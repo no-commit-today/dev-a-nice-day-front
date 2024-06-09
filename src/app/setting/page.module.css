@@ -1,6 +1,7 @@
 .container {
-  background-color: aqua;
+  background-color: #fff;
   max-width: 600px;
   margin: 0 auto;
   height: 100dvh;
+  overflow-y: auto;
 }
