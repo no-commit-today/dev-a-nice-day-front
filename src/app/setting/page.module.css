@@ -1,6 +1,5 @@
 .container {
   max-width: 600px;
   margin: 0 auto;
-  height: 100dvh;
-  overflow-y: auto;
+  height: calc(100vh - 96px);
 }
