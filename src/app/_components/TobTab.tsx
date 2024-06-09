@@ -22,8 +22,8 @@ const TobTab = () => {
             y2="8"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#E063FF" />
-            <stop offset="1" stop-color="#DE6985" />
+            <stop stopColor="#E063FF" />
+            <stop offset="1" stopColor="#DE6985" />
           </linearGradient>
         </defs>
       </svg>
