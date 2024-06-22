@@ -1,7 +1,5 @@
 import styles from "./page.module.css";
 
-const Content = () => {
+export default function Content() {
   return <div className={styles.container}>Content</div>;
-};
-
-export default Content;
+}

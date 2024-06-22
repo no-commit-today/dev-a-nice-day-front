@@ -157,7 +157,6 @@ body {
 }
 ol,
 ul {
-  list-style: none;
 }
 blockquote,
 q {
@@ -177,4 +176,13 @@ table {
 a {
   text-decoration: none;
   color: black;
+}
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
