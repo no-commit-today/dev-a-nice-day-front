@@ -1,7 +1,5 @@
 import styles from "./page.module.css";
 
-const Setting = () => {
+export default function Setting() {
   return <div className={styles.container}>Setting</div>;
-};
-
-export default Setting;
+}

@@ -1,5 +1,5 @@
 import styles from "./TobTab.module.css";
-const TobTab = () => {
+export default function TobTab() {
   return (
     <div className={styles.container}>
       <svg
@@ -29,6 +29,4 @@ const TobTab = () => {
       </svg>
     </div>
   );
-};
-
-export default TobTab;
+}

@@ -3,7 +3,7 @@ import Link from "next/link";
 import styles from "./BottomTabBar.module.css";
 import { usePathname } from "next/navigation";
 
-const BottomTabBar = () => {
+export default function BottomTabBar() {
   const pathname = usePathname();
   return (
     <div className={styles.container}>
@@ -133,6 +133,4 @@ const BottomTabBar = () => {
       </Link>
     </div>
   );
-};
-
-export default BottomTabBar;
+}
