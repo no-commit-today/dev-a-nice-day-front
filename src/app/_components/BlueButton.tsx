@@ -1,22 +1,19 @@
 "use client";
-import { useRouter } from "next/navigation";
 import styles from "./BlueButton.module.css";
+import SetCookie from "./SetCookie";
 export default function BlueButton({
-  onClick,
   disabled,
   title,
 }: {
-  onClick?: () => void;
   disabled: boolean;
   title: string;
 }) {
-  const router = useRouter();
+  const onClick = () => {
+    // 서버컴포넌트로 쿠키 설정
+    SetCookie();
+  };
   return (
-    <button
-      className={styles.button}
-      onClick={() => router.push("/")}
-      disabled={disabled}
-    >
+    <button className={styles.button} onClick={onClick} disabled={disabled}>
       {title}
     </button>
   );
