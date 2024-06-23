@@ -8,7 +8,7 @@ import IndexIndicator from "./IndexIndicator";
 export default function ContentSlider({ contentData }: { contentData: any[] }) {
   return (
     <div className="swiper-container">
-      <Swiper>
+      <Swiper autoHeight={true}>
         {contentData.map((content) => {
           const summaryArray = content.summary
             .split("-")
