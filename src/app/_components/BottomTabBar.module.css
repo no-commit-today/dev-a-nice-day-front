@@ -1,9 +1,11 @@
 .container {
-  position: sticky;
+  position: absolute;
   bottom: 0;
   width: 100%;
   max-width: 600px;
-  margin: 0 auto;
+  left: 0;
+  right: 0;
+  margin: auto;
   display: flex;
   flex-direction: row;
   height: 48px;
