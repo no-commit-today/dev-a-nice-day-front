@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "./ContentList.module.css";
 export default function ContentList({ contentData }: { contentData: any[] }) {
   return (
@@ -6,12 +7,13 @@ export default function ContentList({ contentData }: { contentData: any[] }) {
         <div key={content.id} className={styles.contentBox}>
           <div className={styles.leftBox}>
             <div className={styles.titleBox}>
-              <img
+              <Image
                 src={content.providerIconUrl}
+                alt={"provider icon"}
                 width={20}
                 height={20}
                 style={{ borderRadius: 4 }}
-              ></img>
+              ></Image>
               <h1 className={styles.providerTitle}>{content.providerTitle}</h1>
               <h2 className={styles.dateText}>{content.publishedDate}</h2>
             </div>
@@ -25,12 +27,13 @@ export default function ContentList({ contentData }: { contentData: any[] }) {
             </div>
           </div>
           <div className={styles.rightBox}>
-            <img
+            <Image
               src={content.imageUrl}
+              alt={"content image"}
               width={90}
               height={60}
               style={{ borderRadius: 10 }}
-            ></img>
+            ></Image>
           </div>
         </div>
       ))}
