@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import styles from "./ContentSlider.module.css";
 import "swiper/css";
 import IndexIndicator from "./IndexIndicator";
+import Image from "next/image";
 
 export default function ContentSlider({ contentData }: { contentData: any[] }) {
   return (
@@ -20,12 +21,13 @@ export default function ContentSlider({ contentData }: { contentData: any[] }) {
               <div className={styles.slideContainer}>
                 <h1 className={styles.dateText}>{content.publishedDate}</h1>
                 <div className={styles.titleBox}>
-                  <img
+                  <Image
                     src={content.providerIconUrl}
+                    alt={"provider icon"}
                     width={30}
                     height={30}
                     style={{ borderRadius: 7 }}
-                  ></img>
+                  ></Image>
                   <div className={styles.titleWrap}>
                     <h2 className={styles.providerTitle}>
                       {content.providerTitle}
@@ -34,16 +36,19 @@ export default function ContentSlider({ contentData }: { contentData: any[] }) {
                   </div>
                 </div>
                 <div className={styles.summaryBox}>
-                  <img
+                  <Image
                     src={content.imageUrl}
-                    width={"100%"}
-                    height={180}
+                    alt="content image"
+                    width={560}
+                    height={200}
                     style={{
                       objectFit: "cover",
                       borderTopLeftRadius: 10,
                       borderTopRightRadius: 10,
+                      width: "100%",
                     }}
-                  ></img>
+                  ></Image>
+
                   <div className={styles.summary}>
                     {summaryArray.map((summary: string, index: number) => {
                       return (
