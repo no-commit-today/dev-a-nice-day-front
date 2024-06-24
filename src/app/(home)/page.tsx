@@ -1,8 +1,6 @@
-import Link from "next/link";
 import styles from "./page.module.css";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import category from "@/../public/assets/categories.svg";
 import ContentSlider from "./_components/ContentSlider";
 import CategoryButton from "../_components/CategoryButton";
 
