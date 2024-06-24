@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import category from "@/../public/assets/categories.svg";
 import ContentSlider from "./_components/ContentSlider";
+import CategoryButton from "../_components/CategoryButton";
 
 export default function Home() {
   const cookieStore = cookies();
@@ -46,10 +47,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <div className={styles.contentBox}>
-        <div className={styles.categoryBox}>
-          <img src={category.src} />
-          <h1 className={styles.grayMediumText}>관심주제 변경</h1>
-        </div>
+        <CategoryButton />
         <div className={styles.sliderBox}>
           <ContentSlider contentData={content.content} />
         </div>
