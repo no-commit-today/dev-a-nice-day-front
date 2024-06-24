@@ -1,0 +1,74 @@
+.categoryModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+.categoryModalContainer {
+  position: absolute;
+  bottom: 0;
+  max-width: 600px;
+  width: 100%;
+  height: 500px;
+  background-color: #2e2e2e;
+  z-index: 1000;
+  left: 50%;
+  transform: translate(-50%, 0);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  display: flex;
+  flex-direction: column;
+}
+.categoryUpperBox {
+  margin: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.categoryTitleBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.categoryTitle {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+}
+.numberBox {
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4f4f4f;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+}
+.categoryLowerBox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+  justify-items: center;
+  padding: 20px;
+}
+.categoryItem {
+  background-color: #5b5b5b;
+  width: 100%;
+  height: 60px;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.categoryItem:hover {
+  background-color: #6b6b6b;
+}
+.categoryItemTitle {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+}
