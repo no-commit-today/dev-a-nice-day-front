@@ -1,13 +1,16 @@
 .container {
-  position: sticky;
+  position: fixed;
   bottom: 0;
   width: 100%;
   max-width: 600px;
-  margin: 0 auto;
+  left: 0;
+  right: 0;
+  margin: auto;
   display: flex;
   flex-direction: row;
   height: 48px;
   background-color: #000;
+  z-index: 100;
 }
 
 .tabBtn {
