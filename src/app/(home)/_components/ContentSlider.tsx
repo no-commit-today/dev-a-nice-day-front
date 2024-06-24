@@ -25,6 +25,7 @@ export default function ContentSlider({ contentData }: { contentData: any[] }) {
                     width={30}
                     height={30}
                     style={{ borderRadius: 7 }}
+                    loading="lazy"
                   ></img>
                   <div className={styles.titleWrap}>
                     <h2 className={styles.providerTitle}>
@@ -43,6 +44,7 @@ export default function ContentSlider({ contentData }: { contentData: any[] }) {
                       borderTopLeftRadius: 10,
                       borderTopRightRadius: 10,
                     }}
+                    loading="lazy"
                   ></img>
                   <div className={styles.summary}>
                     {summaryArray.map((summary: string, index: number) => {
