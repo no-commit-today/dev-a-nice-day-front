@@ -1,0 +1,63 @@
+.container {
+  margin: 20px;
+  padding-bottom: 28px;
+}
+.contentBox {
+  width: 100%;
+  height: fit-content;
+  background-color: #2e2e2e;
+  margin: 15px 0;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.contentBox:hover {
+  cursor: pointer;
+  background-color: #3e3e3e;
+}
+.leftBox {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+}
+.rightBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+}
+.titleBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.providerTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f1f1f1;
+  margin: 0 5px;
+}
+.dateText {
+  font-size: 10px;
+  font-weight: 600;
+  color: #b5b5b5;
+}
+.contentTitle {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+.categoryBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+}
+.category {
+  margin-right: 5px;
+  font-size: 12px;
+  color: #3d6bff;
+  font-weight: 500;
+}
