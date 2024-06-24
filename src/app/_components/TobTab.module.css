@@ -9,4 +9,5 @@
   justify-content: center;
   align-items: center;
   background-color: #191a1c;
+  z-index: 1000;
 }
