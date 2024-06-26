@@ -21,4 +21,6 @@
 }
 .sliderBox {
   margin-top: 20px;
+  height: 100%;
+  overflow: hidden;
 }
