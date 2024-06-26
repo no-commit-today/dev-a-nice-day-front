@@ -5,11 +5,12 @@ import styles from "./ContentSlider.module.css";
 import "swiper/css";
 import IndexIndicator from "./IndexIndicator";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function ContentSlider({ contentData }: { contentData: any[] }) {
   return (
     <div className="swiper-container">
-      <Swiper autoHeight={true}>
+      <Swiper autoHeight={true} direction={"vertical"}>
         {contentData.map((content) => {
           const summaryArray = content.summary
             .split("-")
@@ -17,7 +18,7 @@ export default function ContentSlider({ contentData }: { contentData: any[] }) {
             .filter((item: string) => item);
 
           return (
-            <SwiperSlide key={content.id}>
+            <SwiperSlide key={content.id} className={styles.swiperSlide}>
               <div className={styles.slideContainer}>
                 <h1 className={styles.dateText}>{content.publishedDate}</h1>
                 <div className={styles.titleBox}>
@@ -36,35 +37,48 @@ export default function ContentSlider({ contentData }: { contentData: any[] }) {
                   </div>
                 </div>
                 <div className={styles.summaryBox}>
-                  <Image
-                    src={content.imageUrl}
-                    alt="content image"
-                    width={560}
-                    height={200}
+                  <div
                     style={{
-                      objectFit: "cover",
-                      borderTopLeftRadius: 10,
-                      borderTopRightRadius: 10,
-                      width: "100%",
+                      height: 350,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      position: "relative",
                     }}
-                  ></Image>
-
-                  <div className={styles.summary}>
-                    {summaryArray.map((summary: string, index: number) => {
-                      return (
-                        <div className={styles.summaryTextBox}>
-                          <IndexIndicator index={index} />
-                          <h2 className={styles.summaryText}>{summary}</h2>
-                        </div>
-                      );
-                    })}
+                  >
+                    <Image
+                      src={content.imageUrl}
+                      alt="content image"
+                      width={560}
+                      height={350}
+                      style={{
+                        objectFit: "cover",
+                        borderRadius: 10,
+                        width: "100%",
+                      }}
+                    ></Image>
+                    <div className={styles.summary}>
+                      {summaryArray.map((summary: string, index: number) => {
+                        return (
+                          <div key={index} className={styles.summaryTextBox}>
+                            <IndexIndicator index={index} />
+                            <h2 className={styles.summaryText}>{summary}</h2>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
+
                   <div className={styles.categoryBox}>
-                    {content.categories.map((category: string) => {
-                      return (
-                        <h2 className={styles.categoryText}>{category}</h2>
-                      );
-                    })}
+                    {content.categories.map(
+                      (category: string, index: number) => {
+                        return (
+                          <h2 key={index} className={styles.categoryText}>
+                            {category}
+                          </h2>
+                        );
+                      }
+                    )}
                   </div>
                 </div>
               </div>

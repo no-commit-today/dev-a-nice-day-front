@@ -32,11 +32,15 @@
   margin-top: 10px;
 }
 .summary {
-  min-height: 170px;
-  height: fit-content;
+  min-height: 50px;
   background-color: #2e2e2e;
+  opacity: 0.8;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 .summaryTextBox {
   display: flex;
@@ -61,4 +65,7 @@
   font-weight: 400;
   color: #3d6bff;
   margin-left: 8px;
+}
+.swiperSlide {
+  max-height: calc(100dvh - 130px);
 }
