@@ -1,13 +1,18 @@
 "use client";
 import Link from "next/link";
 import styles from "./BottomTabBar.module.css";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function BottomTabBar() {
   const pathname = usePathname();
+  const query = useSearchParams();
+
   return (
     <div className={styles.container}>
-      <Link href="/" className={styles.tabBtn}>
+      <Link
+        href={{ pathname: "/", query: query.toString() }}
+        className={styles.tabBtn}
+      >
         <div className={styles.btnBox}>
           <div>
             <svg
@@ -56,7 +61,10 @@ export default function BottomTabBar() {
           </span>
         </div>
       </Link>
-      <Link href="/content" className={styles.tabBtn}>
+      <Link
+        href={{ pathname: "/content", query: query.toString() }}
+        className={styles.tabBtn}
+      >
         <div className={styles.btnBox}>
           <div>
             <svg
