@@ -53,9 +53,11 @@ export default function CategoryModal({
               </h1>
             </div>
           </div>
-          <button onClick={closeBtnOnClick}>
-            <img src={dismiss.src} alt="close" />
-          </button>
+          <div className={styles.closeBtn}>
+            <button onClick={closeBtnOnClick}>
+              <img src={dismiss.src} alt="close" />
+            </button>
+          </div>
         </div>
         <div className={styles.categoryLowerBox}>
           {Object.keys(categories).map((categoryKey, index) => (

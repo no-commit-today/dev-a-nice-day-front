@@ -65,10 +65,13 @@
   align-items: center;
 }
 .categoryItem:hover {
-  background-color: #6b6b6b;
+  opacity: 0.8;
 }
 .categoryItemTitle {
   color: #fff;
   font-size: 18px;
   font-weight: 500;
+}
+.closeBtn:hover {
+  opacity: 0.5;
 }
