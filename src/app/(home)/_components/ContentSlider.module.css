@@ -22,6 +22,7 @@
   font-size: 12px;
   font-weight: 600;
   color: #aaaaaa;
+  width: fit-content;
 }
 .title {
   font-size: 13px;
@@ -68,4 +69,27 @@
 }
 .swiperSlide {
   max-height: calc(100dvh - 130px);
+}
+.summaryBtn {
+  height: 350;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+.providerIcon:hover {
+  opacity: 0.9;
+  cursor: pointer;
+}
+.summaryBtn:hover {
+  opacity: 0.9;
+  cursor: pointer;
+}
+.providerTitle:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.title:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
