@@ -1,17 +1,43 @@
+"use client";
 import styles from "./page.module.css";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import ContentSlider from "./_components/ContentSlider";
 import CategoryButton from "../_components/CategoryButton";
 
-export default function Home({ searchParams }: { searchParams: any }) {
-  const cookieStore = cookies();
-  const popup = cookieStore.has("popup");
-  if (!popup) {
-    redirect("/onboarding");
+function shuffleArray(array: object[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
+  return array;
+}
 
-  const content = {
+export default function Home({ searchParams }: { searchParams: any }) {
+  // const cookieStore = cookies();
+  // const popup = cookieStore.has("popup");
+  // if (!popup) {
+  //   redirect("/onboarding");
+  // }
+
+  const totalPage = 10;
+  var numbers = Array.from({ length: totalPage }, (_, i) => i + 1);
+  function getRandomNumber() {
+    if (numbers.length === 0) {
+      numbers = Array.from({ length: totalPage }, (_, i) => i + 1);
+    }
+    const randomIndex = Math.floor(Math.random() * numbers.length); // 랜덤 인덱스 선택
+    const selectedNumber = numbers[randomIndex]; // 선택된 숫자
+    numbers.splice(randomIndex, 1); // 선택된 숫자 배열에서 제거
+    return selectedNumber;
+  }
+  const getPage = () => {
+    const page = getRandomNumber();
+    console.log(numbers);
+    console.log(page);
+    return page;
+  };
+  const originalContent = {
     content: [
       {
         id: 1,
@@ -43,12 +69,21 @@ export default function Home({ searchParams }: { searchParams: any }) {
     ],
   };
 
+  const content = shuffleArray(originalContent.content);
+
   return (
     <div className={styles.container}>
+      <button
+        onClick={() => {
+          getPage();
+        }}
+      >
+        Click me
+      </button>
       <div className={styles.contentBox}>
         <CategoryButton />
         <div className={styles.sliderBox}>
-          <ContentSlider contentData={content.content} />
+          <ContentSlider contentData={content} />
         </div>
       </div>
     </div>
