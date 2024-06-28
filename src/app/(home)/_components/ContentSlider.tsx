@@ -5,9 +5,10 @@ import styles from "./ContentSlider.module.css";
 import "swiper/css";
 import IndexIndicator from "./IndexIndicator";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Categories } from "@/app/_components/Categories";
 
 export default function ContentSlider({ contentData }: { contentData: any[] }) {
+  const categories = Categories;
   return (
     <div className="swiper-container">
       <Swiper autoHeight={true} direction={"vertical"}>
@@ -74,7 +75,7 @@ export default function ContentSlider({ contentData }: { contentData: any[] }) {
                       (category: string, index: number) => {
                         return (
                           <h2 key={index} className={styles.categoryText}>
-                            {category}
+                            {categories[category]}
                           </h2>
                         );
                       }
