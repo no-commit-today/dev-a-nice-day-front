@@ -7,7 +7,7 @@ import IndexIndicator from "./IndexIndicator";
 import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getContent } from "@/app/_utils/api";
+import { getShuffledContent } from "@/app/_utils/api";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Mousewheel } from "swiper/modules";
@@ -28,8 +28,8 @@ export default function ContentSlider() {
     isStale,
     isFetchedAfterMount,
   } = useInfiniteQuery({
-    queryKey: ["content", searchParams],
-    queryFn: ({ pageParam }) => getContent(pageParam, searchParams),
+    queryKey: ["shuffledContent", searchParams],
+    queryFn: ({ pageParam }) => getShuffledContent(pageParam, searchParams),
     initialPageParam: 1,
     getNextPageParam: () => getPage(),
     staleTime: 5 * 1000 * 60,
