@@ -21,22 +21,46 @@ export default function ContentSlider() {
   };
   const getPage = () => 2;
 
-  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+  const {
+    data,
+    fetchNextPage,
+    isFetchingNextPage,
+    isStale,
+    isFetchedAfterMount,
+  } = useInfiniteQuery({
     queryKey: ["content", searchParams],
     queryFn: ({ pageParam }) => getContent(pageParam, searchParams),
     initialPageParam: 1,
     getNextPageParam: () => getPage(),
+    staleTime: 5 * 1000 * 60,
+    gcTime: 30 * 1000 * 60,
   });
   const [contentData, setContentData] = useState<any[] | undefined>(undefined);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
+  // 데이터 추가 요청
   const pushMore = async () => {
     if (!isFetchingNextPage) {
       fetchNextPage();
     }
   };
 
+  // 스크롤 포지션 받아오기
   useEffect(() => {
     if (data) {
+      if (isStale || isFetchedAfterMount) {
+        // 캐싱 시간 지나서 리패치 or 마운트 이후 리패치(새로고침 시)
+        // 스크롤 포지션 초기화
+        setScrollPosition(0);
+        sessionStorage.removeItem("scrollPosition");
+      } else {
+        // 데이터가 캐싱되어 있는 경우
+        // 스크롤 포지션 복구
+        const scrollPosition = Number(sessionStorage.getItem("scrollPosition"));
+        if (scrollPosition) {
+          setScrollPosition(Number(sessionStorage.getItem("scrollPosition")));
+        }
+      }
       setContentData(data.pages.map((page) => page.content).flat());
     }
   }, [data]);
@@ -47,12 +71,17 @@ export default function ContentSlider() {
         <Swiper
           modules={[Mousewheel]}
           mousewheel={{
-            thresholdDelta: 10,
+            thresholdDelta: 20,
             forceToAxis: true,
           }}
           autoHeight={true}
           direction={"vertical"}
+          initialSlide={scrollPosition}
           onSlideChange={(prop) => {
+            sessionStorage.setItem(
+              "scrollPosition",
+              prop.activeIndex.toString()
+            );
             if (prop.activeIndex === contentData.length - 3) {
               pushMore();
             }
