@@ -2,9 +2,26 @@
 import Image from "next/image";
 import styles from "./ContentList.module.css";
 import { Categories } from "@/app/_components/Categories";
-export default function ContentList({ contentData }: { contentData: any[] }) {
+import useIntersect from "@/app/_hooks/useIntersect";
+
+export default function ContentList({
+  contentData,
+  loadMore,
+  isFetchingNextPage,
+}: {
+  contentData: any[];
+  loadMore: () => void;
+  isFetchingNextPage: boolean;
+}) {
   const categories = Categories;
-  return (
+  const ref = useIntersect(async (entry, observer) => {
+    observer.unobserve(entry.target);
+    if (!isFetchingNextPage) {
+      loadMore();
+    }
+  });
+  //tech.kakaoenterprise.com/149 [카카오엔터프라이즈 기술블로그 Tech&(테크앤):티스토리]
+  출처: https: return (
     <div className={styles.container}>
       {contentData.map((content) => (
         <div
@@ -15,7 +32,7 @@ export default function ContentList({ contentData }: { contentData: any[] }) {
           <div className={styles.leftBox}>
             <div className={styles.titleBox}>
               <Image
-                src={content.providerIconUrl}
+                src={"https://picsum.photos/200/300"}
                 alt={"provider icon"}
                 width={20}
                 height={20}
@@ -35,7 +52,7 @@ export default function ContentList({ contentData }: { contentData: any[] }) {
           </div>
           <div className={styles.rightBox}>
             <Image
-              src={content.imageUrl}
+              src={"https://picsum.photos/200/300"}
               alt={"content image"}
               width={90}
               height={60}
@@ -44,6 +61,7 @@ export default function ContentList({ contentData }: { contentData: any[] }) {
           </div>
         </div>
       ))}
+      <div ref={ref} style={{ height: 1 }} />
     </div>
   );
 }
