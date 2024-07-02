@@ -13,24 +13,21 @@ export default function ContentList() {
   const ref = useIntersect(async (entry, observer) => {
     observer.unobserve(entry.target);
     if (!isFetchingNextPage) {
-      loadMore();
+      fetchNextPage();
     }
   });
 
   const searchParams = useSearchParams().toString();
 
-  const getPage = () => {
-    return 2;
-  };
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ["content", searchParams],
     queryFn: ({ pageParam }) => getContent(pageParam, searchParams),
     initialPageParam: 1,
-    getNextPageParam: () => getPage(),
+    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
+      return lastPageParam + 1;
+    },
   });
-  const loadMore = async () => {
-    fetchNextPage();
-  };
+
   const [contentData, setContentData] = useState<any[] | undefined>(undefined);
   useEffect(() => {
     if (data) {
@@ -81,7 +78,7 @@ export default function ContentList() {
             </div>
           </div>
         ))}
-      <div ref={ref} style={{ height: 1 }} />
+      {!isFetchingNextPage && <div ref={ref} style={{ height: 1 }} />}
     </div>
   );
 }
