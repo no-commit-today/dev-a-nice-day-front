@@ -1,25 +1,43 @@
 "use client";
 
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import styles from "./ContentSlider.module.css";
 import "swiper/css";
 import IndexIndicator from "./IndexIndicator";
 import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
 import { useRouter } from "next/navigation";
+import { Zoom } from "swiper/modules";
 
-export default function ContentSlider({ contentData }: { contentData: any[] }) {
+export default function ContentSlider({
+  contentData,
+  pushMore,
+}: {
+  contentData: any[];
+  pushMore: () => void;
+}) {
   const categories = Categories;
   const router = useRouter();
   const goToLink = ({ url }: { url: string }) => {
     window.open(url);
   };
+
   return (
     <div className="swiper-container">
-      <Swiper autoHeight={true} direction={"vertical"}>
+      <Swiper
+        autoHeight={true}
+        direction={"vertical"}
+        onSlideChange={(prop) => {
+          console.log(prop.activeIndex);
+          if (prop.activeIndex === contentData.length - 2) {
+            pushMore();
+          }
+        }}
+        onEndedCapture={() => console.log("end")}
+      >
         {contentData.map((content) => {
           const summaryArray = content.summary
-            .split("-")
+            .split("\n")
             .map((item: string) => item.trim())
             .filter((item: string) => item);
 
@@ -29,7 +47,7 @@ export default function ContentSlider({ contentData }: { contentData: any[] }) {
                 <h1 className={styles.dateText}>{content.publishedDate}</h1>
                 <div className={styles.titleBox}>
                   <Image
-                    src={content.providerIconUrl}
+                    src={"https://picsum.photos/1000/1000"}
                     alt={"provider icon"}
                     width={30}
                     height={30}
@@ -58,7 +76,7 @@ export default function ContentSlider({ contentData }: { contentData: any[] }) {
                     onClick={() => goToLink({ url: content.url })}
                   >
                     <Image
-                      src={content.imageUrl}
+                      src={"https://picsum.photos/200/300"}
                       alt="content image"
                       width={560}
                       height={350}
