@@ -4,6 +4,7 @@
   justify-content: flex-end;
   align-items: center;
 }
+
 .grayMediumText {
   color: #cfcfcf;
   font-size: 12px;
@@ -14,4 +15,9 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+.categoryBtn:hover {
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.1); /* x-offset, y-offset, blur-radius, spread-radius, color */
 }

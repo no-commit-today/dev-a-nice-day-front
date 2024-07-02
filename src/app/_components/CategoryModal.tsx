@@ -1,27 +1,37 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "./CategoryModal.module.css";
 import dismiss from "@/../public/assets/dismiss.svg";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Categories } from "./Categories";
 
 export default function CategoryModal({
   setOpen,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const categories = [
-    "서버 개발",
-    "웹 개발",
-    "앱 개발",
-    "데이터 엔지니어링",
-    "DevOps",
-    "인공지능",
-    "SW엔지니어링",
-    "개발 툴",
-  ];
-  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<
-    number[] | null
-  >(null);
+  const categories = Categories;
+  const [selectedCategory, setSelectedCategory] = useState<string[]>();
+  const router = useRouter();
+  const pathName = usePathname();
+
+  const categoryParams = useSearchParams().getAll("category");
+  useEffect(() => {
+    setSelectedCategory(categoryParams);
+  }, []);
+
+  const closeBtnOnClick = () => {
+    if (selectedCategory) {
+      const queryString = selectedCategory
+        .map((category) => `category=${category}`)
+        .join("&");
+      router.push(pathName + "?" + queryString);
+      setOpen(false);
+    } else {
+      setOpen(false);
+    }
+  };
 
   return (
     <div className={styles.categoryModal}>
@@ -31,39 +41,44 @@ export default function CategoryModal({
             <h1 className={styles.categoryTitle}>관심주제 선택</h1>
             <div className={styles.numberBox}>
               <h1 className={styles.categoryTitle} style={{ fontSize: 15 }}>
-                {selectedCategoryIndex?.length || 0}
+                {selectedCategory?.length || 0}
               </h1>
             </div>
           </div>
-          <button onClick={() => setOpen(false)}>
-            <img src={dismiss.src} alt="close" />
-          </button>
+          <div className={styles.closeBtn}>
+            <button onClick={closeBtnOnClick}>
+              <img src={dismiss.src} alt="close" />
+            </button>
+          </div>
         </div>
         <div className={styles.categoryLowerBox}>
-          {categories.map((category, index) => (
+          {Object.keys(categories).map((categoryKey, index) => (
             <button
               key={index}
               className={styles.categoryItem}
               style={{
-                backgroundColor: selectedCategoryIndex?.includes(index)
+                backgroundColor: selectedCategory?.includes(categoryKey)
                   ? "#3E6AFF"
                   : "#5b5b5b",
               }}
               onClick={() => {
-                if (selectedCategoryIndex?.includes(index)) {
-                  setSelectedCategoryIndex(
-                    selectedCategoryIndex.filter((i) => i !== index)
+                if (selectedCategory?.includes(categoryKey)) {
+                  setSelectedCategory(
+                    selectedCategory.filter(
+                      (category) => category !== categoryKey
+                    )
                   );
                 } else {
-                  setSelectedCategoryIndex(
-                    selectedCategoryIndex
-                      ? [...selectedCategoryIndex, index]
-                      : [index]
-                  );
+                  setSelectedCategory([
+                    ...(selectedCategory || []),
+                    categoryKey,
+                  ]);
                 }
               }}
             >
-              <h1 className={styles.categoryItemTitle}>{category}</h1>
+              <h1 className={styles.categoryItemTitle}>
+                {categories[categoryKey]}
+              </h1>
             </button>
           ))}
         </div>

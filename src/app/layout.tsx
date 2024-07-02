@@ -1,5 +1,6 @@
 import BottomTabBar from "./_components/BottomTabBar";
 import TobTab from "./_components/TobTab";
+import ReactQueryProvider from "./_hooks/useReactQuery";
 import "./globals.css";
 
 export default function RootLayout({
@@ -18,9 +19,11 @@ export default function RootLayout({
           backgroundColor: "#191A1C",
         }}
       >
-        <TobTab />
-        {children}
-        <BottomTabBar />
+        <ReactQueryProvider>
+          <TobTab />
+          {children}
+          <BottomTabBar />
+        </ReactQueryProvider>
       </body>
     </html>
   );
