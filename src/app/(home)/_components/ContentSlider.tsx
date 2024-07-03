@@ -14,12 +14,27 @@ import { Mousewheel } from "swiper/modules";
 
 export default function ContentSlider() {
   const searchParams = useSearchParams().toString();
-
   const categories = Categories;
+
   const goToLink = ({ url }: { url: string }) => {
     window.open(url);
   };
-  const getPage = () => 2;
+  const getPage = 297;
+
+  const totalPage = Math.ceil(getPage / 10);
+  var numbers = Array.from({ length: totalPage }, (_, i) => i + 1);
+
+  //TODO: 랜덤 인덱스 선택 함수 다시 만들기, 리액트 쿼리 안에서 지금까지 받은 페이지 받아와서 중복 방지
+  function getRandomNumber(allPageParams: number[]) {
+    if (numbers.length === 0) {
+      numbers = Array.from({ length: totalPage }, (_, i) => i + 1);
+    }
+    // 지금까지 받아왔던 페이지들 배열에서 삭제
+    numbers = numbers.filter((n) => !allPageParams.includes(n));
+    // 랜덤 인덱스 선택
+    const randomIndex = Math.floor(Math.random() * numbers.length);
+    return randomIndex;
+  }
 
   const {
     data,
@@ -30,8 +45,10 @@ export default function ContentSlider() {
   } = useInfiniteQuery({
     queryKey: ["shuffledContent", searchParams],
     queryFn: ({ pageParam }) => getShuffledContent(pageParam, searchParams),
-    initialPageParam: 1,
-    getNextPageParam: () => getPage(),
+    initialPageParam: getRandomNumber([]),
+    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
+      return getRandomNumber(allPageParams);
+    },
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
   });

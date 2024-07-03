@@ -1,4 +1,4 @@
-const BASE_URL = "https://2a1a5a16-d662-403d-9785-7430252af234.mock.pstmn.io";
+const BASE_URL = "https://api.techswipe.zooneon.dev/api/content/v1";
 
 function shuffleArray(array: object[]) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -8,9 +8,16 @@ function shuffleArray(array: object[]) {
   return array;
 }
 
+const getPageCount = async (searchParams: string) => {
+  //const data = await fetch(`${BASE_URL}/contents-count?${searchParams}`);
+
+  return 297;
+};
+
 const getContent = async (page: number, searchParams: string) => {
+  console.log(page);
   const data = await fetch(
-    `${BASE_URL}/content?page=${page}&size=10&${searchParams}`
+    `${BASE_URL}/contents?page=${page}&size=10&${searchParams}`
   );
   return data.json();
 };
