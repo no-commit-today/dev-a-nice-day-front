@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { getPageCount, getShuffledContent } from "@/app/_utils/api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Mousewheel } from "swiper/modules";
 
@@ -65,6 +65,7 @@ export default function ContentSlider() {
   });
   const [contentData, setContentData] = useState<any[] | undefined>(undefined);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const swiperRef = useRef<any>(null);
 
   // 데이터 추가 요청
   const pushMore = async () => {
@@ -80,6 +81,7 @@ export default function ContentSlider() {
         // 캐싱 시간 지나서 리패치 or 마운트 이후 리패치(새로고침 시)
         // 스크롤 포지션 초기화
         setScrollPosition(0);
+        swiperRef.current?.swiper.slideTo(0);
         sessionStorage.removeItem("scrollPosition");
       } else {
         // 데이터가 캐싱되어 있는 경우
@@ -97,6 +99,7 @@ export default function ContentSlider() {
     <div className="swiper-container">
       {contentData && (
         <Swiper
+          ref={swiperRef}
           modules={[Mousewheel]}
           mousewheel={{
             thresholdDelta: 20,
