@@ -6,8 +6,8 @@ import "swiper/css";
 import IndexIndicator from "./IndexIndicator";
 import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getShuffledContent } from "@/app/_utils/api";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { getPageCount, getShuffledContent } from "@/app/_utils/api";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Mousewheel } from "swiper/modules";
@@ -19,22 +19,32 @@ export default function ContentSlider() {
   const goToLink = ({ url }: { url: string }) => {
     window.open(url);
   };
-  const getPage = 297;
-
-  const totalPage = Math.ceil(getPage / 10);
-  var numbers = Array.from({ length: totalPage }, (_, i) => i + 1);
-
-  //TODO: 랜덤 인덱스 선택 함수 다시 만들기, 리액트 쿼리 안에서 지금까지 받은 페이지 받아와서 중복 방지
-  function getRandomNumber(allPageParams: number[]) {
-    if (numbers.length === 0) {
-      numbers = Array.from({ length: totalPage }, (_, i) => i + 1);
+  const { data: totalPageData, isLoading } = useQuery({
+    queryKey: ["totalPageData", searchParams],
+    queryFn: () => getPageCount(searchParams),
+    staleTime: 5 * 1000 * 60,
+    gcTime: 30 * 1000 * 60,
+  });
+  const getRandomNumber = (allPageParams: number[]) => {
+    var pageCount = 50;
+    if (totalPageData) {
+      pageCount = totalPageData.count;
     }
-    // 지금까지 받아왔던 페이지들 배열에서 삭제
-    numbers = numbers.filter((n) => !allPageParams.includes(n));
+    // 전체 페이지 개수를 통해 전체 페이지 배열 생성
+    const totalNumber = Math.ceil(pageCount / 10);
+    var totalPageArray = Array.from({ length: totalNumber }, (_, i) => i + 1);
+
+    // 지금까지 받아왔던 페이지들 배열에서 삭제 (모두 한번씩 다 받아온 경우 그냥 랜덤으로 뿌림)
+    if (allPageParams.length < totalNumber) {
+      totalPageArray = totalPageArray.filter((n) => !allPageParams.includes(n));
+    }
+
     // 랜덤 인덱스 선택
-    const randomIndex = Math.floor(Math.random() * numbers.length);
-    return randomIndex;
-  }
+    const randomIndex = Math.floor(Math.random() * totalPageArray.length);
+    const selectedNumber = totalPageArray[randomIndex];
+
+    return selectedNumber;
+  };
 
   const {
     data,
@@ -49,6 +59,7 @@ export default function ContentSlider() {
     getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
       return getRandomNumber(allPageParams);
     },
+    enabled: !isLoading,
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
   });

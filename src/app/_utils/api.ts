@@ -10,8 +10,10 @@ function shuffleArray(array: object[]) {
 
 const getPageCount = async (searchParams: string) => {
   //const data = await fetch(`${BASE_URL}/contents-count?${searchParams}`);
-
-  return 297;
+  const data = {
+    count: 297,
+  };
+  return data;
 };
 
 const getContent = async (page: number, searchParams: string) => {
@@ -29,4 +31,4 @@ const getShuffledContent = async (page: number, searchParams: string) => {
   return data;
 };
 
-export { getShuffledContent, getContent };
+export { getShuffledContent, getContent, getPageCount };
