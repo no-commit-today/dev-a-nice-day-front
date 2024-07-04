@@ -7,7 +7,7 @@ import IndexIndicator from "./IndexIndicator";
 import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { getPageCount, getShuffledContent } from "@/app/_utils/api";
+import { BASE_URL, getPageCount, getShuffledContent } from "@/app/_utils/api";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Mousewheel } from "swiper/modules";
@@ -19,7 +19,7 @@ export default function ContentSlider() {
   const goToLink = ({ url }: { url: string }) => {
     window.open(url);
   };
-  const { data: totalPageData, isLoading } = useQuery({
+  const { data: totalPageData } = useQuery({
     queryKey: ["totalPageData", searchParams],
     queryFn: () => getPageCount(searchParams),
     staleTime: 5 * 1000 * 60,
@@ -136,7 +136,11 @@ export default function ContentSlider() {
                       height={30}
                       style={{ borderRadius: 7 }}
                       className={styles.providerIcon}
-                      onClick={() => goToLink({ url: content.providerUrl })}
+                      onClick={() =>
+                        goToLink({
+                          url: content.providerUrl,
+                        })
+                      }
                     ></Image>
                     <div className={styles.titleWrap}>
                       <h2
@@ -147,7 +151,11 @@ export default function ContentSlider() {
                       </h2>
                       <h2
                         className={styles.title}
-                        onClick={() => goToLink({ url: content.url })}
+                        onClick={() =>
+                          goToLink({
+                            url: `${BASE_URL}/contents/${content.id}/link`,
+                          })
+                        }
                       >
                         {content.title}
                       </h2>
@@ -156,7 +164,11 @@ export default function ContentSlider() {
                   <div className={styles.summaryBox}>
                     <div
                       className={styles.summaryBtn}
-                      onClick={() => goToLink({ url: content.url })}
+                      onClick={() =>
+                        goToLink({
+                          url: `${BASE_URL}/contents/${content.id}/link`,
+                        })
+                      }
                     >
                       <Image
                         src={"https://picsum.photos/200/300"}
