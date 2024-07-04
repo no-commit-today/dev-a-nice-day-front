@@ -5,7 +5,7 @@ import { Categories } from "@/app/_components/Categories";
 import useIntersect from "@/app/_hooks/useIntersect";
 import { useSearchParams } from "next/navigation";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { getContent, getPageCount } from "@/app/_utils/api";
+import { BASE_URL, getContent, getPageCount } from "@/app/_utils/api";
 import { useEffect, useState } from "react";
 
 export default function ContentList() {
@@ -55,7 +55,9 @@ export default function ContentList() {
           <div
             key={content.id}
             className={styles.contentBox}
-            onClick={() => window.open(content.url)}
+            onClick={() =>
+              window.open(`${BASE_URL}/contents/${content.id}/link`)
+            }
           >
             <div className={styles.leftBox}>
               <div className={styles.titleBox}>
