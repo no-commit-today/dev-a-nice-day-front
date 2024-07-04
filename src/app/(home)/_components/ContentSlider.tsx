@@ -6,20 +6,45 @@ import "swiper/css";
 import IndexIndicator from "./IndexIndicator";
 import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getShuffledContent } from "@/app/_utils/api";
-import { useEffect, useState } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { getPageCount, getShuffledContent } from "@/app/_utils/api";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Mousewheel } from "swiper/modules";
 
 export default function ContentSlider() {
   const searchParams = useSearchParams().toString();
-
   const categories = Categories;
+
   const goToLink = ({ url }: { url: string }) => {
     window.open(url);
   };
-  const getPage = () => 2;
+  const { data: totalPageData, isLoading } = useQuery({
+    queryKey: ["totalPageData", searchParams],
+    queryFn: () => getPageCount(searchParams),
+    staleTime: 5 * 1000 * 60,
+    gcTime: 30 * 1000 * 60,
+  });
+  const getRandomNumber = (allPageParams: number[]) => {
+    var pageCount = 50;
+    if (totalPageData) {
+      pageCount = totalPageData.count;
+    }
+    // 전체 페이지 개수를 통해 전체 페이지 배열 생성
+    const totalNumber = Math.ceil(pageCount / 10);
+    var totalPageArray = Array.from({ length: totalNumber }, (_, i) => i + 1);
+
+    // 지금까지 받아왔던 페이지들 배열에서 삭제 (모두 한번씩 다 받아온 경우 그냥 랜덤으로 뿌림)
+    if (allPageParams.length < totalNumber) {
+      totalPageArray = totalPageArray.filter((n) => !allPageParams.includes(n));
+    }
+
+    // 랜덤 인덱스 선택
+    const randomIndex = Math.floor(Math.random() * totalPageArray.length);
+    const selectedNumber = totalPageArray[randomIndex];
+
+    return selectedNumber;
+  };
 
   const {
     data,
@@ -30,13 +55,17 @@ export default function ContentSlider() {
   } = useInfiniteQuery({
     queryKey: ["shuffledContent", searchParams],
     queryFn: ({ pageParam }) => getShuffledContent(pageParam, searchParams),
-    initialPageParam: 1,
-    getNextPageParam: () => getPage(),
+    initialPageParam: getRandomNumber([]),
+    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
+      return getRandomNumber(allPageParams);
+    },
+    enabled: totalPageData !== undefined,
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
   });
   const [contentData, setContentData] = useState<any[] | undefined>(undefined);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const swiperRef = useRef<any>(null);
 
   // 데이터 추가 요청
   const pushMore = async () => {
@@ -52,6 +81,7 @@ export default function ContentSlider() {
         // 캐싱 시간 지나서 리패치 or 마운트 이후 리패치(새로고침 시)
         // 스크롤 포지션 초기화
         setScrollPosition(0);
+        swiperRef.current?.swiper.slideTo(0);
         sessionStorage.removeItem("scrollPosition");
       } else {
         // 데이터가 캐싱되어 있는 경우
@@ -69,6 +99,7 @@ export default function ContentSlider() {
     <div className="swiper-container">
       {contentData && (
         <Swiper
+          ref={swiperRef}
           modules={[Mousewheel]}
           mousewheel={{
             thresholdDelta: 20,

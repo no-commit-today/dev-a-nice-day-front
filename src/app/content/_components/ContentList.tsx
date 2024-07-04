@@ -4,8 +4,8 @@ import styles from "./ContentList.module.css";
 import { Categories } from "@/app/_components/Categories";
 import useIntersect from "@/app/_hooks/useIntersect";
 import { useSearchParams } from "next/navigation";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getContent } from "@/app/_utils/api";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { getContent, getPageCount } from "@/app/_utils/api";
 import { useEffect, useState } from "react";
 
 export default function ContentList() {
@@ -19,13 +19,26 @@ export default function ContentList() {
 
   const searchParams = useSearchParams().toString();
 
+  const { data: totalPageData } = useQuery({
+    queryKey: ["totalPageData", searchParams],
+    queryFn: () => getPageCount(searchParams),
+    staleTime: 5 * 1000 * 60,
+    gcTime: 30 * 1000 * 60,
+  });
+
+  //TODO: 전체 페이지 개수로 검사하기
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ["content", searchParams],
     queryFn: ({ pageParam }) => getContent(pageParam, searchParams),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
-      return lastPageParam + 1;
+      if (totalPageData !== undefined) {
+        return lastPageParam + 1 > Math.ceil(totalPageData.count / 10)
+          ? null
+          : lastPageParam + 1;
+      }
     },
+    enabled: totalPageData !== undefined,
   });
 
   const [contentData, setContentData] = useState<any[] | undefined>(undefined);

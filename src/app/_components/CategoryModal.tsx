@@ -26,7 +26,7 @@ export default function CategoryModal({
       const queryString = selectedCategory
         .map((category) => `category=${category}`)
         .join("&");
-      router.push(pathName + "?" + queryString);
+      router.replace(pathName + "?" + queryString);
       setOpen(false);
     } else {
       setOpen(false);
