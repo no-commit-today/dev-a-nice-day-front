@@ -1,4 +1,4 @@
-const BASE_URL = "https://api.techswipe.zooneon.dev/api/content/v1";
+export const BASE_URL = "https://api.techswipe.zooneon.dev";
 
 function shuffleArray(array: object[]) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -19,7 +19,7 @@ const getPageCount = async (searchParams: string) => {
 const getContent = async (page: number, searchParams: string) => {
   console.log(page);
   const data = await fetch(
-    `${BASE_URL}/contents?page=${page}&size=10&${searchParams}`
+    `${BASE_URL}/api/content/v1/contents?page=${page}&size=10&${searchParams}`
   );
   return data.json();
 };
