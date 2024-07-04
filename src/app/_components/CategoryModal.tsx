@@ -3,7 +3,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "./CategoryModal.module.css";
 import dismiss from "@/../public/assets/dismiss.svg";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Categories } from "./Categories";
 
 export default function CategoryModal({
@@ -13,7 +13,6 @@ export default function CategoryModal({
 }) {
   const categories = Categories;
   const [selectedCategory, setSelectedCategory] = useState<string[]>();
-  const router = useRouter();
   const pathName = usePathname();
 
   const categoryParams = useSearchParams().getAll("category");
@@ -26,7 +25,9 @@ export default function CategoryModal({
       const queryString = selectedCategory
         .map((category) => `category=${category}`)
         .join("&");
-      router.replace(pathName + "?" + queryString);
+
+      // 새로고침하면서 이동하려고 router 안씀.
+      location.href = pathName + "?" + queryString;
       setOpen(false);
     } else {
       setOpen(false);

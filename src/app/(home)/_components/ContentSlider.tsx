@@ -81,7 +81,6 @@ export default function ContentSlider() {
         // 캐싱 시간 지나서 리패치 or 마운트 이후 리패치(새로고침 시)
         // 스크롤 포지션 초기화
         setScrollPosition(0);
-        swiperRef.current?.swiper.slideTo(0);
         sessionStorage.removeItem("scrollPosition");
       } else {
         // 데이터가 캐싱되어 있는 경우
