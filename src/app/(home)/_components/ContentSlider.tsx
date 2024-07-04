@@ -59,7 +59,7 @@ export default function ContentSlider() {
     getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
       return getRandomNumber(allPageParams);
     },
-    enabled: !isLoading,
+    enabled: totalPageData !== undefined,
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
   });
