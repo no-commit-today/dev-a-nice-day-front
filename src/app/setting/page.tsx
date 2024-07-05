@@ -1,6 +1,9 @@
+import { Metadata } from "next";
 import styles from "./page.module.css";
 import carret_right from "@/../public/assets/carret_right.svg";
-
+export const metadata: Metadata = {
+  title: "설정 | 테크스와이프",
+};
 export default function Setting() {
   return (
     <div className={styles.container}>
