@@ -1,4 +1,4 @@
-export const BASE_URL = "https://api.techswipe.zooneon.dev";
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 function shuffleArray(array: object[]) {
   for (let i = array.length - 1; i > 0; i--) {
