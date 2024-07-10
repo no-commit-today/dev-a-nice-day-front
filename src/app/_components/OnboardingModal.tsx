@@ -1,3 +1,4 @@
+import Image from "next/image";
 import BlueButton from "./BlueButton";
 import styles from "./OnboardingModal.module.css";
 import GPT_Icon from "@/../public/assets/gpt_icon.svg";
@@ -8,7 +9,7 @@ export default function OnboardingModal() {
       <div className={styles.container}>
         <div className={styles.contentBox}>
           <div className={styles.titleBox}>
-            <img src={GPT_Icon.src} />
+            <Image alt={"gpt icon"} src={GPT_Icon.src} width={24} height={24} />
             <span className={styles.title}>ChatGPT가 아티클을 요약했어요</span>
           </div>
           <div className={styles.detailBox}>

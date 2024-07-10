@@ -5,6 +5,7 @@ import styles from "./CategoryModal.module.css";
 import dismiss from "@/../public/assets/dismiss.svg";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Categories } from "./Categories";
+import Image from "next/image";
 
 export default function CategoryModal({
   setOpen,
@@ -48,7 +49,7 @@ export default function CategoryModal({
           </div>
           <div className={styles.closeBtn}>
             <button onClick={closeBtnOnClick}>
-              <img src={dismiss.src} alt="close" />
+              <Image src={dismiss.src} alt="close" width={40} height={40} />
             </button>
           </div>
         </div>

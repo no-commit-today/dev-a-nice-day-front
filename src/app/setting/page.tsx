@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import styles from "./page.module.css";
 import carret_right from "@/../public/assets/carret_right.svg";
 import Link from "next/link";
+import Image from "next/image";
 export const metadata: Metadata = {
   title: "설정 | 테크스와이프",
 };
@@ -16,7 +17,12 @@ export default function Setting() {
         >
           <div className={styles.termsBox}>
             <h1 className={styles.termsText}>서비스 이용 약관</h1>
-            <img src={carret_right.src} />
+            <Image
+              alt={"carret_right"}
+              src={carret_right.src}
+              width={24}
+              height={24}
+            />
           </div>
         </Link>
         <Link
@@ -26,7 +32,12 @@ export default function Setting() {
         >
           <div className={styles.termsBox}>
             <h1 className={styles.termsText}>고객센터</h1>
-            <img src={carret_right.src} />
+            <Image
+              alt={"carret_right"}
+              src={carret_right.src}
+              width={24}
+              height={24}
+            />
           </div>
         </Link>
       </div>
