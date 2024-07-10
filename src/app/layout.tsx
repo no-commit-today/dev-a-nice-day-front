@@ -3,6 +3,7 @@ import BottomTabBar from "./_components/BottomTabBar";
 import TobTab from "./_components/TobTab";
 import ReactQueryProvider from "./_hooks/useReactQuery";
 import "./globals.css";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "테크스와이프 | 테크를 스와이프하다.",
@@ -27,7 +28,9 @@ export default function RootLayout({
         <ReactQueryProvider>
           <TobTab />
           {children}
-          <BottomTabBar />
+          <Suspense>
+            <BottomTabBar />
+          </Suspense>
         </ReactQueryProvider>
       </body>
     </html>
