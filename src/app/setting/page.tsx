@@ -11,7 +11,7 @@ export default function Setting() {
     <div className={styles.container}>
       <div className={styles.contentBox}>
         <Link
-          href="https://hilarious-grass-1f6.notion.site/606a35d0a34047efa89ab323f7a9a6c7"
+          href="https://github.com/no-commit-today/tech-swipe-cs/blob/main/약관/서비스%20이용%20약관.md"
           passHref
           target="_blank"
         >
