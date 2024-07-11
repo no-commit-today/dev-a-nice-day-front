@@ -13,7 +13,7 @@ export default function CategoryModal({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const categories = Categories;
-  const [selectedCategory, setSelectedCategory] = useState<string[]>();
+  const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
   const pathName = usePathname();
 
   const categoryParams = useSearchParams().getAll("category");
@@ -23,6 +23,11 @@ export default function CategoryModal({
 
   const closeBtnOnClick = () => {
     if (selectedCategory) {
+      // 선택한 카테고리가 없으면 모달 닫기만 함.
+      if (selectedCategory.toString() == categoryParams.toString()) {
+        setOpen(false);
+        return;
+      }
       const queryString = selectedCategory
         .map((category) => `category=${category}`)
         .join("&");
