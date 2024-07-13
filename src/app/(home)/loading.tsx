@@ -1,7 +1,10 @@
+import { categoryFallback } from "../_components/CategoryFallback";
 import styles from "./loading.module.css";
 export default function Loading() {
+  const CategoryBar = () => categoryFallback;
   return (
     <div className={styles.container}>
+      <CategoryBar />
       <div className={styles.contentBox}>
         <div
           className={styles.loadingItem}

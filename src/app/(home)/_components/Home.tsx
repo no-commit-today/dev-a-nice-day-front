@@ -3,11 +3,12 @@ import styles from "./Home.module.css";
 import ContentSlider from "./ContentSlider";
 import { Suspense } from "react";
 import { contentFallBack } from "./ContentSliderFallback";
+import { categoryFallback } from "@/app/_components/CategoryFallback";
 export default function Home() {
   return (
     <div className={styles.container}>
       <div className={styles.contentBox}>
-        <Suspense>
+        <Suspense fallback={categoryFallback}>
           <CategoryButton />
         </Suspense>
         <div className={styles.sliderBox}>
