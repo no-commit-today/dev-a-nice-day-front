@@ -13,13 +13,12 @@ export default function CategoryModal({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const categories = Categories;
-  const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+
   const pathName = usePathname();
 
   const categoryParams = useSearchParams().getAll("category");
-  useEffect(() => {
-    setSelectedCategory(categoryParams);
-  }, []);
+  const [selectedCategory, setSelectedCategory] =
+    useState<string[]>(categoryParams);
 
   const closeBtnOnClick = () => {
     if (selectedCategory) {
