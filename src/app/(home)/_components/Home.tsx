@@ -2,7 +2,7 @@ import CategoryButton from "@/app/_components/CategoryButton";
 import styles from "./Home.module.css";
 import ContentSlider from "./ContentSlider";
 import { Suspense } from "react";
-import { contentFallBack } from "./contentFallback";
+import { contentFallBack } from "./ContentSliderFallback";
 export default function Home() {
   return (
     <div className={styles.container}>

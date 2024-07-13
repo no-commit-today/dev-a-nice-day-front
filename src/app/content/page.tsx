@@ -3,7 +3,7 @@ import CategoryButton from "../_components/CategoryButton";
 import ContentList from "./_components/ContentList";
 import styles from "./page.module.css";
 import { Suspense } from "react";
-import { contentListFallBack } from "./_components/ContentListFallBack";
+import { contentListFallBack } from "./_components/ContentListFallback";
 
 export const metadata: Metadata = {
   title: "콘텐츠 목록 | 테크스와이프",
