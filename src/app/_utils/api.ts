@@ -9,11 +9,11 @@ function shuffleArray(array: object[]) {
 }
 
 const getPageCount = async (searchParams: string) => {
-  //const data = await fetch(`${BASE_URL}/contents-count?${searchParams}`);
-  const data = {
-    count: 297,
-  };
-  return data;
+  const data = await fetch(
+    `${BASE_URL}/api/content/v1/contents-count?${searchParams}`
+  );
+
+  return data.json();
 };
 
 const getContent = async (page: number, searchParams: string) => {
