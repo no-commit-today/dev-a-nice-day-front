@@ -60,7 +60,7 @@ export default function ContentSlider() {
       return getRandomNumber(allPageParams);
     },
     enabled: totalPageData !== undefined,
-    staleTime: 5 * 1000 * 60,
+    staleTime: 5 * 60,
     gcTime: 30 * 1000 * 60,
   });
   const [contentData, setContentData] = useState<any[] | undefined>(undefined);
@@ -92,7 +92,7 @@ export default function ContentSlider() {
       }
       setContentData(data.pages.map((page) => page.content).flat());
     }
-  }, [data]);
+  }, [data, isStale, isFetchedAfterMount]);
 
   return (
     <div className="swiper-container">

@@ -1,23 +1,7 @@
 .container {
-  max-width: 600px;
-  margin: 0 auto;
-  height: 100%;
-  padding: 20px 0px;
-}
-.contentBox {
-  padding: 20px 20px;
-}
-.titleBox {
-  margin-top: 10px;
   display: flex;
-  flex-direction: row;
-}
-.titleWrap {
-  margin-left: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 30px;
+  justify-content: flex-end;
+  padding: 0 20px;
 }
 
 @-webkit-keyframes skeleton-gradient {
