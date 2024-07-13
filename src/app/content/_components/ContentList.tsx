@@ -5,7 +5,7 @@ import { Categories } from "@/app/_components/Categories";
 import useIntersect from "@/app/_hooks/useIntersect";
 import { useSearchParams } from "next/navigation";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { BASE_URL, getContent, getPageCount } from "@/app/_utils/api";
+import { BASE_URL, getContents, getContentsCount } from "@/app/_utils/api";
 import { useEffect, useState } from "react";
 
 export default function ContentList() {
@@ -21,7 +21,7 @@ export default function ContentList() {
 
   const { data: totalPageData } = useQuery({
     queryKey: ["totalPageData", searchParams],
-    queryFn: () => getPageCount(searchParams),
+    queryFn: () => getContentsCount(searchParams),
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
   });
@@ -29,7 +29,7 @@ export default function ContentList() {
   //TODO: 전체 페이지 개수로 검사하기
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ["content", searchParams],
-    queryFn: ({ pageParam }) => getContent(pageParam, searchParams),
+    queryFn: ({ pageParam }) => getContents(pageParam, searchParams),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
       if (totalPageData !== undefined) {

@@ -7,7 +7,7 @@ import IndexIndicator from "./IndexIndicator";
 import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { BASE_URL, getPageCount, getShuffledContent } from "@/app/_utils/api";
+import { BASE_URL, getContentsCount, getShuffledContents } from "@/app/_utils/api";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Mousewheel } from "swiper/modules";
@@ -21,7 +21,7 @@ export default function ContentSlider() {
   };
   const { data: totalPageData } = useQuery({
     queryKey: ["totalPageData", searchParams],
-    queryFn: () => getPageCount(searchParams),
+    queryFn: () => getContentsCount(searchParams),
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
   });
@@ -54,7 +54,7 @@ export default function ContentSlider() {
     isFetchedAfterMount,
   } = useInfiniteQuery({
     queryKey: ["shuffledContent", searchParams],
-    queryFn: ({ pageParam }) => getShuffledContent(pageParam, searchParams),
+    queryFn: ({ pageParam }) => getShuffledContents(pageParam, searchParams),
     initialPageParam: getRandomNumber([]),
     getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
       return getRandomNumber(allPageParams);
