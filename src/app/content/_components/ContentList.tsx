@@ -7,9 +7,9 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { BASE_URL, getContents, getContentsCount } from "@/app/_utils/api";
 import { useEffect, useState } from "react";
 import useParams from "@/app/_hooks/useParams";
+import { IContentData } from "@/app";
 
 export default function ContentList() {
-  const categories = Categories;
   const ref = useIntersect(async (entry, observer) => {
     observer.unobserve(entry.target);
     if (!isFetchingNextPage) {
@@ -18,20 +18,21 @@ export default function ContentList() {
   });
 
   const searchParams = useParams("category").getParamsToString();
+  const [contentsData, setContentsData] = useState<IContentData[] | null>(null);
 
   const { data: contentsCountData } = useQuery({
-    queryKey: ["totalPageData", searchParams],
+    queryKey: ["contentsCountData", searchParams],
     queryFn: () => getContentsCount(searchParams),
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
   });
 
   const {
-    data: contentsData,
+    data: alignedContentsData,
     fetchNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["content", searchParams],
+    queryKey: ["contents", searchParams],
     queryFn: ({ pageParam }) => getContents(pageParam, searchParams),
     initialPageParam: 1,
     getNextPageParam: (_, __, lastPageParam, ___) => {
@@ -44,17 +45,18 @@ export default function ContentList() {
     enabled: contentsCountData !== undefined,
   });
 
-  const [contentData, setContentData] = useState<any[] | undefined>(undefined);
   useEffect(() => {
-    if (contentsData) {
-      setContentData(contentsData.pages.map((page) => page.content).flat());
+    if (alignedContentsData) {
+      setContentsData(
+        alignedContentsData.pages.map((page) => page.content).flat()
+      );
     }
-  }, [contentsData]);
+  }, [alignedContentsData]);
 
   return (
     <div className={styles.container}>
-      {contentData &&
-        contentData.map((content) => (
+      {contentsData &&
+        contentsData.map((content) => (
           <div
             key={content.id}
             className={styles.contentBox}
@@ -78,9 +80,9 @@ export default function ContentList() {
               </div>
               <h1 className={styles.contentTitle}>{content.title}</h1>
               <div className={styles.categoryBox}>
-                {content.categories.map((category: string) => (
+                {content.categories.map((category) => (
                   <div key={category} className={styles.category}>
-                    {categories[category]}
+                    {Categories[category]}
                   </div>
                 ))}
               </div>
