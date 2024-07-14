@@ -80,9 +80,10 @@ export default function ContentSlider() {
     gcTime: 30 * 1000 * 60,
   });
 
-  const [contentData, setContentData] = useState<any[] | undefined>(undefined);
+  const [contentsData, setContentsData] = useState<any[] | undefined>(
+    undefined
+  );
   const [scrollPosition, setScrollPosition] = useState(0);
-  const swiperRef = useRef<any>(null);
 
   // 스크롤 포지션 받아오기
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function ContentSlider() {
           setScrollPosition(Number(sessionStorage.getItem("scrollPosition")));
         }
       }
-      setContentData(
+      setContentsData(
         shuffledContentsData.pages.map((page) => page.content).flat()
       );
     }
@@ -108,9 +109,8 @@ export default function ContentSlider() {
 
   return (
     <div className="swiper-container">
-      {contentData && (
+      {contentsData && (
         <Swiper
-          ref={swiperRef}
           modules={[Mousewheel]}
           mousewheel={{
             thresholdDelta: 20,
@@ -124,12 +124,12 @@ export default function ContentSlider() {
               "scrollPosition",
               prop.activeIndex.toString()
             );
-            if (prop.activeIndex === contentData.length - pagesBeforeFetch) {
+            if (prop.activeIndex === contentsData.length - pagesBeforeFetch) {
               pushMore();
             }
           }}
         >
-          {contentData.map((content) => {
+          {contentsData.map((content) => {
             const summaryArray = content.summary
               .split("\n")
               .map((item: string) => item.trim())
