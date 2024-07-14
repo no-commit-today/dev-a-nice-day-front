@@ -56,6 +56,33 @@ export const contentListFallBack = (
           marginBottom: 15,
         }}
       ></div>
+      <div
+        className={styles.loadingItem}
+        style={{
+          width: "100%",
+          height: 80,
+          borderRadius: 15,
+          marginBottom: 15,
+        }}
+      ></div>
+      <div
+        className={styles.loadingItem}
+        style={{
+          width: "100%",
+          height: 80,
+          borderRadius: 15,
+          marginBottom: 15,
+        }}
+      ></div>
+      <div
+        className={styles.loadingItem}
+        style={{
+          width: "100%",
+          height: 80,
+          borderRadius: 15,
+          marginBottom: 15,
+        }}
+      ></div>
     </div>
   </div>
 );

@@ -3,10 +3,10 @@ import Image from "next/image";
 import styles from "./ContentList.module.css";
 import { Categories } from "@/app/_components/Categories";
 import useIntersect from "@/app/_hooks/useIntersect";
-import { useSearchParams } from "next/navigation";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { BASE_URL, getContent, getPageCount } from "@/app/_utils/api";
+import { BASE_URL, getContents, getContentsCount } from "@/app/_utils/api";
 import { useEffect, useState } from "react";
+import useParams from "@/app/_hooks/useParams";
 
 export default function ContentList() {
   const categories = Categories;
@@ -17,36 +17,39 @@ export default function ContentList() {
     }
   });
 
-  const searchParams = useSearchParams().toString();
+  const searchParams = useParams().getParamsToString("category");
 
-  const { data: totalPageData } = useQuery({
+  const { data: contentsCountData } = useQuery({
     queryKey: ["totalPageData", searchParams],
-    queryFn: () => getPageCount(searchParams),
+    queryFn: () => getContentsCount(searchParams),
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
   });
 
-  //TODO: 전체 페이지 개수로 검사하기
-  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+  const {
+    data: contentsData,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["content", searchParams],
-    queryFn: ({ pageParam }) => getContent(pageParam, searchParams),
+    queryFn: ({ pageParam }) => getContents(pageParam, searchParams),
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
-      if (totalPageData !== undefined) {
-        return lastPageParam + 1 > Math.ceil(totalPageData.count / 10)
+    getNextPageParam: (_, __, lastPageParam, ___) => {
+      if (contentsCountData !== undefined) {
+        return lastPageParam + 1 > Math.ceil(contentsCountData.count / 10)
           ? null
           : lastPageParam + 1;
       }
     },
-    enabled: totalPageData !== undefined,
+    enabled: contentsCountData !== undefined,
   });
 
   const [contentData, setContentData] = useState<any[] | undefined>(undefined);
   useEffect(() => {
-    if (data) {
-      setContentData(data.pages.map((page) => page.content).flat());
+    if (contentsData) {
+      setContentData(contentsData.pages.map((page) => page.content).flat());
     }
-  }, [data]);
+  }, [contentsData]);
 
   return (
     <div className={styles.container}>

@@ -8,7 +8,7 @@ function shuffleArray(array: object[]) {
   return array;
 }
 
-const getPageCount = async (searchParams: string) => {
+const getContentsCount = async (searchParams: string) => {
   const data = await fetch(
     `${BASE_URL}/api/content/v1/contents-count?${searchParams}`
   );
@@ -16,7 +16,7 @@ const getPageCount = async (searchParams: string) => {
   return data.json();
 };
 
-const getContent = async (page: number, searchParams: string) => {
+const getContents = async (page: number, searchParams: string) => {
   console.log(page);
   const data = await fetch(
     `${BASE_URL}/api/content/v1/contents?page=${page}&size=10&${searchParams}`
@@ -24,11 +24,11 @@ const getContent = async (page: number, searchParams: string) => {
   return data.json();
 };
 
-const getShuffledContent = async (page: number, searchParams: string) => {
-  const data = await getContent(page, searchParams);
+const getShuffledContents = async (page: number, searchParams: string) => {
+  const data = await getContents(page, searchParams);
   shuffleArray(data.content);
 
   return data;
 };
 
-export { getShuffledContent, getContent, getPageCount };
+export { getShuffledContents, getContents, getContentsCount };
