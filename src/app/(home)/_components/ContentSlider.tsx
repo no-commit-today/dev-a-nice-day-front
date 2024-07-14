@@ -18,17 +18,6 @@ import { Mousewheel } from "swiper/modules";
 
 export default function ContentSlider() {
   const searchParams = useSearchParams().toString();
-  const categories = Categories;
-
-  const goToLink = ({ url }: { url: string }) => {
-    window.open(url);
-  };
-  const { data: contentsCountData } = useQuery({
-    queryKey: ["contentsCountData", searchParams],
-    queryFn: () => getContentsCount(searchParams),
-    staleTime: 5 * 1000 * 60,
-    gcTime: 30 * 1000 * 60,
-  });
 
   const getRandomNumber = (allPageParams: number[]) => {
     if (contentsCountData) {
@@ -50,29 +39,12 @@ export default function ContentSlider() {
 
       return totalPageArray[randomIndex];
     }
-    return 0;
+    return 1;
   };
 
-  const {
-    data,
-    fetchNextPage,
-    isFetchingNextPage,
-    isStale,
-    isFetchedAfterMount,
-  } = useInfiniteQuery({
-    queryKey: ["shuffledContent", searchParams],
-    queryFn: ({ pageParam }) => getShuffledContents(pageParam, searchParams),
-    initialPageParam: getRandomNumber([]),
-    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
-      return getRandomNumber(allPageParams);
-    },
-    enabled: contentsCountData !== undefined,
-    staleTime: 5 * 1000 * 60,
-    gcTime: 30 * 1000 * 60,
-  });
-  const [contentData, setContentData] = useState<any[] | undefined>(undefined);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const swiperRef = useRef<any>(null);
+  const goToLink = ({ url }: { url: string }) => {
+    window.open(url);
+  };
 
   // 데이터 추가 요청
   const pushMore = async () => {
@@ -81,9 +53,38 @@ export default function ContentSlider() {
     }
   };
 
+  const { data: contentsCountData } = useQuery({
+    queryKey: ["contentsCountData", searchParams],
+    queryFn: () => getContentsCount(searchParams),
+    staleTime: 5 * 1000 * 60,
+    gcTime: 30 * 1000 * 60,
+  });
+
+  const {
+    data: shuffledContentsData,
+    fetchNextPage,
+    isFetchingNextPage,
+    isStale,
+    isFetchedAfterMount,
+  } = useInfiniteQuery({
+    queryKey: ["shuffledContent", searchParams],
+    queryFn: ({ pageParam }) => getShuffledContents(pageParam, searchParams),
+    initialPageParam: getRandomNumber([]),
+    getNextPageParam: (_, __, ___, allPageParams) => {
+      return getRandomNumber(allPageParams);
+    },
+    enabled: contentsCountData !== undefined,
+    staleTime: 5 * 1000 * 60,
+    gcTime: 30 * 1000 * 60,
+  });
+
+  const [contentData, setContentData] = useState<any[] | undefined>(undefined);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const swiperRef = useRef<any>(null);
+
   // 스크롤 포지션 받아오기
   useEffect(() => {
-    if (data) {
+    if (shuffledContentsData) {
       if (isStale || isFetchedAfterMount) {
         // 캐싱 시간 지나서 리패치 or 마운트 이후 리패치(새로고침 시)
         // 스크롤 포지션 초기화
@@ -97,9 +98,11 @@ export default function ContentSlider() {
           setScrollPosition(Number(sessionStorage.getItem("scrollPosition")));
         }
       }
-      setContentData(data.pages.map((page) => page.content).flat());
+      setContentData(
+        shuffledContentsData.pages.map((page) => page.content).flat()
+      );
     }
-  }, [data, isStale, isFetchedAfterMount]);
+  }, [shuffledContentsData]);
 
   return (
     <div className="swiper-container">
@@ -204,7 +207,7 @@ export default function ContentSlider() {
                         (category: string, index: number) => {
                           return (
                             <h2 key={index} className={styles.categoryText}>
-                              {categories[category]}
+                              {Categories[category]}
                             </h2>
                           );
                         }
