@@ -12,14 +12,17 @@ import {
   getContentsCount,
   getShuffledContents,
 } from "@/app/_utils/api";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
+import { IContentData } from "@/app";
 
 export default function ContentSlider() {
   // 몇페이지 전에 패치할 것인지.
   const pagesBeforeFetch = 3;
-  const searchParams = useParams().getParamsToString("category");
+  const searchParams = useParams("category").getParamsToString();
+  const [contentsData, setContentsData] = useState<IContentData[] | null>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   const getRandomNumber = (allPageParams: number[]) => {
     if (contentsCountData) {
@@ -69,7 +72,7 @@ export default function ContentSlider() {
     isStale,
     isFetchedAfterMount,
   } = useInfiniteQuery({
-    queryKey: ["shuffledContent", searchParams],
+    queryKey: ["shuffledContents", searchParams],
     queryFn: ({ pageParam }) => getShuffledContents(pageParam, searchParams),
     initialPageParam: getRandomNumber([]),
     getNextPageParam: (_, __, ___, allPageParams) => {
@@ -79,10 +82,6 @@ export default function ContentSlider() {
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
   });
-
-  const [contentData, setContentData] = useState<any[] | undefined>(undefined);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const swiperRef = useRef<any>(null);
 
   // 스크롤 포지션 받아오기
   useEffect(() => {
@@ -97,20 +96,19 @@ export default function ContentSlider() {
         // 스크롤 포지션 복구
         const scrollPosition = Number(sessionStorage.getItem("scrollPosition"));
         if (scrollPosition) {
-          setScrollPosition(Number(sessionStorage.getItem("scrollPosition")));
+          setScrollPosition(scrollPosition);
         }
       }
-      setContentData(
+      setContentsData(
         shuffledContentsData.pages.map((page) => page.content).flat()
       );
     }
-  }, [shuffledContentsData]);
+  }, [shuffledContentsData, isStale, isFetchedAfterMount]);
 
   return (
     <div className="swiper-container">
-      {contentData && (
+      {contentsData && (
         <Swiper
-          ref={swiperRef}
           modules={[Mousewheel]}
           mousewheel={{
             thresholdDelta: 20,
@@ -124,16 +122,16 @@ export default function ContentSlider() {
               "scrollPosition",
               prop.activeIndex.toString()
             );
-            if (prop.activeIndex === contentData.length - pagesBeforeFetch) {
+            if (prop.activeIndex === contentsData.length - pagesBeforeFetch) {
               pushMore();
             }
           }}
         >
-          {contentData.map((content) => {
+          {contentsData.map((content) => {
             const summaryArray = content.summary
               .split("\n")
-              .map((item: string) => item.trim())
-              .filter((item: string) => item);
+              .map((item) => item.trim())
+              .filter((item) => item);
 
             return (
               <SwiperSlide key={content.id} className={styles.swiperSlide}>
@@ -193,7 +191,7 @@ export default function ContentSlider() {
                         }}
                       ></Image>
                       <div className={styles.summary}>
-                        {summaryArray.map((summary: string, index: number) => {
+                        {summaryArray.map((summary, index) => {
                           return (
                             <div key={index} className={styles.summaryTextBox}>
                               <IndexIndicator index={index} />
@@ -205,15 +203,13 @@ export default function ContentSlider() {
                     </div>
 
                     <div className={styles.categoryBox}>
-                      {content.categories.map(
-                        (category: string, index: number) => {
-                          return (
-                            <h2 key={index} className={styles.categoryText}>
-                              {Categories[category]}
-                            </h2>
-                          );
-                        }
-                      )}
+                      {content.categories.map((category, index) => {
+                        return (
+                          <h2 key={index} className={styles.categoryText}>
+                            {Categories[category]}
+                          </h2>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
