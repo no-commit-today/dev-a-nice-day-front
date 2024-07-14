@@ -12,7 +12,7 @@ import {
   getContentsCount,
   getShuffledContents,
 } from "@/app/_utils/api";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
@@ -81,7 +81,7 @@ export default function ContentSlider() {
     gcTime: 30 * 1000 * 60,
   });
 
-  const [contentsData, setContentsData] = useState<IContentData[]>([]);
+  const [contentsData, setContentsData] = useState<IContentData[] | null>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
 
   // 스크롤 포지션 받아오기
