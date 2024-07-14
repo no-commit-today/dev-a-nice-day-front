@@ -15,11 +15,12 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
+import { IContentData } from "@/app";
 
 export default function ContentSlider() {
   // 몇페이지 전에 패치할 것인지.
   const pagesBeforeFetch = 3;
-  const searchParams = useParams().getParamsToString("category");
+  const searchParams = useParams("category").getParamsToString();
 
   const getRandomNumber = (allPageParams: number[]) => {
     if (contentsCountData) {
@@ -80,9 +81,7 @@ export default function ContentSlider() {
     gcTime: 30 * 1000 * 60,
   });
 
-  const [contentsData, setContentsData] = useState<any[] | undefined>(
-    undefined
-  );
+  const [contentsData, setContentsData] = useState<IContentData[]>([]);
   const [scrollPosition, setScrollPosition] = useState(0);
 
   // 스크롤 포지션 받아오기
@@ -105,7 +104,7 @@ export default function ContentSlider() {
         shuffledContentsData.pages.map((page) => page.content).flat()
       );
     }
-  }, [shuffledContentsData]);
+  }, [shuffledContentsData, isStale, isFetchedAfterMount]);
 
   return (
     <div className="swiper-container">

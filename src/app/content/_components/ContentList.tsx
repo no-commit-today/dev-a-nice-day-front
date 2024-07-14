@@ -17,7 +17,7 @@ export default function ContentList() {
     }
   });
 
-  const searchParams = useParams().getParamsToString("category");
+  const searchParams = useParams("category").getParamsToString();
 
   const { data: contentsCountData } = useQuery({
     queryKey: ["totalPageData", searchParams],
