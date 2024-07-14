@@ -13,11 +13,13 @@ import {
   getShuffledContents,
 } from "@/app/_utils/api";
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { Mousewheel } from "swiper/modules";
+import useParams from "@/app/_hooks/useParams";
 
 export default function ContentSlider() {
-  const searchParams = useSearchParams().toString();
+  // 몇페이지 전에 패치할 것인지.
+  const pagesBeforeFetch = 3;
+  const searchParams = useParams().getParamsToString("category");
 
   const getRandomNumber = (allPageParams: number[]) => {
     if (contentsCountData) {
@@ -122,7 +124,7 @@ export default function ContentSlider() {
               "scrollPosition",
               prop.activeIndex.toString()
             );
-            if (prop.activeIndex === contentData.length - 3) {
+            if (prop.activeIndex === contentData.length - pagesBeforeFetch) {
               pushMore();
             }
           }}
