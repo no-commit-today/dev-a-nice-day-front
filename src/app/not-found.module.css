@@ -1,0 +1,20 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.contentBox {
+  padding: 50px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.text {
+  font-size: 20px;
+  color: white;
+}
+.linkText {
+  font-size: 20px;
+  color: #007bff;
+  text-decoration: underline;
+}
