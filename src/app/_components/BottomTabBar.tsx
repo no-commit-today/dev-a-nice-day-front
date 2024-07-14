@@ -102,7 +102,10 @@ export default function BottomTabBar() {
           </span>
         </div>
       </Link>
-      <Link href="/setting" className={styles.tabBtn}>
+      <Link
+        href={{ pathname: "/setting", query: query.toString() }}
+        className={styles.tabBtn}
+      >
         <div className={styles.btnBox}>
           <div>
             <svg
