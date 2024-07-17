@@ -5,20 +5,12 @@ import { Categories } from "@/app/_components/Categories";
 import useIntersect from "@/app/_hooks/useIntersect";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { BASE_URL, getContents, getContentsCount } from "@/app/_utils/api";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
 
 export default function ContentList() {
-  const ref = useIntersect(async (entry, observer) => {
-    observer.unobserve(entry.target);
-    if (!isFetchingNextPage) {
-      fetchNextPage();
-    }
-  });
-
   const searchParams = useParams("category").getParamsToString();
-  const [contentsData, setContentsData] = useState<IContentData[] | null>(null);
 
   const { data: contentsCountData } = useQuery({
     queryKey: ["contentsCountData", searchParams],
@@ -27,11 +19,7 @@ export default function ContentList() {
     gcTime: 30 * 1000 * 60,
   });
 
-  const {
-    data: alignedContentsData,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
+  const { data: alignedContentsData, fetchNextPage } = useInfiniteQuery({
     queryKey: ["contents", searchParams],
     queryFn: ({ pageParam }) => getContents(pageParam, searchParams),
     initialPageParam: 1,
@@ -43,22 +31,29 @@ export default function ContentList() {
       }
     },
     enabled: contentsCountData !== undefined,
+    staleTime: 5 * 1000 * 60,
+    gcTime: 30 * 1000 * 60,
   });
 
-  useEffect(() => {
-    if (alignedContentsData) {
-      setContentsData(
-        alignedContentsData.pages.map((page) => page.content).flat()
-      );
-    }
-  }, [alignedContentsData]);
+  const contentsData: IContentData[] = useMemo(
+    () =>
+      alignedContentsData
+        ? alignedContentsData.pages.map((page) => page.content).flat()
+        : [],
+    [alignedContentsData]
+  );
+
+  const ref = useIntersect(() => {
+    fetchNextPage({ cancelRefetch: false });
+  });
 
   return (
     <div className={styles.container}>
       {contentsData &&
-        contentsData.map((content) => (
+        contentsData.map((content, index) => (
           <div
             key={content.id}
+            ref={index === contentsData.length - 2 ? ref : null}
             className={styles.contentBox}
             onClick={() =>
               window.open(`${BASE_URL}/contents/${content.id}/link`)
@@ -98,7 +93,6 @@ export default function ContentList() {
             </div>
           </div>
         ))}
-      {!isFetchingNextPage && <div ref={ref} style={{ height: 1 }} />}
     </div>
   );
 }
