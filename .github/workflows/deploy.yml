@@ -1,11 +1,12 @@
 name: git push into dev repo to deploy to vercel
-permissions: write-all
+
 on:
   push:
     branches: [feat/github-action-setting]
 
 jobs:
   build:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
