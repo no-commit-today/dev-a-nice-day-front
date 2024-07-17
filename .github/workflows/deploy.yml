@@ -9,8 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     container: pandoc/latex
     steps:
+      - uses: actions/checkout@v2
       - name: Pushes to another repository
-        id: push_directory
+        id: push_director
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.GIT_TOKEN }}
