@@ -1,0 +1,24 @@
+name: git push into dev repo to deploy to vercel
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pushes to another repository
+        id: push_directory
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.AUTO_DEPLOY }}
+        with:
+          source-directory: 'output'
+          destination-github-username: 'prkgnt'
+          destination-repository-name: 'tech-swipe-front-dev'
+          user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }}
+          commit-message: ${{ github.event.commits[0].message }}
+          target-branch: main
+      - name: Test get variable exported by push-to-another-repository
+        run: echo $DESTINATION_CLONED_DIRECTORY
