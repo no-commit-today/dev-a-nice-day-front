@@ -1,7 +1,6 @@
 "use client";
 import { redirect, useRouter } from "next/navigation";
 import styles from "./BlueButton.module.css";
-import SetCookie from "./SetCookie";
 export default function BlueButton({
   disabled,
   title,
