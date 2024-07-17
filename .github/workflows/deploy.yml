@@ -1,5 +1,8 @@
 name: git push into dev repo to deploy to vercel
-
+permissions:
+  pull-requests: write
+  issues: write
+  repository-projects: write
 on:
   push:
     branches: [feat/github-action-setting]
