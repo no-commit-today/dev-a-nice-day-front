@@ -20,6 +20,7 @@ jobs:
           destination-repository-name: 'tech-swipe-front-dev'
           user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
+          github_token: ${{ secrets.GIT_TOKEN }}
           target-branch: main
       - name: Test get variable exported by push-to-another-repository
         run: echo $DESTINATION_CLONED_DIRECTORY
