@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
+import no_image from "@/../public/assets/no_image.svg";
 
 export default function ContentSlider() {
   // 몇페이지 전에 패치할 것인지.
@@ -139,7 +140,11 @@ export default function ContentSlider() {
                   <h1 className={styles.dateText}>{content.publishedDate}</h1>
                   <div className={styles.titleBox}>
                     <Image
-                      src={"https://picsum.photos/1000/1000"}
+                      src={
+                        content.providerIconUrl
+                          ? content.providerIconUrl
+                          : no_image.src
+                      }
                       alt={"provider icon"}
                       width={30}
                       height={30}
@@ -180,7 +185,7 @@ export default function ContentSlider() {
                       }
                     >
                       <Image
-                        src={"https://picsum.photos/200/300"}
+                        src={content.imageUrl ? content.imageUrl : no_image.src}
                         alt="content image"
                         width={560}
                         height={350}

@@ -8,6 +8,7 @@ import { BASE_URL, getContents, getContentsCount } from "@/app/_utils/api";
 import { useMemo } from "react";
 import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
+import no_image from "@/../public/assets/no_image.svg";
 
 export default function ContentList() {
   const searchParams = useParams("category").getParamsToString();
@@ -62,7 +63,11 @@ export default function ContentList() {
             <div className={styles.leftBox}>
               <div className={styles.titleBox}>
                 <Image
-                  src={"https://picsum.photos/200/300"}
+                  src={
+                    content.providerIconUrl
+                      ? content.providerIconUrl
+                      : no_image.src
+                  }
                   alt={"provider icon"}
                   width={20}
                   height={20}
@@ -84,7 +89,7 @@ export default function ContentList() {
             </div>
             <div className={styles.rightBox}>
               <Image
-                src={"https://picsum.photos/200/300"}
+                src={content.imageUrl ? content.imageUrl : no_image.src}
                 alt={"content image"}
                 width={90}
                 height={60}
