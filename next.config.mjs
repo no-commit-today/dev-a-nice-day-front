@@ -4,25 +4,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "picsum.photos",
-        port: "",
-        pathname: "/200/300",
-      },
-      {
-        protocol: "https",
-        hostname: "picsum.photos",
-        port: "",
-        pathname: "/1000/1000",
-      },
-      {
-        protocol: "https",
-        hostname: "picsum.photos",
-        port: "",
-        pathname: "/200/200",
+        hostname: "techswipe-images.s3.ap-northeast-2.amazonaws.com",
       },
     ],
   },
-  output: "standalone"
+  output: "standalone",
 };
 
 export default nextConfig;
