@@ -5,21 +5,19 @@ import { Categories } from "@/app/_components/Categories";
 import useIntersect from "@/app/_hooks/useIntersect";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { BASE_URL, getContents, getContentsCount } from "@/app/_utils/api";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
 
 export default function ContentList() {
   const searchParams = useParams("category").getParamsToString();
 
-  // const { data: contentsCountData } = useQuery({
-  //   queryKey: ["contentsCountData", searchParams],
-  //   queryFn: () => getContentsCount(searchParams),
-  //   staleTime: 5 * 1000 * 60,
-  //   gcTime: 30 * 1000 * 60,
-  // });
-
-  const contentsCountData = { count: 297 };
+  const { data: contentsCountData } = useQuery({
+    queryKey: ["contentsCountData", searchParams],
+    queryFn: () => getContentsCount(searchParams),
+    staleTime: 5 * 1000 * 60,
+    gcTime: 30 * 1000 * 60,
+  });
 
   const { data: alignedContentsData, fetchNextPage } = useInfiniteQuery({
     queryKey: ["contents", searchParams],
@@ -37,49 +35,16 @@ export default function ContentList() {
     gcTime: 30 * 1000 * 60,
   });
 
-  const [contentsData, setContentsData] = useState<IContentData[] | null>(null);
-
-  useEffect(() => {
-    if (alignedContentsData) {
-      setContentsData(
-        alignedContentsData.pages.map((page) => page.content).flat()
-      );
-    }
-  }, [alignedContentsData]);
-
-  // const contentsData = useMemo(
-  //   () =>
-  //     alignedContentsData
-  //       ? alignedContentsData.pages.map((page) => page.content).flat()
-  //       : [],
-  //   [alignedContentsData]
-  // );
-
-  // let contentsData = alignedContentsData?.pages
-  //   .map((page) => page.content)
-  //   .flat();
+  const contentsData: IContentData[] = useMemo(
+    () =>
+      alignedContentsData
+        ? alignedContentsData.pages.map((page) => page.content).flat()
+        : [],
+    [alignedContentsData]
+  );
 
   const ref = useIntersect(() => {
     fetchNextPage({ cancelRefetch: false });
-    // if (!isFetchingNextPage) {
-    //   fetchNextPage();
-    // }
-  });
-
-  // useEffect(() => {
-  //   console.log("ref");
-  // }, [ref]);
-  // useEffect(() => {
-  //   console.log("alignedContentsData");
-  // }, [alignedContentsData]);
-  // useEffect(() => {
-  //   console.log("contentsData");
-  // }, [contentsData]);
-  const prevStateRef = useRef();
-  useEffect(() => {
-    console.log("render");
-    //console.log(alignedContentsData);
-    // console.log(contentsData);
   });
 
   return (
