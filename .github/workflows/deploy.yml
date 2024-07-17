@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: pandoc/latex
     steps:
       - name: Pushes to another repository
         id: push_directory
