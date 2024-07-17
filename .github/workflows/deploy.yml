@@ -15,7 +15,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.GIT_TOKEN }}
         with:
-          source-directory: 'output'
+          source-directory: './'
           destination-github-username: 'prkgnt'
           destination-repository-name: 'tech-swipe-front-dev'
           user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }}
