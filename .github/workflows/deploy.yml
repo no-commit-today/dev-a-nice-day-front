@@ -17,9 +17,9 @@ jobs:
         with:
           source-directory: .
           destination-github-username: 'prkgnt'
-          destination-repository-name: 'tech-swipe-test'
+          destination-repository-name: 'tech-swipe-front-dev'
           user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }}
           commit-message: See ORIGIN_COMMIT from $GITHUB_REF
-          target-branch: main
+          target-branch: deploy
       - name: Test get variable exported by push-to-another-repository
         run: echo $DESTINATION_CLONED_DIRECTORY
