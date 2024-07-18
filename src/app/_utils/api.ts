@@ -17,7 +17,6 @@ const getContentsCount = async (searchParams: string) => {
 };
 
 const getContents = async (page: number, searchParams: string) => {
-  console.log(page);
   const data = await fetch(
     `${BASE_URL}/api/content/v1/contents?page=${page}&size=10&${searchParams}`
   );

@@ -184,23 +184,30 @@ export default function ContentSlider() {
                         })
                       }
                     >
-                      <Image
-                        src={content.imageUrl ? content.imageUrl : no_image.src}
-                        alt="content image"
-                        width={560}
-                        height={350}
-                        style={{
-                          objectFit: "cover",
-                          borderRadius: 10,
-                          width: "100%",
-                        }}
-                      ></Image>
+                      <div className={styles.imgBox}>
+                        <Image
+                          src={
+                            content.imageUrl ? content.imageUrl : no_image.src
+                          }
+                          alt="content image"
+                          fill
+                          sizes="(max-height:250px)"
+                          style={{
+                            objectFit: "cover",
+                            borderTopLeftRadius: 10,
+                            borderTopRightRadius: 10,
+                            width: "100%",
+                          }}
+                        ></Image>
+                      </div>
                       <div className={styles.summary}>
                         {summaryArray.map((summary, index) => {
                           return (
                             <div key={index} className={styles.summaryTextBox}>
                               <IndexIndicator index={index} />
-                              <h2 className={styles.summaryText}>{summary}</h2>
+                              <h2 className={styles.summaryText}>
+                                {summary.replace(/^\d+\.\s*/, "")}
+                              </h2>
                             </div>
                           );
                         })}
@@ -211,7 +218,7 @@ export default function ContentSlider() {
                       {content.categories.map((category, index) => {
                         return (
                           <h2 key={index} className={styles.categoryText}>
-                            {Categories[category]}
+                            #{Categories[category]}
                           </h2>
                         );
                       })}
