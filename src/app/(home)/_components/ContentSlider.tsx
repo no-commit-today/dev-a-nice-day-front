@@ -184,18 +184,22 @@ export default function ContentSlider() {
                         })
                       }
                     >
-                      <Image
-                        src={content.imageUrl ? content.imageUrl : no_image.src}
-                        alt="content image"
-                        width={560}
-                        height={290}
-                        style={{
-                          objectFit: "cover",
-                          borderTopLeftRadius: 10,
-                          borderTopRightRadius: 10,
-                          width: "100%",
-                        }}
-                      ></Image>
+                      <div className={styles.imgBox}>
+                        <Image
+                          src={
+                            content.imageUrl ? content.imageUrl : no_image.src
+                          }
+                          alt="content image"
+                          fill
+                          sizes="(max-height:250px)"
+                          style={{
+                            objectFit: "cover",
+                            borderTopLeftRadius: 10,
+                            borderTopRightRadius: 10,
+                            width: "100%",
+                          }}
+                        ></Image>
+                      </div>
                       <div className={styles.summary}>
                         {summaryArray.map((summary, index) => {
                           return (
@@ -214,7 +218,7 @@ export default function ContentSlider() {
                       {content.categories.map((category, index) => {
                         return (
                           <h2 key={index} className={styles.categoryText}>
-                            {Categories[category]}
+                            #{Categories[category]}
                           </h2>
                         );
                       })}
