@@ -80,11 +80,9 @@ export default function ContentList() {
               </div>
               <h1 className={styles.contentTitle}>{content.title}</h1>
               <div className={styles.categoryBox}>
-                {content.categories.map((category) => (
-                  <div key={category} className={styles.category}>
-                    {Categories[category]}
-                  </div>
-                ))}
+                {content.categories.map(
+                  (category) => `${Categories[category]} `
+                )}
               </div>
             </div>
             <div className={styles.rightBox}>
