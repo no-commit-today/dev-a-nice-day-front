@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: creates output
+        run:  sh ./build.sh
       - name: Pushes to another repository
         id: push_director
         uses: cpina/github-action-push-to-another-repository@main
