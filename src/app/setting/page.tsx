@@ -4,7 +4,7 @@ import carret_right from "@/../public/assets/carret_right.svg";
 import Link from "next/link";
 import Image from "next/image";
 export const metadata: Metadata = {
-  title: "설정 | 테크스와이프",
+  title: "테크스와이프 | 설정",
 };
 export default function Setting() {
   return (
