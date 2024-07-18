@@ -17,10 +17,10 @@ jobs:
         with:
           source-directory: '.'
           destination-github-username: 'prkgnt'
-          destination-repository-name: 'tech-swipe-front-deploy'
+          destination-repository-name: 'tech-swipe-test'
           user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
           github_token: ${{ secrets.API_TOKEN_GITHUB }}
-          target-branch: deploy
+          target-branch: main
       - name: Test get variable exported by push-to-another-repository
         run: echo $DESTINATION_CLONED_DIRECTORY
