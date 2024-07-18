@@ -188,10 +188,11 @@ export default function ContentSlider() {
                         src={content.imageUrl ? content.imageUrl : no_image.src}
                         alt="content image"
                         width={560}
-                        height={350}
+                        height={290}
                         style={{
                           objectFit: "cover",
-                          borderRadius: 10,
+                          borderTopLeftRadius: 10,
+                          borderTopRightRadius: 10,
                           width: "100%",
                         }}
                       ></Image>
