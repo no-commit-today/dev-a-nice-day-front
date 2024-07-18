@@ -200,7 +200,9 @@ export default function ContentSlider() {
                           return (
                             <div key={index} className={styles.summaryTextBox}>
                               <IndexIndicator index={index} />
-                              <h2 className={styles.summaryText}>{summary}</h2>
+                              <h2 className={styles.summaryText}>
+                                {summary.replace(/^\d+\.\s*/, "")}
+                              </h2>
                             </div>
                           );
                         })}
