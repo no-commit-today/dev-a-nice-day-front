@@ -21,6 +21,6 @@ jobs:
           user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
           github_token: ${{ secrets.API_TOKEN_GITHUB }}
-          target-branch: develop
+          target-branch: deploy
       - name: Test get variable exported by push-to-another-repository
         run: echo $DESTINATION_CLONED_DIRECTORY
