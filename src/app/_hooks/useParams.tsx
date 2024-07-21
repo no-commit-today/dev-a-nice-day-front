@@ -1,7 +1,6 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 const useParams = (queryParam: string) => {
   const searchParamsArray = useSearchParams().getAll(queryParam);
