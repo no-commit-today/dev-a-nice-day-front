@@ -16,7 +16,7 @@ export default function CategoryModal({
 
   const pathName = usePathname();
 
-  const categoryParams = useSearchParams().getAll("category");
+  const categoryParams = useSearchParams().getAll("categories");
   const [selectedCategory, setSelectedCategory] =
     useState<string[]>(categoryParams);
 
@@ -28,7 +28,7 @@ export default function CategoryModal({
         return;
       }
       const queryString = selectedCategory
-        .map((category) => `category=${category}`)
+        .map((category) => `categories=${category}`)
         .join("&");
 
       // 새로고침하면서 이동하려고 router 안씀.

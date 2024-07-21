@@ -21,7 +21,7 @@ import no_image from "@/../public/assets/no_image.svg";
 export default function ContentSlider() {
   // 몇페이지 전에 패치할 것인지.
   const pagesBeforeFetch = 3;
-  const searchParams = useParams("category").getParamsToString();
+  const searchParams = useParams("categories").getParamsToString();
   const [contentsData, setContentsData] = useState<IContentData[] | null>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
 
