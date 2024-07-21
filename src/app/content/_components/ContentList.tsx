@@ -11,7 +11,7 @@ import { IContentData } from "@/app";
 import no_image from "@/../public/assets/no_image.svg";
 
 export default function ContentList() {
-  const searchParams = useParams("category").getParamsToString();
+  const searchParams = useParams("categories").getParamsToString();
 
   const { data: contentsCountData } = useQuery({
     queryKey: ["contentsCountData", searchParams],
