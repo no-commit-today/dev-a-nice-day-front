@@ -192,6 +192,7 @@ export default function ContentSlider() {
                           alt="content image"
                           fill
                           sizes="(max-height:250px)"
+                          priority={true}
                           style={{
                             objectFit: "cover",
                             borderTopLeftRadius: 10,
