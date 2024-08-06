@@ -5,7 +5,7 @@ import { Categories } from "@/app/_components/Categories";
 import useIntersect from "@/app/_hooks/useIntersect";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { BASE_URL, getContents, getContentsCount } from "@/app/_utils/api";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
 import no_image from "@/../public/assets/no_image.svg";
@@ -20,7 +20,11 @@ export default function ContentList() {
     gcTime: 30 * 1000 * 60,
   });
 
-  const { data: alignedContentsData, fetchNextPage } = useInfiniteQuery({
+  const {
+    data: alignedContentsData,
+    fetchNextPage,
+    isStale,
+  } = useInfiniteQuery({
     queryKey: ["contents", searchParams],
     queryFn: ({ pageParam }) => getContents(pageParam, searchParams),
     initialPageParam: 1,
@@ -47,6 +51,16 @@ export default function ContentList() {
   const ref = useIntersect(() => {
     fetchNextPage({ cancelRefetch: false });
   });
+
+  useEffect(() => {
+    if (!isStale) {
+      const scrollY = sessionStorage.getItem("scrollY");
+      if (scrollY) {
+        window.scrollTo(0, Number(scrollY));
+        sessionStorage.removeItem("scrollY");
+      }
+    }
+  }, [isStale]);
 
   return (
     <div className={styles.container}>

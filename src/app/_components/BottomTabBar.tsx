@@ -12,6 +12,12 @@ export default function BottomTabBar() {
       <Link
         href={{ pathname: "/", query: query.toString() }}
         className={styles.tabBtn}
+        scroll={false}
+        onClick={() => {
+          if (pathname === "/content") {
+            sessionStorage.setItem("scrollY", window.scrollY.toString());
+          }
+        }}
       >
         <div className={styles.btnBox}>
           <div>
@@ -64,6 +70,7 @@ export default function BottomTabBar() {
       <Link
         href={{ pathname: "/content", query: query.toString() }}
         className={styles.tabBtn}
+        scroll={false}
       >
         <div className={styles.btnBox}>
           <div>
@@ -105,6 +112,11 @@ export default function BottomTabBar() {
       <Link
         href={{ pathname: "/setting", query: query.toString() }}
         className={styles.tabBtn}
+        onClick={() => {
+          if (pathname === "/content") {
+            sessionStorage.setItem("scrollY", window.scrollY.toString());
+          }
+        }}
       >
         <div className={styles.btnBox}>
           <div>
