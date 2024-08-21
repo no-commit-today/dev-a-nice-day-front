@@ -6,12 +6,8 @@ import "swiper/css";
 import IndexIndicator from "./IndexIndicator";
 import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import {
-  BASE_URL,
-  getContentsCount,
-  getShuffledContents,
-} from "@/app/_utils/api";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { BASE_URL, getShuffledContents } from "@/app/_utils/api";
 import { useEffect, useState } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
@@ -29,7 +25,6 @@ export default function ContentSlider({
   // 몇페이지 전에 패치할 것인지.
   const pagesBeforeFetch = 3;
   const searchParams = useParams("categories").getParamsToString();
-  // const [contentsData, setContentsData] = useState<IContentData[] | null>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
 
   const {
@@ -50,16 +45,17 @@ export default function ContentSlider({
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
   });
+
   // 데이터 추가 요청
   const pushMore = async () => {
     if (!isFetchingNextPage) {
       await fetchNextPage();
     }
   };
-  let contentsData = initialData.pages.map((page) => page.content).flat();
   const goToLink = ({ url }: { url: string }) => {
     window.open(url);
   };
+
   // 스크롤 포지션 받아오기
   useEffect(() => {
     if (shuffledContentsData) {
@@ -76,13 +72,6 @@ export default function ContentSlider({
           setScrollPosition(scrollPosition);
         }
       }
-      // setContentsData(
-      //   shuffledContentsData.pages.map((page) => page.content).flat()
-      // );
-      console.log(shuffledContentsData);
-      contentsData = shuffledContentsData.pages
-        .map((page) => page.content)
-        .flat();
     }
   }, [shuffledContentsData, isStale, isFetchedAfterMount]);
 
