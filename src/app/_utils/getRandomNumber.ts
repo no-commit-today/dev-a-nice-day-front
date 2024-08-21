@@ -5,7 +5,6 @@ const getRandomNumber = (
   allPageParams: number[] | unknown[],
   contentsCountData: ContentsCountData
 ) => {
-  console.log(contentsCountData);
   // 전체 콘텐츠 개수를 통해 전체 페이지 개수를 계산
   let pagesCount = Math.ceil(contentsCountData.count / 10);
 
