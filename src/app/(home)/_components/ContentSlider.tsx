@@ -125,6 +125,7 @@ export default function ContentSlider({
                         alt={"provider icon"}
                         width={30}
                         height={30}
+                        priority={true}
                         style={{ borderRadius: 7 }}
                         className={styles.providerIcon}
                         onClick={() =>
