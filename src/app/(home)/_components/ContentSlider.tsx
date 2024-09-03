@@ -83,10 +83,29 @@ export default function ContentSlider({
       return 0;
     }
   };
+  // url에 id 파라미터 추가
+  const pushIdParam = (index: number) => {
+    if (searchParams) {
+      router.replace(
+        `/?${searchParams}&id=${
+          shuffledContentsData.pages.map((page) => page.content).flat()[index]
+            .id
+        }`,
+        {}
+      );
+    } else {
+      router.replace(
+        `/?id=${
+          shuffledContentsData.pages.map((page) => page.content).flat()[index]
+            .id
+        }`
+      );
+    }
+  };
 
   return (
     <div className="swiper-container">
-      {shuffledContentsData.pages.map((page) => page.content).flat() && (
+      {shuffledContentsData && (
         <Swiper
           modules={[Mousewheel]}
           mousewheel={{
@@ -97,33 +116,10 @@ export default function ContentSlider({
           direction={"vertical"}
           initialSlide={getScrollPosition()}
           onInit={(prop) => {
-            console.log(prop.activeIndex);
-            console.log(
-              shuffledContentsData.pages.map((page) => page.content).flat()[
-                prop.activeIndex
-              ].id
-            );
-            router.push(
-              `/?${searchParams}&id=${
-                shuffledContentsData.pages.map((page) => page.content).flat()[
-                  prop.activeIndex
-                ].id
-              }`
-            );
+            pushIdParam(prop.activeIndex);
           }}
           onSlideChange={(prop) => {
-            console.log(
-              shuffledContentsData.pages.map((page) => page.content).flat()[
-                prop.activeIndex
-              ]
-            );
-            router.push(
-              `/?${searchParams}&id=${
-                shuffledContentsData.pages.map((page) => page.content).flat()[
-                  prop.activeIndex
-                ].id
-              }`
-            );
+            pushIdParam(prop.activeIndex);
             sessionStorage.setItem(
               "scrollPosition",
               prop.activeIndex.toString()
