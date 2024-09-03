@@ -34,7 +34,6 @@ export default function ContentSlider({
     fetchNextPage,
     isFetchingNextPage,
     isStale,
-    isFetchedAfterMount,
   } = useInfiniteQuery({
     queryKey: ["shuffledContents", searchParams],
     queryFn: ({ pageParam }) => getShuffledContents(pageParam, searchParams),
@@ -43,9 +42,9 @@ export default function ContentSlider({
     getNextPageParam: (_, __, ___, allPageParams) => {
       return getRandomNumber(allPageParams, contentsCountData);
     },
-    enabled: contentsCountData !== undefined,
-    staleTime: 5 * 1000 * 60,
-    gcTime: 30 * 1000 * 60,
+
+    // staleTime: 5 * 1000 * 60,
+    // gcTime: 30 * 1000 * 60,
   });
 
   // 데이터 추가 요청
@@ -58,30 +57,62 @@ export default function ContentSlider({
     window.open(url);
   };
 
-  useEffect(() => {
-    router.push(
-      `/?${searchParams}&id=${shuffledContentsData.pages[0].content[0].id}`
-    );
-  }, []);
+  // useEffect(() => {
+  //   router.push(
+  //     `/?${searchParams}&id=${shuffledContentsData.pages[0].content[0].id}`
+  //   );
+  // }, []);
 
   // 스크롤 포지션 받아오기
+  // useEffect(() => {
+  //   if (shuffledContentsData) {
+  //     if (isStale || isFetchedAfterMount) {
+  //       // 캐싱 시간 지나서 리패치 or 마운트 이후 리패치(새로고침 시)
+  //       // 스크롤 포지션 초기화
+  //       setScrollPosition(0);
+  //       sessionStorage.removeItem("scrollPosition");
+  //     } else {
+  //       // 데이터가 캐싱되어 있는 경우
+  //       // 스크롤 포지션 복구
+  //       const scrollPosition = Number(sessionStorage.getItem("scrollPosition"));
+  //       if (scrollPosition) {
+  //         setScrollPosition(scrollPosition);
+  //       }
+  //     }
+  //   }
+  // }, [shuffledContentsData, isStale, isFetchedAfterMount]);
+
   useEffect(() => {
-    if (shuffledContentsData) {
-      if (isStale || isFetchedAfterMount) {
-        // 캐싱 시간 지나서 리패치 or 마운트 이후 리패치(새로고침 시)
-        // 스크롤 포지션 초기화
-        setScrollPosition(0);
-        sessionStorage.removeItem("scrollPosition");
-      } else {
-        // 데이터가 캐싱되어 있는 경우
-        // 스크롤 포지션 복구
-        const scrollPosition = Number(sessionStorage.getItem("scrollPosition"));
-        if (scrollPosition) {
-          setScrollPosition(scrollPosition);
+    const handleBeforeUnload = (event: any) => {
+      // 사용자에게 경고 메시지를 표시할 수 있습니다.
+      sessionStorage.removeItem("scrollPosition");
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const getScrollPosition = (): number => {
+    if (typeof window !== "undefined") {
+      const scrollPosition = Number(sessionStorage.getItem("scrollPosition"));
+      if (scrollPosition) {
+        if (isStale) {
+          console.log("stale");
+          sessionStorage.removeItem("scrollPosition");
+          return 0;
+        } else {
+          return scrollPosition;
         }
+      } else {
+        return 0;
       }
+    } else {
+      return 0;
     }
-  }, [shuffledContentsData, isStale, isFetchedAfterMount]);
+  };
 
   return (
     <div className="swiper-container">
@@ -94,8 +125,28 @@ export default function ContentSlider({
           }}
           autoHeight={true}
           direction={"vertical"}
-          initialSlide={scrollPosition}
+          initialSlide={getScrollPosition()}
+          onInit={(prop) => {
+            console.log(prop.activeIndex);
+            console.log(
+              shuffledContentsData.pages.map((page) => page.content).flat()[
+                prop.activeIndex
+              ].id
+            );
+            router.push(
+              `/?${searchParams}&id=${
+                shuffledContentsData.pages.map((page) => page.content).flat()[
+                  prop.activeIndex
+                ].id
+              }`
+            );
+          }}
           onSlideChange={(prop) => {
+            console.log(
+              shuffledContentsData.pages.map((page) => page.content).flat()[
+                prop.activeIndex
+              ]
+            );
             router.push(
               `/?${searchParams}&id=${
                 shuffledContentsData.pages.map((page) => page.content).flat()[
@@ -107,15 +158,8 @@ export default function ContentSlider({
               "scrollPosition",
               prop.activeIndex.toString()
             );
-            if (
-              prop.activeIndex ===
-              shuffledContentsData.pages.map((page) => page.content).flat()
-                .length -
-                pagesBeforeFetch
-            ) {
-              pushMore();
-            }
           }}
+          onReachEnd={pushMore}
         >
           {shuffledContentsData.pages
             .map((page) => page.content)
