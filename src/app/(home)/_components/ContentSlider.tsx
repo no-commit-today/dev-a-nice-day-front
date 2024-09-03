@@ -24,10 +24,7 @@ export default function ContentSlider({
   contentsCountData: { count: number };
 }) {
   const router = useRouter();
-  // 몇페이지 전에 패치할 것인지.
-  const pagesBeforeFetch = 3;
   const searchParams = useParams("categories").getParamsToString();
-  const [scrollPosition, setScrollPosition] = useState(0);
 
   const {
     data: shuffledContentsData,
@@ -42,9 +39,8 @@ export default function ContentSlider({
     getNextPageParam: (_, __, ___, allPageParams) => {
       return getRandomNumber(allPageParams, contentsCountData);
     },
-
-    // staleTime: 5 * 1000 * 60,
-    // gcTime: 30 * 1000 * 60,
+    staleTime: 5 * 1000 * 60,
+    gcTime: 30 * 1000 * 60,
   });
 
   // 데이터 추가 요청
@@ -57,34 +53,9 @@ export default function ContentSlider({
     window.open(url);
   };
 
-  // useEffect(() => {
-  //   router.push(
-  //     `/?${searchParams}&id=${shuffledContentsData.pages[0].content[0].id}`
-  //   );
-  // }, []);
-
-  // 스크롤 포지션 받아오기
-  // useEffect(() => {
-  //   if (shuffledContentsData) {
-  //     if (isStale || isFetchedAfterMount) {
-  //       // 캐싱 시간 지나서 리패치 or 마운트 이후 리패치(새로고침 시)
-  //       // 스크롤 포지션 초기화
-  //       setScrollPosition(0);
-  //       sessionStorage.removeItem("scrollPosition");
-  //     } else {
-  //       // 데이터가 캐싱되어 있는 경우
-  //       // 스크롤 포지션 복구
-  //       const scrollPosition = Number(sessionStorage.getItem("scrollPosition"));
-  //       if (scrollPosition) {
-  //         setScrollPosition(scrollPosition);
-  //       }
-  //     }
-  //   }
-  // }, [shuffledContentsData, isStale, isFetchedAfterMount]);
-
+  // 새로고침 시 슬라이더 위치 초기화
   useEffect(() => {
-    const handleBeforeUnload = (event: any) => {
-      // 사용자에게 경고 메시지를 표시할 수 있습니다.
+    const handleBeforeUnload = () => {
       sessionStorage.removeItem("scrollPosition");
     };
 
@@ -100,7 +71,6 @@ export default function ContentSlider({
       const scrollPosition = Number(sessionStorage.getItem("scrollPosition"));
       if (scrollPosition) {
         if (isStale) {
-          console.log("stale");
           sessionStorage.removeItem("scrollPosition");
           return 0;
         } else {
