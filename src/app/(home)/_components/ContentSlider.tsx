@@ -14,6 +14,7 @@ import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
 import no_image from "@/../public/assets/no_image.svg";
 import getRandomNumber from "@/app/_utils/getRandomNumber";
+import { useRouter } from "next/navigation";
 
 export default function ContentSlider({
   initialData,
@@ -22,6 +23,7 @@ export default function ContentSlider({
   initialData: { pages: { content: IContentData[] }[]; pageParams: number[] };
   contentsCountData: { count: number };
 }) {
+  const router = useRouter();
   // 몇페이지 전에 패치할 것인지.
   const pagesBeforeFetch = 3;
   const searchParams = useParams("categories").getParamsToString();
@@ -56,6 +58,12 @@ export default function ContentSlider({
     window.open(url);
   };
 
+  useEffect(() => {
+    router.push(
+      `/?${searchParams}&id=${shuffledContentsData.pages[0].content[0].id}`
+    );
+  }, []);
+
   // 스크롤 포지션 받아오기
   useEffect(() => {
     if (shuffledContentsData) {
@@ -88,6 +96,13 @@ export default function ContentSlider({
           direction={"vertical"}
           initialSlide={scrollPosition}
           onSlideChange={(prop) => {
+            router.push(
+              `/?${searchParams}&id=${
+                shuffledContentsData.pages.map((page) => page.content).flat()[
+                  prop.activeIndex
+                ].id
+              }`
+            );
             sessionStorage.setItem(
               "scrollPosition",
               prop.activeIndex.toString()
