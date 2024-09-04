@@ -86,19 +86,26 @@ export default function ContentSlider({
   // url에 id 파라미터 추가
   const pushIdParam = (index: number) => {
     if (searchParams) {
-      router.replace(
-        `/?${searchParams}&id=${
-          shuffledContentsData.pages.map((page) => page.content).flat()[index]
-            .id
-        }`,
-        {}
+      window.history.replaceState(
+        window.history.state,
+        "",
+        window.location.pathname +
+          "?" +
+          `${searchParams}&id=${
+            shuffledContentsData.pages.map((page) => page.content).flat()[index]
+              .id
+          }`
       );
     } else {
-      router.replace(
-        `/?id=${
-          shuffledContentsData.pages.map((page) => page.content).flat()[index]
-            .id
-        }`
+      window.history.replaceState(
+        window.history.state,
+        "",
+        window.location.pathname +
+          "?" +
+          `id=${
+            shuffledContentsData.pages.map((page) => page.content).flat()[index]
+              .id
+          }`
       );
     }
   };
