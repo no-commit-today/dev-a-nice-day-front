@@ -9,7 +9,7 @@ import getRandomNumber from "@/app/_utils/getRandomNumber";
 export default async function Home({
   searchParams,
 }: {
-  searchParams: string[];
+  searchParams: { categories: string[]; id?: string };
 }) {
   const arrayToQueryString = (categories: string[] | string) => {
     if (categories == null) {
@@ -17,18 +17,18 @@ export default async function Home({
     } else if (!Array.isArray(categories)) {
       // 단일 카테고리일 경우, 배열이 아니므로 그대로 처리해서 반환
       return `categories=${categories}`;
-    }
-    {
+    } else {
       return categories.map((category) => `categories=${category}`).join("&");
     }
   };
   const contentsCountData = await getContentsCount(
-    arrayToQueryString(searchParams)
+    arrayToQueryString(searchParams.categories)
   );
   const randomIndex = getRandomNumber([], contentsCountData);
   const initialContents = await getShuffledContents(
     randomIndex,
-    arrayToQueryString(searchParams)
+    arrayToQueryString(searchParams.categories),
+    searchParams.id
   );
   const initialData = {
     pages: [initialContents],
