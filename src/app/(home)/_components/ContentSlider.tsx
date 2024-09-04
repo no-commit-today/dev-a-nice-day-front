@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { BASE_URL, getShuffledContents } from "@/app/_utils/api";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
@@ -22,17 +22,12 @@ export default function ContentSlider({
   initialData: { pages: { content: IContentData[] }[]; pageParams: number[] };
   contentsCountData: { count: number };
 }) {
-  // 몇페이지 전에 패치할 것인지.
-  const pagesBeforeFetch = 3;
   const searchParams = useParams("categories").getParamsToString();
-  const [scrollPosition, setScrollPosition] = useState(0);
-
   const {
     data: shuffledContentsData,
     fetchNextPage,
     isFetchingNextPage,
     isStale,
-    isFetchedAfterMount,
   } = useInfiniteQuery({
     queryKey: ["shuffledContents", searchParams],
     queryFn: ({ pageParam }) => getShuffledContents(pageParam, searchParams),
@@ -41,7 +36,6 @@ export default function ContentSlider({
     getNextPageParam: (_, __, ___, allPageParams) => {
       return getRandomNumber(allPageParams, contentsCountData);
     },
-    enabled: contentsCountData !== undefined,
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
   });
@@ -56,28 +50,66 @@ export default function ContentSlider({
     window.open(url);
   };
 
-  // 스크롤 포지션 받아오기
+  // 새로고침 시 슬라이더 위치 초기화
   useEffect(() => {
-    if (shuffledContentsData) {
-      if (isStale || isFetchedAfterMount) {
-        // 캐싱 시간 지나서 리패치 or 마운트 이후 리패치(새로고침 시)
-        // 스크롤 포지션 초기화
-        setScrollPosition(0);
-        sessionStorage.removeItem("scrollPosition");
-      } else {
-        // 데이터가 캐싱되어 있는 경우
-        // 스크롤 포지션 복구
-        const scrollPosition = Number(sessionStorage.getItem("scrollPosition"));
-        if (scrollPosition) {
-          setScrollPosition(scrollPosition);
+    const handleBeforeUnload = () => {
+      sessionStorage.removeItem("scrollPosition");
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const getScrollPosition = (): number => {
+    if (typeof window !== "undefined") {
+      const scrollPosition = Number(sessionStorage.getItem("scrollPosition"));
+      if (scrollPosition) {
+        if (isStale) {
+          sessionStorage.removeItem("scrollPosition");
+          return 0;
+        } else {
+          return scrollPosition;
         }
+      } else {
+        return 0;
       }
+    } else {
+      return 0;
     }
-  }, [shuffledContentsData, isStale, isFetchedAfterMount]);
+  };
+  // url에 id 파라미터 추가
+  const pushIdParam = (index: number) => {
+    if (searchParams) {
+      window.history.replaceState(
+        window.history.state,
+        "",
+        window.location.pathname +
+          "?" +
+          `${searchParams}&id=${
+            shuffledContentsData.pages.map((page) => page.content).flat()[index]
+              .id
+          }`
+      );
+    } else {
+      window.history.replaceState(
+        window.history.state,
+        "",
+        window.location.pathname +
+          "?" +
+          `id=${
+            shuffledContentsData.pages.map((page) => page.content).flat()[index]
+              .id
+          }`
+      );
+    }
+  };
 
   return (
     <div className="swiper-container">
-      {shuffledContentsData.pages.map((page) => page.content).flat() && (
+      {shuffledContentsData && (
         <Swiper
           modules={[Mousewheel]}
           mousewheel={{
@@ -86,21 +118,18 @@ export default function ContentSlider({
           }}
           autoHeight={true}
           direction={"vertical"}
-          initialSlide={scrollPosition}
+          initialSlide={getScrollPosition()}
+          onInit={(prop) => {
+            pushIdParam(prop.activeIndex);
+          }}
           onSlideChange={(prop) => {
+            pushIdParam(prop.activeIndex);
             sessionStorage.setItem(
               "scrollPosition",
               prop.activeIndex.toString()
             );
-            if (
-              prop.activeIndex ===
-              shuffledContentsData.pages.map((page) => page.content).flat()
-                .length -
-                pagesBeforeFetch
-            ) {
-              pushMore();
-            }
           }}
+          onReachEnd={pushMore}
         >
           {shuffledContentsData.pages
             .map((page) => page.content)
@@ -125,6 +154,7 @@ export default function ContentSlider({
                         alt={"provider icon"}
                         width={30}
                         height={30}
+                        priority={true}
                         style={{ borderRadius: 7 }}
                         className={styles.providerIcon}
                         onClick={() =>

@@ -1,16 +1,17 @@
 "use client";
 import Link from "next/link";
 import styles from "./BottomTabBar.module.css";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
+import useParams from "../_hooks/useParams";
 
 export default function BottomTabBar() {
   const pathname = usePathname();
-  const query = useSearchParams();
+  const query = useParams("categories").getParamsToString();
 
   return (
     <div className={styles.container}>
       <Link
-        href={{ pathname: "/", query: query.toString() }}
+        href={{ pathname: "/", query: query }}
         className={styles.tabBtn}
         scroll={false}
         onClick={() => {
@@ -68,7 +69,7 @@ export default function BottomTabBar() {
         </div>
       </Link>
       <Link
-        href={{ pathname: "/content", query: query.toString() }}
+        href={{ pathname: "/content", query: query }}
         className={styles.tabBtn}
         scroll={false}
       >
@@ -110,7 +111,7 @@ export default function BottomTabBar() {
         </div>
       </Link>
       <Link
-        href={{ pathname: "/setting", query: query.toString() }}
+        href={{ pathname: "/setting", query: query }}
         className={styles.tabBtn}
         onClick={() => {
           if (pathname === "/content") {

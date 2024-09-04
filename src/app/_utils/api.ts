@@ -28,8 +28,26 @@ const getContents = async (page: number, searchParams: string) => {
   return data.json();
 };
 
-const getShuffledContents = async (page: number, searchParams: string) => {
+const getContentById = async (id: string) => {
+  const data = await fetch(`${BASE_URL}/api/content/v1/contents/${id}`);
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+  return data.json();
+};
+
+const getShuffledContents = async (
+  page: number,
+  searchParams: string,
+  firstContentId?: string
+) => {
   const data = await getContents(page, searchParams);
+  if (firstContentId) {
+    const firstContent = await getContentById(firstContentId);
+    shuffleArray(data.content);
+
+    return { content: [firstContent, ...data.content] };
+  }
   shuffleArray(data.content);
 
   return data;
