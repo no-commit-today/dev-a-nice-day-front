@@ -4,11 +4,11 @@ import CheckLocalStorage from "./_components/CheckLocalStorage";
 export default function Page({
   searchParams,
 }: {
-  searchParams: { categories: string[] };
+  searchParams: { categories: string[]; id?: string };
 }) {
   return (
     <>
-      <Home searchParams={searchParams.categories} />
+      <Home searchParams={searchParams} />
       <CheckLocalStorage />
     </>
   );
