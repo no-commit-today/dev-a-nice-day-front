@@ -72,6 +72,11 @@
   padding: 0 10px;
   line-height: 1.2;
 }
+@media (min-width: 600px) {
+  .summaryText {
+    font-size: 20px;
+  }
+}
 .categoryBox {
   display: flex;
   flex-direction: row;
