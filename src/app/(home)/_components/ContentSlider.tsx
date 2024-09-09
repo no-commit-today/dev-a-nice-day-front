@@ -14,6 +14,7 @@ import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
 import no_image from "@/../public/assets/no_image.svg";
 import getRandomNumber from "@/app/_utils/getRandomNumber";
+import FloatingBtn from "./FloatingBtn";
 
 export default function ContentSlider({
   initialData,
@@ -250,6 +251,7 @@ export default function ContentSlider({
                       </div>
                     </div>
                   </div>
+                  <FloatingBtn />
                 </SwiperSlide>
               );
             })}

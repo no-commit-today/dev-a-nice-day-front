@@ -1,7 +1,5 @@
 .slideContainer {
   padding: 0 20px;
-  padding-top: 40px;
-  padding-bottom: 48px;
 }
 .dateText {
   font-size: 16px;
@@ -63,7 +61,7 @@
 .summaryTextBox {
   display: flex;
   flex-direction: row;
-  align-items: start;
+  align-items: flex-start;
   padding: 5px 0px;
   margin: 5px 0;
 }
@@ -87,7 +85,7 @@
   margin-right: 8px;
 }
 .swiperSlide {
-  /*max-height: calc(100dvh - 130px);*/
+  max-height: calc(100dvh - 96px);
 }
 .summaryBtn {
   height: 350;
