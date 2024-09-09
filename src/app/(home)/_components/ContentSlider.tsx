@@ -8,12 +8,13 @@ import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { BASE_URL, getShuffledContents } from "@/app/_utils/api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
 import no_image from "@/../public/assets/no_image.svg";
 import getRandomNumber from "@/app/_utils/getRandomNumber";
+import FloatingBtn from "./FloatingBtn";
 
 export default function ContentSlider({
   initialData,
@@ -23,6 +24,7 @@ export default function ContentSlider({
   contentsCountData: { count: number };
 }) {
   const searchParams = useParams("categories").getParamsToString();
+  const [mainImage, setMainImage] = useState<string | null>(null);
   const {
     data: shuffledContentsData,
     fetchNextPage,
@@ -107,8 +109,41 @@ export default function ContentSlider({
     }
   };
 
+  const [animate, setAnimate] = useState(false);
+
+  const handleAnimation = () => {
+    setAnimate(true);
+    setTimeout(() => {
+      setAnimate(false);
+    }, 200);
+  };
+
   return (
     <div className="swiper-container">
+      {/* 이 부분 이미지가 바뀔 때 커진 상태에서 작아지는 애니메이션 추가 */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: -1,
+          overflow: "hidden",
+        }}
+      >
+        <Image
+          src={mainImage ? mainImage : no_image.src}
+          alt={"provider icon"}
+          fill
+          priority={true}
+          style={{
+            objectFit: "cover",
+            opacity: 0.2,
+          }}
+          className={animate ? styles["image-animation"] : ""}
+        ></Image>
+      </div>
       {shuffledContentsData && (
         <Swiper
           modules={[Mousewheel]}
@@ -121,13 +156,24 @@ export default function ContentSlider({
           initialSlide={getScrollPosition()}
           onInit={(prop) => {
             pushIdParam(prop.activeIndex);
+            setMainImage(
+              shuffledContentsData.pages.map((page) => page.content).flat()[
+                prop.activeIndex
+              ].imageUrl
+            );
           }}
           onSlideChange={(prop) => {
             pushIdParam(prop.activeIndex);
+            setMainImage(
+              shuffledContentsData.pages.map((page) => page.content).flat()[
+                prop.activeIndex
+              ].imageUrl
+            );
             sessionStorage.setItem(
               "scrollPosition",
               prop.activeIndex.toString()
             );
+            handleAnimation();
           }}
           onReachEnd={pushMore}
         >
@@ -143,7 +189,6 @@ export default function ContentSlider({
               return (
                 <SwiperSlide key={content.id} className={styles.swiperSlide}>
                   <div className={styles.slideContainer}>
-                    <h1 className={styles.dateText}>{content.publishedDate}</h1>
                     <div className={styles.titleBox}>
                       <Image
                         src={
@@ -163,24 +208,33 @@ export default function ContentSlider({
                           })
                         }
                       ></Image>
-                      <div className={styles.titleWrap}>
-                        <h2
-                          className={styles.providerTitle}
-                          onClick={() => goToLink({ url: content.providerUrl })}
-                        >
-                          {content.providerTitle}
-                        </h2>
-                        <h2
-                          className={styles.title}
-                          onClick={() =>
-                            goToLink({
-                              url: `${BASE_URL}/contents/${content.id}/link`,
-                            })
-                          }
-                        >
-                          {content.title}
-                        </h2>
-                      </div>
+                      <h2
+                        className={styles.providerTitle}
+                        onClick={() => goToLink({ url: content.providerUrl })}
+                      >
+                        {content.providerTitle}
+                      </h2>
+                    </div>
+                    <h2
+                      className={styles.title}
+                      onClick={() =>
+                        goToLink({
+                          url: `${BASE_URL}/contents/${content.id}/link`,
+                        })
+                      }
+                    >
+                      {content.title}
+                    </h2>
+                    <div className={styles.categoryBox}>
+                      {content.categories.map(
+                        (category: string, index: number) => {
+                          return (
+                            <h2 key={index} className={styles.categoryText}>
+                              #{Categories[category]}
+                            </h2>
+                          );
+                        }
+                      )}
                     </div>
                     <div className={styles.summaryBox}>
                       <div
@@ -191,23 +245,6 @@ export default function ContentSlider({
                           })
                         }
                       >
-                        <div className={styles.imgBox}>
-                          <Image
-                            src={
-                              content.imageUrl ? content.imageUrl : no_image.src
-                            }
-                            alt="content image"
-                            fill
-                            sizes="(max-height:250px)"
-                            priority={true}
-                            style={{
-                              objectFit: "cover",
-                              borderTopLeftRadius: 10,
-                              borderTopRightRadius: 10,
-                              width: "100%",
-                            }}
-                          ></Image>
-                        </div>
                         <div className={styles.summary}>
                           {summaryArray.map(
                             (summary: string, index: number) => {
@@ -226,20 +263,9 @@ export default function ContentSlider({
                           )}
                         </div>
                       </div>
-
-                      <div className={styles.categoryBox}>
-                        {content.categories.map(
-                          (category: string, index: number) => {
-                            return (
-                              <h2 key={index} className={styles.categoryText}>
-                                #{Categories[category]}
-                              </h2>
-                            );
-                          }
-                        )}
-                      </div>
                     </div>
                   </div>
+                  <FloatingBtn />
                 </SwiperSlide>
               );
             })}

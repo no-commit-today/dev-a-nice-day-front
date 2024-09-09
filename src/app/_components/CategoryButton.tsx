@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./CategoryButton.module.css";
-import category from "@/../public/assets/categories.svg";
+import category from "@/../public/assets/categories2.svg";
 
 import { useState } from "react";
 import CategoryModal from "./CategoryModal";
@@ -18,7 +18,6 @@ export default function CategoryButton() {
           width={16}
           height={16}
         />
-        <h1 className={styles.grayMediumText}>관심주제 변경</h1>
       </button>
       {open && <CategoryModal setOpen={setOpen} />}
     </div>

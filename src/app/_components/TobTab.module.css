@@ -6,8 +6,16 @@
   width: 100%;
   height: 48px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  background-color: #191a1c;
+  /* background-color: #191a1c; */
   z-index: 1000;
+}
+.logo {
+  margin-left: 20px;
+}
+.rightContainer {
+  display: flex;
+  flex-direction: row;
+  margin-right: 20px;
 }

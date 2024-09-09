@@ -1,6 +1,5 @@
 .slideContainer {
   padding: 0 20px;
-  padding-bottom: 48px;
 }
 .dateText {
   font-size: 16px;
@@ -11,6 +10,7 @@
   margin-top: 7px;
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 .titleWrap {
   display: flex;
@@ -19,15 +19,18 @@
   margin-left: 10px;
 }
 .providerTitle {
-  font-size: 12px;
+  font-size: 20px;
+  margin-left: 10px;
   font-weight: 600;
   color: #aaaaaa;
   width: fit-content;
 }
 .title {
-  font-size: 13px;
+  margin-top: 10px;
+  font-size: 32px;
   font-weight: 600;
   color: #f1f1f1;
+  line-height: 1.1;
 }
 .imgBox {
   position: relative;
@@ -46,14 +49,11 @@
   }
 }
 .summaryBox {
-  margin-top: 10px;
+  margin-top: 15px;
   position: relative;
 }
 .summary {
   min-height: 100px;
-  background-color: #2e2e2e;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -61,30 +61,36 @@
 .summaryTextBox {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  padding: 5px 10px;
+  align-items: flex-start;
+  padding: 5px 0px;
   margin: 5px 0;
 }
 .summaryText {
-  font-size: 13px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 500;
   color: #fff;
   padding: 0 10px;
+  line-height: 1.2;
+}
+@media (min-width: 600px) {
+  .summaryText {
+    font-size: 20px;
+  }
 }
 .categoryBox {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .categoryText {
   font-size: 15px;
   font-weight: 400;
-  color: #3d6bff;
-  margin-left: 8px;
+  color: #fdaeff;
+  margin-right: 8px;
 }
 .swiperSlide {
-  max-height: calc(100dvh - 130px);
+  max-height: calc(100dvh - 96px);
 }
 .summaryBtn {
   height: 350;
@@ -108,4 +114,16 @@
 .title:hover {
   cursor: pointer;
   text-decoration: underline;
+}
+@keyframes scale-up-down {
+  0% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.image-animation {
+  animation: scale-up-down 0.2s ease-in-out;
 }
