@@ -199,24 +199,6 @@ export default function ContentSlider({
                       >
                         {content.providerTitle}
                       </h2>
-                      {/* <div className={styles.titleWrap}>
-                        <h2
-                          className={styles.providerTitle}
-                          onClick={() => goToLink({ url: content.providerUrl })}
-                        >
-                          {content.providerTitle}
-                        </h2>
-                        <h2
-                          className={styles.title}
-                          onClick={() =>
-                            goToLink({
-                              url: `${BASE_URL}/contents/${content.id}/link`,
-                            })
-                          }
-                        >
-                          {content.title}
-                        </h2>
-                      </div> */}
                     </div>
                     <h2
                       className={styles.title}
@@ -228,6 +210,17 @@ export default function ContentSlider({
                     >
                       {content.title}
                     </h2>
+                    <div className={styles.categoryBox}>
+                      {content.categories.map(
+                        (category: string, index: number) => {
+                          return (
+                            <h2 key={index} className={styles.categoryText}>
+                              #{Categories[category]}
+                            </h2>
+                          );
+                        }
+                      )}
+                    </div>
                     <div className={styles.summaryBox}>
                       <div
                         className={styles.summaryBtn}
@@ -237,23 +230,6 @@ export default function ContentSlider({
                           })
                         }
                       >
-                        <div className={styles.imgBox}>
-                          <Image
-                            src={
-                              content.imageUrl ? content.imageUrl : no_image.src
-                            }
-                            alt="content image"
-                            fill
-                            sizes="(max-height:250px)"
-                            priority={true}
-                            style={{
-                              objectFit: "cover",
-                              borderTopLeftRadius: 10,
-                              borderTopRightRadius: 10,
-                              width: "100%",
-                            }}
-                          ></Image>
-                        </div>
                         <div className={styles.summary}>
                           {summaryArray.map(
                             (summary: string, index: number) => {
@@ -271,18 +247,6 @@ export default function ContentSlider({
                             }
                           )}
                         </div>
-                      </div>
-
-                      <div className={styles.categoryBox}>
-                        {content.categories.map(
-                          (category: string, index: number) => {
-                            return (
-                              <h2 key={index} className={styles.categoryText}>
-                                #{Categories[category]}
-                              </h2>
-                            );
-                          }
-                        )}
                       </div>
                     </div>
                   </div>
