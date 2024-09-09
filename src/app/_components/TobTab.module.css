@@ -9,7 +9,7 @@
   justify-content: space-between;
   align-items: center;
   /* background-color: #191a1c; */
-  /* z-index: 1000; */
+  z-index: 1000;
 }
 .logo {
   margin-left: 20px;
