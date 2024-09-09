@@ -38,9 +38,6 @@ export default async function Home({
   return (
     <div className={styles.container}>
       <div className={styles.contentBox}>
-        <Suspense fallback={categoryFallback}>
-          <CategoryButton />
-        </Suspense>
         <div className={styles.sliderBox}>
           <Suspense fallback={contentFallBack}>
             <ContentSlider

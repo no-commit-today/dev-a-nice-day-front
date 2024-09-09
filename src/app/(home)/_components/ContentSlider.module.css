@@ -1,5 +1,6 @@
 .slideContainer {
   padding: 0 20px;
+  padding-top: 30px;
   padding-bottom: 48px;
 }
 .dateText {
@@ -11,6 +12,7 @@
   margin-top: 7px;
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 .titleWrap {
   display: flex;
@@ -19,13 +21,15 @@
   margin-left: 10px;
 }
 .providerTitle {
-  font-size: 12px;
+  font-size: 20px;
+  margin-left: 10px;
   font-weight: 600;
   color: #aaaaaa;
   width: fit-content;
 }
 .title {
-  font-size: 13px;
+  margin-top: 5px;
+  font-size: 32px;
   font-weight: 600;
   color: #f1f1f1;
 }
@@ -84,7 +88,7 @@
   margin-left: 8px;
 }
 .swiperSlide {
-  max-height: calc(100dvh - 130px);
+  /*max-height: calc(100dvh - 130px);*/
 }
 .summaryBtn {
   height: 350;
