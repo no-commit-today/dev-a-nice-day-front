@@ -109,8 +109,18 @@ export default function ContentSlider({
     }
   };
 
+  const [animate, setAnimate] = useState(false);
+
+  const handleAnimation = () => {
+    setAnimate(true);
+    setTimeout(() => {
+      setAnimate(false);
+    }, 200);
+  };
+
   return (
     <div className="swiper-container">
+      {/* 이 부분 이미지가 바뀔 때 커진 상태에서 작아지는 애니메이션 추가 */}
       <div
         style={{
           position: "absolute",
@@ -119,16 +129,19 @@ export default function ContentSlider({
           width: "100%",
           height: "100%",
           zIndex: -1,
+          overflow: "hidden",
         }}
       >
         <Image
           src={mainImage ? mainImage : no_image.src}
           alt={"provider icon"}
           fill
+          priority={true}
           style={{
             objectFit: "cover",
-            opacity: 0.3,
+            opacity: 0.2,
           }}
+          className={animate ? styles["image-animation"] : ""}
         ></Image>
       </div>
       {shuffledContentsData && (
@@ -160,6 +173,7 @@ export default function ContentSlider({
               "scrollPosition",
               prop.activeIndex.toString()
             );
+            handleAnimation();
           }}
           onReachEnd={pushMore}
         >
