@@ -6,6 +6,7 @@ import { contentFallBack } from "./ContentSliderFallback";
 import { categoryFallback } from "@/app/_components/CategoryFallback";
 import { getContentsCount, getShuffledContents } from "@/app/_utils/api";
 import getRandomNumber from "@/app/_utils/getRandomNumber";
+import FloatingBtn from "./FloatingBtn";
 export default async function Home({
   searchParams,
 }: {
@@ -38,9 +39,6 @@ export default async function Home({
   return (
     <div className={styles.container}>
       <div className={styles.contentBox}>
-        <Suspense fallback={categoryFallback}>
-          <CategoryButton />
-        </Suspense>
         <div className={styles.sliderBox}>
           <Suspense fallback={contentFallBack}>
             <ContentSlider

@@ -1,0 +1,45 @@
+.container {
+  position: absolute;
+  width: 100%;
+  height: 150px;
+  bottom: 0px;
+  display: flex;
+
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+.floatingWrap {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  align-items: center;
+}
+.floatingBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: rgba(224, 224, 224, 0.4);
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.text {
+  color: #fff;
+  margin-top: 5px;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+@media (min-width: 600px) {
+  .container {
+    height: 200px;
+  }
+  .floatingBtn {
+    width: 62px;
+    height: 62px;
+  }
+  .text {
+    font-size: 18px;
+  }
+}
