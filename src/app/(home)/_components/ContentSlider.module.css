@@ -1,8 +1,10 @@
 .slideContainer {
   padding: 0 20px;
+  max-width: 560px;
+  margin: 0 auto;
 }
 .swiperSlide {
-  max-height: calc(100dvh - 96px);
+  max-height: calc(100dvh - 48px);
   padding-top: 48px;
 }
 .dateText {

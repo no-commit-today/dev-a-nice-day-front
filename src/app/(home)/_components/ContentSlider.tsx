@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { BASE_URL, getShuffledContents } from "@/app/_utils/api";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
@@ -110,17 +110,8 @@ export default function ContentSlider({
     }
   };
 
-  const [animate, setAnimate] = useState(false);
-
-  const handleAnimation = () => {
-    setAnimate(true);
-    setTimeout(() => {
-      setAnimate(false);
-    }, 500);
-  };
-
   return (
-    <div className="swiper-container">
+    <div>
       {shuffledContentsData && (
         <Swiper
           modules={[Mousewheel]}
@@ -140,7 +131,6 @@ export default function ContentSlider({
               "scrollPosition",
               prop.activeIndex.toString()
             );
-            handleAnimation();
           }}
           onReachEnd={pushMore}
         >
