@@ -26,8 +26,9 @@ export default function RootLayout({
         }}
       >
         <ReactQueryProvider>
-          <TobTab />
           {children}
+          <TobTab />
+
           <Suspense>
             <BottomTabBar />
           </Suspense>
