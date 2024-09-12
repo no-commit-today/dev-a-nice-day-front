@@ -1,5 +1,11 @@
 .slideContainer {
   padding: 0 20px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.swiperSlide {
+  max-height: calc(100dvh - 48px);
+  padding-top: 48px;
 }
 .dateText {
   font-size: 16px;
@@ -89,9 +95,7 @@
   color: #fdaeff;
   margin-right: 8px;
 }
-.swiperSlide {
-  max-height: calc(100dvh - 96px);
-}
+
 .summaryBtn {
   height: 350;
   display: flex;
@@ -125,5 +129,5 @@
 }
 
 .image-animation {
-  animation: scale-up-down 0.2s ease-in-out;
+  animation: scale-up-down 0.5s ease-in-out forwards;
 }

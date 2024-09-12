@@ -1,12 +1,9 @@
-import CategoryButton from "@/app/_components/CategoryButton";
 import styles from "./Home.module.css";
 import ContentSlider from "./ContentSlider";
 import { Suspense } from "react";
 import { contentFallBack } from "./ContentSliderFallback";
-import { categoryFallback } from "@/app/_components/CategoryFallback";
 import { getContentsCount, getShuffledContents } from "@/app/_utils/api";
 import getRandomNumber from "@/app/_utils/getRandomNumber";
-import FloatingBtn from "./FloatingBtn";
 export default async function Home({
   searchParams,
 }: {
