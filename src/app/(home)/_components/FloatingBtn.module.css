@@ -35,6 +35,9 @@
   justify-content: center;
   align-items: center;
 }
+.floatingBtn:hover {
+  background-color: rgba(224, 224, 224, 0.5);
+}
 .text {
   color: #fff;
   margin-top: 5px;
