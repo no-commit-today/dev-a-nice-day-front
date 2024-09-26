@@ -111,7 +111,7 @@ export default function BottomTabBar() {
         </div>
       </Link>
       <Link
-        href={{ pathname: "/setting", query: query }}
+        href={{ pathname: "/profile", query: query }}
         className={styles.tabBtn}
         onClick={() => {
           if (pathname === "/content") {
@@ -146,7 +146,7 @@ export default function BottomTabBar() {
           </div>
           <span
             className={
-              pathname === "/setting" ? styles.textFocused : styles.text
+              pathname === "/profile" ? styles.textFocused : styles.text
             }
           >
             내정보
