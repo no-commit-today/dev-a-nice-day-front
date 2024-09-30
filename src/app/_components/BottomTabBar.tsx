@@ -111,7 +111,7 @@ export default function BottomTabBar() {
         </div>
       </Link>
       <Link
-        href={{ pathname: "/setting", query: query }}
+        href={{ pathname: "/profile", query: query }}
         className={styles.tabBtn}
         onClick={() => {
           if (pathname === "/content") {
@@ -131,22 +131,22 @@ export default function BottomTabBar() {
               <path
                 d="M16.1553 17.2126V15.6505C16.1553 14.8219 15.8261 14.0272 15.2402 13.4413C14.6543 12.8554 13.8596 12.5263 13.031 12.5263H6.78263C5.95404 12.5263 5.15938 12.8554 4.57348 13.4413C3.98757 14.0272 3.65842 14.8219 3.65842 15.6505V17.2126"
                 stroke="#898989"
-                stroke-width="1.56211"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.56211"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M9.90683 9.40208C11.6323 9.40208 13.031 8.00332 13.031 6.27787C13.031 4.55241 11.6323 3.15366 9.90683 3.15366C8.18138 3.15366 6.78262 4.55241 6.78262 6.27787C6.78262 8.00332 8.18138 9.40208 9.90683 9.40208Z"
                 stroke="#898989"
-                stroke-width="1.56211"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.56211"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </div>
           <span
             className={
-              pathname === "/setting" ? styles.textFocused : styles.text
+              pathname === "/profile" ? styles.textFocused : styles.text
             }
           >
             내정보
