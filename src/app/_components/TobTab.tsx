@@ -6,11 +6,12 @@ import logo from "@/../public/assets/DevaNiceDay.svg";
 import CategoryButton from "./CategoryButton";
 import setting from "@/../public/assets/setting.svg";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import carrot from "@/../public/assets/carrot_right.svg";
 
 export default function TobTab() {
   const pathname = usePathname();
+  const router = useRouter();
   if (pathname.includes("/groupContents"))
     return (
       <div className={styles.container}>
@@ -21,6 +22,7 @@ export default function TobTab() {
           priority={true}
           alt="carrot"
           style={{ transform: "rotate(180deg)" }}
+          onClick={() => router.back()}
         />
         <h1 className={styles.groupTitle}>모든 게시물</h1>
         <div style={{ width: 48, height: 48 }} />
