@@ -1,19 +1,24 @@
 import styles from "./page.module.css";
 import user_frame from "@/../public/assets/user_frame.svg";
 import edit from "@/../public/assets/edit.svg";
+import Link from "next/link";
 const Profile = () => {
   const groupedContentsData = [
     {
       title: "게시글 제목",
+      id: 1,
     },
     {
       title: "게시글 제목",
+      id: 2,
     },
     {
       title: "게시글 제목",
+      id: 3,
     },
     {
       title: "게시글 제목",
+      id: 4,
     },
   ];
   return (
@@ -30,11 +35,13 @@ const Profile = () => {
       <div className={styles.groupedContentsContainer}>
         <h1 className={styles.groupText}>저장한 게시글</h1>
         <div className={styles.groupedContents}>
-          {groupedContentsData.map((content, index) => (
-            <div className={styles.groupedContentBox}>
-              <div className={styles.groupedContentImage}></div>
-              <h1 className={styles.contentTitle}>{content.title}</h1>
-            </div>
+          {groupedContentsData.map((content) => (
+            <Link href={`groupContents/${content.id}`} key={content.id}>
+              <div className={styles.groupedContentBox}>
+                <div className={styles.groupedContentImage}></div>
+                <h1 className={styles.contentTitle}>{content.title}</h1>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
