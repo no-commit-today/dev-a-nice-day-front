@@ -1,8 +1,11 @@
+"use client";
 import styles from "./page.module.css";
 import user_frame from "@/../public/assets/user_frame.svg";
 import edit from "@/../public/assets/edit.svg";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 const Profile = () => {
+  const router = useRouter();
   const groupedContentsData = [
     {
       title: "게시글 제목",
@@ -29,7 +32,16 @@ const Profile = () => {
         </div>
         <div className={styles.userNameWrap}>
           <h1 className={styles.userName}>박건태</h1>
-          <img src={edit.src} alt="edit" className={styles.editBtn} />
+          <img
+            src={edit.src}
+            alt="edit"
+            className={styles.editBtn}
+            onClick={() =>
+              router.push(
+                "https://github.com/login/oauth/authorize?client_id=Iv23lipZn6Q52xQOthNr"
+              )
+            }
+          />
         </div>
       </div>
       <div className={styles.groupedContentsContainer}>
