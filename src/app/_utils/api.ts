@@ -63,6 +63,7 @@ const getGitHubToken = async (code?: string) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+
         Accept: "application/json",
       },
       body: JSON.stringify({
@@ -75,12 +76,16 @@ const getGitHubToken = async (code?: string) => {
   return await response.json();
 };
 
-const getToken = async (gitHubAccessToken: string | undefined) => {
+const login = async (gitHubAccessToken: string | undefined) => {
   if (gitHubAccessToken === undefined) {
     return null;
   }
-  const accessToken = await fetch(`${BASE_URL}/api/user/v1/signup`, {
+  const accessToken = await fetch(`${BASE_URL}/api/user/v1/login`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Accept: "application/json",
+    },
     body: JSON.stringify({
       accessToken: gitHubAccessToken,
     }),
@@ -93,5 +98,5 @@ export {
   getContents,
   getContentsCount,
   getGitHubToken,
-  getToken,
+  login,
 };
