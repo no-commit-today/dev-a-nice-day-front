@@ -10,7 +10,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* background-color: #191a1c; */
+  background: linear-gradient(
+    to bottom,
+    rgba(25, 26, 28, 1),
+    rgba(25, 26, 28, 0)
+  );
   z-index: 100;
 }
 .logo {
