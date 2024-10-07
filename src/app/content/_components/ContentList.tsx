@@ -60,6 +60,7 @@ export default function ContentList() {
       {contentsData &&
         contentsData.map((contentData, index) => (
           <ContentBox
+            key={contentData.id}
             contentData={contentData}
             index={index}
             length={contentsData.length}

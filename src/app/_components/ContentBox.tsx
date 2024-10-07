@@ -28,12 +28,12 @@ const ContentBox = ({
   contentData: IContentData;
   index: number;
   length: number;
-  fetchNextPage: ({}) => Promise<
+  fetchNextPage?: ({}) => Promise<
     InfiniteQueryObserverResult<InfiniteData<any, unknown>, Error>
   >;
 }) => {
   const ref = useIntersect(() => {
-    fetchNextPage({ cancelRefetch: false });
+    if (fetchNextPage) fetchNextPage({ cancelRefetch: false });
   });
   return (
     <div
