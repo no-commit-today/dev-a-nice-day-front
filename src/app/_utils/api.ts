@@ -108,7 +108,8 @@ const login = async (gitHubAccessToken: string) => {
     if (data.status === 404) {
       console.log("가입되지 않은 회원");
       await signup(gitHubAccessToken);
-      return login(gitHubAccessToken);
+      const ret: Response = await login(gitHubAccessToken);
+      return ret;
     } else {
       console.log("login Fn Error: ", data);
       throw new Error("API Error");
