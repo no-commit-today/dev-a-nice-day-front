@@ -15,7 +15,7 @@ const getContentsCount = async (searchParams: string) => {
   if (!data.ok) {
     throw new Error("API Error");
   }
-  return data.json();
+  return await data.json();
 };
 
 const getContents = async (page: number, searchParams: string) => {
@@ -25,7 +25,7 @@ const getContents = async (page: number, searchParams: string) => {
   if (!data.ok) {
     throw new Error("API Error");
   }
-  return data.json();
+  return await data.json();
 };
 
 const getContentById = async (id: string) => {
@@ -33,7 +33,7 @@ const getContentById = async (id: string) => {
   if (!data.ok) {
     throw new Error("API Error");
   }
-  return data.json();
+  return await data.json();
 };
 
 const getShuffledContents = async (
@@ -54,33 +54,29 @@ const getShuffledContents = async (
 };
 
 const getGitHubToken = async (code?: string) => {
-  if (code === undefined) {
-    return null;
-  }
-  const response: any = await fetch(
-    "https://github.com/login/oauth/access_token",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+  console.log("getGitHubToken Fn: ", code);
+  const data = await fetch("https://github.com/login/oauth/access_token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
 
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        client_id: "Iv23lipZn6Q52xQOthNr",
-        client_secret: "04b83b0d1f0edf94a62fce5c7f530edb40d4bdec",
-        code: code,
-      }),
-    }
-  );
-  return await response.json();
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      client_id: "Iv23lipZn6Q52xQOthNr",
+      client_secret: "7efa5c65398a198caf376cb1ecb09c6942b13dcf",
+      code: code,
+    }),
+  });
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+  return await data.json();
 };
 
-const login = async (gitHubAccessToken: string | undefined) => {
-  if (gitHubAccessToken === undefined) {
-    return null;
-  }
-  const accessToken = await fetch(`${BASE_URL}/api/user/v1/login`, {
+const signup = async (gitHubAccessToken: string) => {
+  console.log("signup Fn: ", gitHubAccessToken);
+  const data = await fetch(`${BASE_URL}/api/user/v1/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -90,7 +86,52 @@ const login = async (gitHubAccessToken: string | undefined) => {
       accessToken: gitHubAccessToken,
     }),
   });
-  return await accessToken.json();
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+  return data;
+};
+
+const login = async (gitHubAccessToken: string) => {
+  console.log("login fn: ", gitHubAccessToken);
+  const data = await fetch(`${BASE_URL}/api/user/v1/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      accessToken: gitHubAccessToken,
+    }),
+  });
+  if (!data.ok) {
+    if (data.status === 404) {
+      console.log("가입되지 않은 회원");
+      await signup(gitHubAccessToken);
+      return login(gitHubAccessToken);
+    } else {
+      console.log("login Fn Error: ", data);
+      throw new Error("API Error");
+    }
+  }
+  return await data.json();
+};
+
+const refresh = async (refreshToken: string) => {
+  const data = await fetch(`${BASE_URL}/api/user/v1/refresh`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      refreshToken: refreshToken,
+    }),
+  });
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+  return await data.json();
 };
 
 export {
@@ -99,4 +140,5 @@ export {
   getContentsCount,
   getGitHubToken,
   login,
+  refresh,
 };
