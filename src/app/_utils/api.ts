@@ -80,7 +80,7 @@ const login = async (gitHubAccessToken: string | undefined) => {
   if (gitHubAccessToken === undefined) {
     return null;
   }
-  const accessToken = await fetch(`${BASE_URL}/api/user/v1/login`, {
+  const token = await fetch(`${BASE_URL}/api/user/v1/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -90,7 +90,21 @@ const login = async (gitHubAccessToken: string | undefined) => {
       accessToken: gitHubAccessToken,
     }),
   });
-  return await accessToken.json();
+  return await token.json();
+};
+
+const refresh = async (refreshToken: string) => {
+  const token = await fetch(`${BASE_URL}/api/user/v1/refresh`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      refreshToken: refreshToken,
+    }),
+  });
+  return await token.json();
 };
 
 export {
@@ -99,4 +113,5 @@ export {
   getContentsCount,
   getGitHubToken,
   login,
+  refresh,
 };

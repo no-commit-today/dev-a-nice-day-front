@@ -8,14 +8,16 @@ export default async function Page({
   searchParams: { categories: string[]; id?: string; code?: string };
 }) {
   const { code } = searchParams;
+  let tokenData = null;
+  if (code) {
+    const gitTokenData = await getGitHubToken(code);
+    tokenData = await login(gitTokenData?.access_token);
+  }
 
-  const gitTokenData = await getGitHubToken(code);
-  const tokenData = await login(gitTokenData?.access_token);
-  console.log(tokenData);
   return (
     <>
       <Home searchParams={searchParams} />
-      <CheckLocalStorage />
+      <CheckLocalStorage tokenData={tokenData} />
     </>
   );
 }
