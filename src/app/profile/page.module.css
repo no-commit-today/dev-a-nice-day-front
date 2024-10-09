@@ -46,8 +46,7 @@
 .groupedContentsContainer {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
-  padding: 0 10px;
+  padding: 0 20px;
 }
 .groupText {
   color: #fff;

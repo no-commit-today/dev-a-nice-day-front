@@ -26,7 +26,7 @@ const Profile = () => {
   ];
   return (
     <div className={styles.container}>
-      <div className={styles.userInfoWrap}>
+      {/* <div className={styles.userInfoWrap}>
         <div className={styles.profileImage}>
           <img src={user_frame.src} alt="user_frame" />
         </div>
@@ -43,7 +43,7 @@ const Profile = () => {
             }
           />
         </div>
-      </div>
+      </div> */}
       <div className={styles.groupedContentsContainer}>
         <h1 className={styles.groupText}>저장한 게시글</h1>
         <div className={styles.groupedContents}>
