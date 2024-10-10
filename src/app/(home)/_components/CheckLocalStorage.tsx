@@ -1,21 +1,13 @@
 "use client";
 
+import { ITokenData } from "@/app";
 import { refresh } from "@/app/_utils/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-interface TokenData {
-  userId: string;
-  accessToken: string;
-  refreshToken: string;
-  accessTokenIssuedAt: string;
-  accessTokenExpiresAt: string;
-  refreshTokenIssuedAt: string;
-  refreshTokenExpiresAt: string;
-}
 export default function CheckLocalStorage({
   tokenData,
 }: {
-  tokenData: TokenData | null;
+  tokenData: ITokenData | null;
 }) {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(false);
