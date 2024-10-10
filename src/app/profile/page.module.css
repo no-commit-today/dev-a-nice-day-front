@@ -1,7 +1,7 @@
 .container {
-  max-width: 600px;
+  max-width: 560px;
   margin: 0 auto;
-  padding-top: 82px;
+  padding-top: 68px;
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 58px;
@@ -46,8 +46,7 @@
 .groupedContentsContainer {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
-  padding: 0 10px;
+  padding: 0 0px;
 }
 .groupText {
   color: #fff;

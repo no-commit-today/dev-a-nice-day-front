@@ -1,9 +1,10 @@
 "use client";
 import styles from "./page.module.css";
-import user_frame from "@/../public/assets/user_frame.svg";
-import edit from "@/../public/assets/edit.svg";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import CheckLocalStorage from "../(home)/_components/CheckLocalStorage";
+import LoginModal from "../_components/LoginModal";
+
 const Profile = () => {
   const router = useRouter();
   const groupedContentsData = [
@@ -24,26 +25,13 @@ const Profile = () => {
       id: 4,
     },
   ];
+  const isLogin = CheckLocalStorage({ tokenData: null });
+
+  if (!isLogin) {
+    return <LoginModal />;
+  }
   return (
     <div className={styles.container}>
-      <div className={styles.userInfoWrap}>
-        <div className={styles.profileImage}>
-          <img src={user_frame.src} alt="user_frame" />
-        </div>
-        <div className={styles.userNameWrap}>
-          <h1 className={styles.userName}>박건태</h1>
-          <img
-            src={edit.src}
-            alt="edit"
-            className={styles.editBtn}
-            onClick={() =>
-              router.push(
-                "https://github.com/login/oauth/authorize?client_id=Iv23lipZn6Q52xQOthNr"
-              )
-            }
-          />
-        </div>
-      </div>
       <div className={styles.groupedContentsContainer}>
         <h1 className={styles.groupText}>저장한 게시글</h1>
         <div className={styles.groupedContents}>

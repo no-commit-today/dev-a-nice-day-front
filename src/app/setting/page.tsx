@@ -3,6 +3,7 @@ import styles from "./page.module.css";
 import carrot_right from "@/../public/assets/carrot_right.svg";
 import Link from "next/link";
 import Image from "next/image";
+import LogoutButton from "./_components/LogoutButton";
 export const metadata: Metadata = {
   title: "테크스와이프 | 설정",
 };
@@ -40,6 +41,7 @@ export default function Setting() {
             />
           </div>
         </Link>
+        <LogoutButton />
       </div>
     </div>
   );
