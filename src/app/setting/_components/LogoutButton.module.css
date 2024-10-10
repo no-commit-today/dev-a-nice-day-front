@@ -1,0 +1,14 @@
+.logoutBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 50px;
+  align-items: center;
+  border-bottom: 1px solid #2e2e2e;
+  cursor: pointer;
+}
+.logoutText {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}

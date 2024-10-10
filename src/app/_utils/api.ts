@@ -135,6 +135,24 @@ const refresh = async (refreshToken: string) => {
   return await data.json();
 };
 
+const logout = async (refreshToken: string) => {
+  console.log("logout Fn: ", refreshToken);
+  const data = await fetch(`${BASE_URL}/api/user/v1/logout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      refreshToken: refreshToken,
+    }),
+  });
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+  return data;
+};
+
 export {
   getShuffledContents,
   getContents,
@@ -142,4 +160,5 @@ export {
   getGitHubToken,
   login,
   refresh,
+  logout,
 };
