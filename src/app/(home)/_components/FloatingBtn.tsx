@@ -1,37 +1,55 @@
+"use client";
 import Image from "next/image";
 import styles from "./FloatingBtn.module.css";
 import share from "@/../public/assets/share.svg";
 import save from "@/../public/assets/save.svg";
+import SaveContent from "./SaveContent";
+import { createPortal } from "react-dom";
+import { useState } from "react";
 const FloatingBtn = () => {
+  const [isSaveModalOpened, setIsSaveModalOpened] = useState(false);
+  const closeSaveModal = () => {
+    setIsSaveModalOpened(false);
+  };
   return (
-    <div className={styles.container}>
-      <div className={styles.floatingWrap}>
-        <div className={styles.btnWrap}>
-          <div className={styles.floatingBtn}>
-            <Image
-              src={share.src}
-              alt="shareBtn"
-              width={20}
-              height={20}
-              style={{ zIndex: 2 }}
-            />
+    <>
+      {isSaveModalOpened &&
+        createPortal(
+          <SaveContent closeSaveModal={closeSaveModal} />,
+          document.body
+        )}
+      <div className={styles.container}>
+        <div className={styles.floatingWrap}>
+          <div className={styles.btnWrap}>
+            <div className={styles.floatingBtn}>
+              <Image
+                src={share.src}
+                alt="shareBtn"
+                width={20}
+                height={20}
+                style={{ zIndex: 2 }}
+              />
+            </div>
+            <h6 className={styles.text}>공유</h6>
           </div>
-          <h6 className={styles.text}>공유</h6>
-        </div>
-        <div className={styles.btnWrap}>
-          <div className={styles.floatingBtn}>
-            <Image
-              src={save.src}
-              alt="shareBtn"
-              width={20}
-              height={20}
-              style={{ zIndex: 2 }}
-            />
+          <div className={styles.btnWrap}>
+            <div
+              className={styles.floatingBtn}
+              onClick={() => setIsSaveModalOpened((prev) => !prev)}
+            >
+              <Image
+                src={save.src}
+                alt="saveContentBtn"
+                width={20}
+                height={20}
+                style={{ zIndex: 2 }}
+              />
+            </div>
+            <h6 className={styles.text}>저장</h6>
           </div>
-          <h6 className={styles.text}>저장</h6>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
