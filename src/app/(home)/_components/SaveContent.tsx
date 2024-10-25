@@ -3,8 +3,8 @@ import styles from "./SaveContent.module.css";
 import Plus from "@/../public/assets/plus.svg";
 import Check_White from "@/../public/assets/check_white.svg";
 import CheckBox from "@/app/_components/CheckBox";
-import { useState } from "react";
-const SaveContent = () => {
+import { MouseEvent, useState } from "react";
+const SaveContent = ({ closeSaveModal }: { closeSaveModal: () => void }) => {
   const groupData = [
     { title: "프론트엔드" },
     { title: "백엔드" },
@@ -18,9 +18,13 @@ const SaveContent = () => {
     updatedCheckList[index] = !updatedCheckList[index];
     setCheckList(updatedCheckList);
   };
+
   return (
-    <div className={styles.container}>
-      <div className={styles.groupContainer}>
+    <div className={styles.container} onClick={closeSaveModal}>
+      <div
+        className={styles.groupContainer}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className={styles.header}>
           <h1 className={styles.title}>게시물 저장</h1>
           <div className={styles.newGroup}>
@@ -40,7 +44,7 @@ const SaveContent = () => {
             </div>
           ))}
         </div>
-        <div className={styles.btnWrap}>
+        <div className={styles.btnWrap} onClick={closeSaveModal}>
           <Image src={Check_White.src} alt="check" width={14} height={14} />
           <h1 className={styles.doneText}>완료</h1>
         </div>
