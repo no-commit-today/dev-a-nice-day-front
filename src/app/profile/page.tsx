@@ -46,7 +46,7 @@ const Profile = () => {
           <div className={styles.groupedContents}>
             {groupListData &&
               groupListData.content.map((content: IGroup, index) => (
-                <Link href={`groupContents/${index}`} key={index}>
+                <Link href={`groupContents/${content.name}`} key={index}>
                   <div className={styles.groupedContentBox}>
                     <div className={styles.groupedContentImage}></div>
                     <h1 className={styles.contentTitle}>{content.name}</h1>
