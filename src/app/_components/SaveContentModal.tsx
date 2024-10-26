@@ -4,7 +4,7 @@ import Plus from "@/../public/assets/plus.svg";
 import Check_White from "@/../public/assets/check_white.svg";
 import CheckBox from "@/app/_components/CheckBox";
 import { useEffect, useState } from "react";
-import { getGroupList } from "../_utils/api";
+import { getGroupList, saveContentToGroup } from "../_utils/api";
 import { IGroup } from "..";
 
 const SaveContent = ({
@@ -20,13 +20,37 @@ const SaveContent = ({
   const [checkList, setCheckList] = useState<boolean[]>(
     new Array(groupListData?.content.length).fill(false)
   );
+
   const handleGroupClick = (index: number) => {
     const updatedCheckList = [...checkList];
     updatedCheckList[index] = !updatedCheckList[index];
     setCheckList(updatedCheckList);
   };
 
-  const handleSaveGroupClick = () => {
+  const handleSaveGroupClick = async () => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const contentId = urlParams.get("id");
+
+    const localTokenData = localStorage.getItem("tokenData");
+    if (localTokenData === null) throw new Error("Token is not found");
+    const tokenData = JSON.parse(localTokenData);
+    checkList.forEach((v, index) => {
+      if (v === true) {
+        if (groupListData === null)
+          throw new Error("GroupListData is not found");
+        console.log(
+          groupListData.content[index].name,
+          contentId,
+          tokenData.accessToken
+        );
+        saveContentToGroup(
+          groupListData.content[index].name,
+          contentId,
+          tokenData.accessToken
+        );
+      }
+    });
     closeSaveModal();
   };
 
