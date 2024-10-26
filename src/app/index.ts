@@ -19,3 +19,7 @@ export interface ITokenData {
   refreshTokenIssuedAt: string;
   refreshTokenExpiresAt: string;
 }
+
+export interface IGroup {
+  name: string;
+}
