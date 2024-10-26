@@ -1,5 +1,5 @@
 import Image from "next/image";
-import styles from "./SaveContent.module.css";
+import styles from "./SaveContentModal.module.css";
 import Plus from "@/../public/assets/plus.svg";
 import Check_White from "@/../public/assets/check_white.svg";
 import CheckBox from "@/app/_components/CheckBox";

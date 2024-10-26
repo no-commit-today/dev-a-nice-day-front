@@ -1,4 +1,4 @@
-import styles from "./NewGroup.module.css";
+import styles from "./NewGroupModal.module.css";
 import Image from "next/image";
 import Check_White from "@/../public/assets/check_white.svg";
 import { useState } from "react";
