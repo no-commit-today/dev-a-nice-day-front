@@ -32,6 +32,7 @@
 .newGroup {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 .newGroupText {
   font-size: 15px;
