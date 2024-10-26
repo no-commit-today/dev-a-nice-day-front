@@ -3,25 +3,61 @@ import Image from "next/image";
 import styles from "./FloatingBtn.module.css";
 import share from "@/../public/assets/share.svg";
 import save from "@/../public/assets/save.svg";
-import SaveContent from "./SaveContent";
+import SaveContentModal from "../../_components/SaveContentModal";
 import { createPortal } from "react-dom";
 import { useState } from "react";
+import NewGroupModal from "@/app/_components/NewGroupModal";
+import ShareModal from "@/app/_components/ShareModal";
+
 const FloatingBtn = () => {
   const [isSaveModalOpened, setIsSaveModalOpened] = useState(false);
+  const [isShareModalOpened, setIsShareModalOpened] = useState(false);
+  const [isNewGroupModalOpened, setIsNewGroupModalOpened] = useState(false);
+
   const closeSaveModal = () => {
     setIsSaveModalOpened(false);
   };
+
+  const openNewGroupModal = () => {
+    setIsSaveModalOpened(false);
+    setIsNewGroupModalOpened(true);
+  };
+
+  const closeNewGroupModal = () => {
+    setIsNewGroupModalOpened(false);
+  };
+
+  const closeShareModal = () => {
+    setIsShareModalOpened(false);
+  };
+
   return (
     <>
       {isSaveModalOpened &&
         createPortal(
-          <SaveContent closeSaveModal={closeSaveModal} />,
+          <SaveContentModal
+            closeSaveModal={closeSaveModal}
+            openNewGroupModal={openNewGroupModal}
+          />,
+          document.body
+        )}
+      {isNewGroupModalOpened &&
+        createPortal(
+          <NewGroupModal closeNewGroupModal={closeNewGroupModal} />,
+          document.body
+        )}
+      {isShareModalOpened &&
+        createPortal(
+          <ShareModal closeShareModal={closeShareModal} />,
           document.body
         )}
       <div className={styles.container}>
         <div className={styles.floatingWrap}>
           <div className={styles.btnWrap}>
-            <div className={styles.floatingBtn}>
+            <div
+              className={styles.floatingBtn}
+              onClick={() => setIsShareModalOpened(true)}
+            >
               <Image
                 src={share.src}
                 alt="shareBtn"
@@ -35,7 +71,7 @@ const FloatingBtn = () => {
           <div className={styles.btnWrap}>
             <div
               className={styles.floatingBtn}
-              onClick={() => setIsSaveModalOpened((prev) => !prev)}
+              onClick={() => setIsSaveModalOpened(true)}
             >
               <Image
                 src={save.src}
