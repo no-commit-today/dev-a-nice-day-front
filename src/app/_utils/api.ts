@@ -153,6 +153,37 @@ const logout = async (refreshToken: string) => {
   return data;
 };
 
+const getGroupList = async (access_token: string) => {
+  const data = await fetch(`${BASE_URL}/api/bookmark/v1/groups`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+
+  return await data.json();
+};
+
+const createGroup = async (groupName: string, access_token: string) => {
+  const data = await fetch(`${BASE_URL}/api/bookmark/v1/groups`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Accept: "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
+    body: JSON.stringify({
+      name: groupName,
+    }),
+  });
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+  return await data.json();
+};
+
 export {
   getShuffledContents,
   getContents,
@@ -161,4 +192,6 @@ export {
   login,
   refresh,
   logout,
+  getGroupList,
+  createGroup,
 };
