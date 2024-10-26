@@ -2,6 +2,7 @@ import styles from "./NewGroupModal.module.css";
 import Image from "next/image";
 import Check_White from "@/../public/assets/check_white.svg";
 import { useState } from "react";
+import { createGroup } from "../_utils/api";
 
 const NewGroup = ({
   closeNewGroupModal,
@@ -10,6 +11,14 @@ const NewGroup = ({
 }) => {
   const [groupName, setGroupName] = useState("");
 
+  const handleCreateGroup = async () => {
+    const localTokenData = localStorage.getItem("tokenData");
+    if (localTokenData !== null) {
+      const tokenData = JSON.parse(localTokenData);
+      await createGroup(groupName, tokenData.accessToken);
+      closeNewGroupModal();
+    }
+  };
   return (
     <div className={styles.background} onClick={closeNewGroupModal}>
       <div className={styles.container} onClick={(e) => e.stopPropagation()}>
@@ -25,7 +34,7 @@ const NewGroup = ({
             onChange={(e) => setGroupName(e.target.value)}
           />
         </div>
-        <button className={styles.btnWrap} onClick={closeNewGroupModal}>
+        <button className={styles.btnWrap} onClick={handleCreateGroup}>
           <Image src={Check_White.src} alt="check" width={14} height={14} />
           <h1 className={styles.doneText}>완료</h1>
         </button>
