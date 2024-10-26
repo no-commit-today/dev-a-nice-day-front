@@ -181,7 +181,31 @@ const createGroup = async (groupName: string, access_token: string) => {
   if (!data.ok) {
     throw new Error("API Error");
   }
-  return await data.json();
+  return data;
+};
+
+const saveContentToGroup = async (
+  groupName: string | null,
+  contentId: string | null,
+  access_token: string
+) => {
+  const data = await fetch(`${BASE_URL}/api/bookmark/v1/bookmarks`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Accept: "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
+    body: JSON.stringify({
+      groupName: groupName,
+      contentId: contentId,
+    }),
+  });
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+
+  return data;
 };
 
 export {
@@ -194,4 +218,5 @@ export {
   logout,
   getGroupList,
   createGroup,
+  saveContentToGroup,
 };
