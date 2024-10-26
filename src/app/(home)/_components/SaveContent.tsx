@@ -3,7 +3,8 @@ import styles from "./SaveContent.module.css";
 import Plus from "@/../public/assets/plus.svg";
 import Check_White from "@/../public/assets/check_white.svg";
 import CheckBox from "@/app/_components/CheckBox";
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
+
 const SaveContent = ({ closeSaveModal }: { closeSaveModal: () => void }) => {
   const groupData = [
     { title: "프론트엔드" },
@@ -20,11 +21,8 @@ const SaveContent = ({ closeSaveModal }: { closeSaveModal: () => void }) => {
   };
 
   return (
-    <div className={styles.container} onClick={closeSaveModal}>
-      <div
-        className={styles.groupContainer}
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className={styles.background} onClick={closeSaveModal}>
+      <div className={styles.container} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <h1 className={styles.title}>게시물 저장</h1>
           <div className={styles.newGroup}>
