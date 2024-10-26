@@ -14,6 +14,10 @@ const NewGroup = ({
   const handleCreateGroup = async () => {
     const localTokenData = localStorage.getItem("tokenData");
     if (localTokenData !== null) {
+      if (groupName === "") {
+        alert("그룹 이름을 입력해주세요.");
+        return;
+      }
       const tokenData = JSON.parse(localTokenData);
       await createGroup(groupName, tokenData.accessToken);
       closeNewGroupModal();
