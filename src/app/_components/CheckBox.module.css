@@ -1,0 +1,13 @@
+.checkBox {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #b5b5b5;
+}
+.checked {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #de6985;
+}
