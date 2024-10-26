@@ -1,21 +1,21 @@
 "use client";
-import ModalContainer from "./ModalContainer";
 import styles from "./LoginModal.module.css";
 import Image from "next/image";
 import logo from "../../../public/assets/login_logo.svg";
 import githubLogo from "../../../public/assets/github_logo.png";
 import dismiss from "../../../public/assets/dismiss.svg";
 import { useRouter } from "next/navigation";
-export default function LoginModal() {
+export default function LoginModal({
+  closeLoginModal,
+}: {
+  closeLoginModal: () => void;
+}) {
   const router = useRouter();
   return (
-    <ModalContainer backgroundColor="#2E2E2E">
+    <div className={styles.container}>
       <div className={styles.loginContainer}>
         <div className={styles.upperContainer}>
-          <div
-            className={styles.dismissButton}
-            onClick={() => router.push("./")}
-          >
+          <div className={styles.dismissButton} onClick={closeLoginModal}>
             <Image src={dismiss.src} alt="dismiss" width={36} height={36} />
           </div>
           <Image src={logo.src} alt="logo" width={301} height={81} />
@@ -39,11 +39,11 @@ export default function LoginModal() {
             </div>
             <h1>GitHub로 로그인하기</h1>
           </div>
-          <div className={styles.dismissText} onClick={() => router.push("/")}>
+          <div className={styles.dismissText} onClick={closeLoginModal}>
             <h1>나중에 할래요.</h1>
           </div>
         </div>
       </div>
-    </ModalContainer>
+    </div>
   );
 }
