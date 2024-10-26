@@ -3,7 +3,9 @@ import styles from "./SaveContentModal.module.css";
 import Plus from "@/../public/assets/plus.svg";
 import Check_White from "@/../public/assets/check_white.svg";
 import CheckBox from "@/app/_components/CheckBox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getGroupList } from "../_utils/api";
+import { IGroup } from "..";
 
 const SaveContent = ({
   closeSaveModal,
@@ -12,19 +14,34 @@ const SaveContent = ({
   closeSaveModal: () => void;
   openNewGroupModal: () => void;
 }) => {
-  const groupData = [
-    { title: "프론트엔드" },
-    { title: "백엔드" },
-    { title: "아무 자료" },
-  ];
+  const [groupListData, setGroupListData] = useState<{
+    content: IGroup[];
+  } | null>(null);
   const [checkList, setCheckList] = useState<boolean[]>(
-    new Array(groupData.length).fill(false)
+    new Array(groupListData?.content.length).fill(false)
   );
   const handleGroupClick = (index: number) => {
     const updatedCheckList = [...checkList];
     updatedCheckList[index] = !updatedCheckList[index];
     setCheckList(updatedCheckList);
   };
+
+  const handleSaveGroupClick = () => {
+    closeSaveModal();
+  };
+
+  useEffect(() => {
+    const getGroupListData = async () => {
+      const localTokenData = localStorage.getItem("tokenData");
+      if (localTokenData !== null) {
+        const tokenData = JSON.parse(localTokenData);
+        const groupListData = await getGroupList(tokenData.accessToken);
+        setGroupListData(groupListData);
+        setCheckList(new Array(groupListData.content.length).fill(false));
+      }
+    };
+    getGroupListData();
+  }, []);
 
   return (
     <div className={styles.background} onClick={closeSaveModal}>
@@ -37,24 +54,25 @@ const SaveContent = ({
           </div>
         </div>
         <div className={styles.groupWrap}>
-          {groupData.map((group, index) => (
+          {groupListData?.content.map((group, index) => (
             <div
               key={index}
               className={styles.group}
               onClick={() => handleGroupClick(index)}
             >
               <CheckBox checked={checkList[index]} />
-              <h1 className={styles.groupTitle}>{group.title}</h1>
+              <h1 className={styles.groupTitle}>{group.name}</h1>
             </div>
           ))}
         </div>
-        <div className={styles.btnWrap} onClick={closeSaveModal}>
+        <div className={styles.btnWrap} onClick={handleSaveGroupClick}>
           <Image src={Check_White.src} alt="check" width={14} height={14} />
           <h1 className={styles.doneText}>완료</h1>
         </div>
       </div>
     </div>
   );
+  return null;
 };
 
 export default SaveContent;

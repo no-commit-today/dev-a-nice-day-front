@@ -1,51 +1,62 @@
 "use client";
 import styles from "./page.module.css";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import CheckLocalStorage from "../(home)/_components/CheckLocalStorage";
 import LoginModal from "../_components/LoginModal";
+import { getGroupList } from "../_utils/api";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import CheckToken from "../(home)/_components/CheckToken";
+import { IGroup } from "..";
 
 const Profile = () => {
   const router = useRouter();
-  const groupedContentsData = [
-    {
-      title: "게시글 제목",
-      id: 1,
-    },
-    {
-      title: "게시글 제목",
-      id: 2,
-    },
-    {
-      title: "게시글 제목",
-      id: 3,
-    },
-    {
-      title: "게시글 제목",
-      id: 4,
-    },
-  ];
-  const isLogin = CheckLocalStorage({ tokenData: null });
+  const [groupListData, setGroupListData] = useState<{
+    content: IGroup[];
+  } | null>(null);
+  const [isLoginModalOpened, setIsLoginModalOpened] = useState(false);
 
-  if (!isLogin) {
-    return <LoginModal />;
-  }
+  useEffect(() => {
+    const getGroupListData = async () => {
+      const isLogin = await CheckToken();
+      if (isLogin) {
+        const localTokenData = localStorage.getItem("tokenData");
+        if (localTokenData !== null) {
+          const tokenData = JSON.parse(localTokenData);
+          const groupListData = await getGroupList(tokenData.accessToken);
+          setGroupListData(groupListData);
+        }
+      } else {
+        setIsLoginModalOpened(true);
+      }
+    };
+    getGroupListData();
+  }, []);
+
+  const closeLoginModal = () => {
+    setIsLoginModalOpened(false);
+    router.push("/");
+  };
+
   return (
-    <div className={styles.container}>
-      <div className={styles.groupedContentsContainer}>
-        <h1 className={styles.groupText}>저장한 게시글</h1>
-        <div className={styles.groupedContents}>
-          {groupedContentsData.map((content) => (
-            <Link href={`groupContents/${content.id}`} key={content.id}>
-              <div className={styles.groupedContentBox}>
-                <div className={styles.groupedContentImage}></div>
-                <h1 className={styles.contentTitle}>{content.title}</h1>
-              </div>
-            </Link>
-          ))}
+    <>
+      {isLoginModalOpened && <LoginModal closeLoginModal={closeLoginModal} />}
+      <div className={styles.container}>
+        <div className={styles.groupedContentsContainer}>
+          <h1 className={styles.groupText}>저장한 게시글</h1>
+          <div className={styles.groupedContents}>
+            {groupListData &&
+              groupListData.content.map((content: IGroup, index) => (
+                <Link href={`groupContents/${index}`} key={index}>
+                  <div className={styles.groupedContentBox}>
+                    <div className={styles.groupedContentImage}></div>
+                    <h1 className={styles.contentTitle}>{content.name}</h1>
+                  </div>
+                </Link>
+              ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
