@@ -19,17 +19,42 @@ const getContentsCount = async (searchParams: string) => {
 };
 
 const getContents = async (page: number, searchParams: string) => {
+  let tokenData;
+  if (typeof window !== "undefined") {
+    const localData = localStorage.getItem("tokenData");
+    if (localData !== null) {
+      tokenData = JSON.parse(localData);
+    }
+  }
   const data = await fetch(
-    `${BASE_URL}/api/content/v1/contents?page=${page}&size=10&${searchParams}`
+    `${BASE_URL}/api/content/v1/contents?page=${page}&size=10&${searchParams}`,
+    {
+      headers: tokenData && {
+        Authorization: `Bearer ${tokenData?.accessToken}`,
+      },
+    }
   );
   if (!data.ok) {
     throw new Error("API Error");
   }
-  return await data.json();
+  const ret = await data.json();
+  console.log(ret);
+  return ret;
 };
 
 const getContentById = async (id: string) => {
-  const data = await fetch(`${BASE_URL}/api/content/v1/contents/${id}`);
+  let tokenData;
+  if (typeof window !== "undefined") {
+    const localData = localStorage.getItem("tokenData");
+    if (localData !== null) {
+      tokenData = JSON.parse(localData);
+    }
+  }
+  const data = await fetch(`${BASE_URL}/api/content/v1/contents/${id}`, {
+    headers: tokenData && {
+      Authorization: `Bearer ${tokenData?.accessToken}`,
+    },
+  });
   if (!data.ok) {
     throw new Error("API Error");
   }
@@ -39,18 +64,19 @@ const getContentById = async (id: string) => {
 const getShuffledContents = async (
   page: number,
   searchParams: string,
-  firstContentId?: string
+  firstContentId: string | null
 ) => {
-  const data = await getContents(page, searchParams);
-  if (firstContentId) {
-    const firstContent = await getContentById(firstContentId);
+  if (typeof window !== "undefined") {
+    const data = await getContents(page, searchParams);
+    if (firstContentId) {
+      const firstContent = await getContentById(firstContentId);
+      shuffleArray(data.content);
+
+      return { content: [firstContent, ...data.content] };
+    }
     shuffleArray(data.content);
-
-    return { content: [firstContent, ...data.content] };
+    return data;
   }
-  shuffleArray(data.content);
-
-  return data;
 };
 
 const getGitHubToken = async (code?: string) => {
@@ -75,7 +101,7 @@ const getGitHubToken = async (code?: string) => {
 };
 
 const signup = async (gitHubAccessToken: string) => {
-  console.log("signup Fn: ", gitHubAccessToken);
+  // console.log("signup Fn: ", gitHubAccessToken);
   const data = await fetch(`${BASE_URL}/api/user/v1/signup`, {
     method: "POST",
     headers: {
@@ -93,7 +119,7 @@ const signup = async (gitHubAccessToken: string) => {
 };
 
 const login = async (gitHubAccessToken: string) => {
-  console.log("login fn: ", gitHubAccessToken);
+  // console.log("login fn: ", gitHubAccessToken);
   const data = await fetch(`${BASE_URL}/api/user/v1/login`, {
     method: "POST",
     headers: {

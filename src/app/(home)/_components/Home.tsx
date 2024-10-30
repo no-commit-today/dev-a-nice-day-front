@@ -22,26 +22,23 @@ export default async function Home({
   const contentsCountData = await getContentsCount(
     arrayToQueryString(searchParams.categories)
   );
-  const randomIndex = getRandomNumber([], contentsCountData);
-  const initialContents = await getShuffledContents(
-    randomIndex,
-    arrayToQueryString(searchParams.categories),
-    searchParams.id
-  );
-  const initialData = {
-    pages: [initialContents],
-    pageParams: [randomIndex],
-  };
+  // const randomIndex = getRandomNumber([], contentsCountData);
+  // const initialContents = await getShuffledContents(
+  //   randomIndex,
+  //   arrayToQueryString(searchParams.categories),
+  //   searchParams.id
+  // );
+  // const initialData = {
+  //   pages: [initialContents],
+  //   pageParams: [randomIndex],
+  // };
 
   return (
     <div className={styles.container}>
       <div className={styles.contentBox}>
         <div className={styles.sliderBox}>
           <Suspense fallback={contentFallBack}>
-            <ContentSlider
-              initialData={initialData}
-              contentsCountData={contentsCountData}
-            />
+            <ContentSlider contentsCountData={contentsCountData} />
           </Suspense>
         </div>
       </div>
