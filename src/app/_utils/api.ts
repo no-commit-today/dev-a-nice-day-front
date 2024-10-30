@@ -208,6 +208,24 @@ const saveContentToGroup = async (
   return data;
 };
 
+const getContentListInGroup = async (
+  groupName: string,
+  access_token: string
+) => {
+  const data = await fetch(
+    `${BASE_URL}/api/bookmark/v1/bookmarks?groupName=${groupName}`,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+  return await data.json();
+};
+
 export {
   getShuffledContents,
   getContents,
@@ -219,4 +237,5 @@ export {
   getGroupList,
   createGroup,
   saveContentToGroup,
+  getContentListInGroup,
 };
