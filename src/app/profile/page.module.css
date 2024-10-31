@@ -68,9 +68,33 @@
   aspect-ratio: 1 / 1;
   border-radius: 10px;
   position: relative;
+  cursor: pointer;
 }
 .contentTitle {
   color: #fff;
   font-size: 16px;
   margin-top: 10px;
+}
+.dotMenu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+.dotMenu:hover {
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.1); /* x-offset, y-offset, blur-radius, spread-radius, color */
+}
+.dotMenuContent {
+  position: absolute;
+  right: 30px;
+  top: 20px;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #fff;
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.1);
+}
+.dotMenuContent:hover {
+  background-color: #f1f1f1;
 }

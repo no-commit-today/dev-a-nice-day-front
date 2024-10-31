@@ -43,6 +43,7 @@ const GroupContents = ({ params }: { params: { id: string } }) => {
               contentData={contentData}
               index={index}
               length={contentsData.content.length}
+              isDeletable={true}
             />
           ))}
       </div>
