@@ -31,14 +31,34 @@ export default function TobTab() {
   if (pathname.includes("/setting")) {
     return (
       <div className={styles.container}>
-        <Image src={logo} priority={true} alt="logo" className={styles.logo} />
+        <Image
+          src={logo}
+          priority={true}
+          alt="logo"
+          className={styles.logo}
+          onClick={() => router.push("/")}
+          style={{ cursor: "pointer" }}
+        />
         <div className={styles.rightContainer}></div>
       </div>
     );
   }
   return (
     <div className={styles.container}>
-      <Image src={logo} priority={true} alt="logo" className={styles.logo} />
+      <Image
+        src={logo}
+        priority={true}
+        alt="logo"
+        className={styles.logo}
+        onClick={() => {
+          if (pathname.includes("/content") || pathname.includes("profile"))
+            router.push("/");
+          else {
+            window.location.replace("/");
+          }
+        }}
+        style={{ cursor: "pointer" }}
+      />
       <div className={styles.rightContainer}>
         <CategoryButton />
         <Link href={"/setting"} className={styles.settingBtn}>
