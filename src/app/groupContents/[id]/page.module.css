@@ -18,7 +18,3 @@
   font-size: 12px;
   font-weight: normal;
 }
-.contentBoxWrap {
-  display: flex;
-  flex-direction: column;
-}

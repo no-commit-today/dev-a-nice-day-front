@@ -32,18 +32,19 @@ const GroupContents = ({ params }: { params: { id: string } }) => {
   return (
     <div className={styles.container}>
       <div className={styles.contentsCountBox}>
-        <h1 className={styles.contentsCount}>4</h1>
+        <h1 className={styles.contentsCount}>{contentsData.content.length}</h1>
         <h1 className={styles.contentsText}>개의 컨텐츠</h1>
       </div>
-      <div className={styles.contentBoxWrap}>
-        {contentsData.content.map((contentData, index) => (
-          <ContentBox
-            key={contentData.id}
-            contentData={contentData}
-            index={index}
-            length={contentsData.content.length}
-          ></ContentBox>
-        ))}
+      <div>
+        {contentsData &&
+          contentsData.content.map((contentData, index) => (
+            <ContentBox
+              key={contentData.id}
+              contentData={contentData}
+              index={index}
+              length={contentsData.content.length}
+            />
+          ))}
       </div>
     </div>
   );
