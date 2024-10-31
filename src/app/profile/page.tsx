@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import CheckToken from "../(home)/_components/CheckToken";
 import { IGroup } from "..";
+import No_Image from "@/../public/assets/no_image.svg";
+import Image from "next/image";
 
 const Profile = () => {
   const router = useRouter();
@@ -48,7 +50,15 @@ const Profile = () => {
               groupListData.content.map((content: IGroup, index) => (
                 <Link href={`groupContents/${content.name}`} key={index}>
                   <div className={styles.groupedContentBox}>
-                    <div className={styles.groupedContentImage}></div>
+                    <div className={styles.groupedContentImage}>
+                      <Image
+                        src={No_Image.src}
+                        alt="no_image"
+                        fill
+                        objectFit="cover"
+                        style={{ borderRadius: 10 }}
+                      />
+                    </div>
                     <h1 className={styles.contentTitle}>{content.name}</h1>
                   </div>
                 </Link>
