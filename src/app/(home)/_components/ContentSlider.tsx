@@ -8,15 +8,15 @@ import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { BASE_URL, getShuffledContents } from "@/app/_utils/api";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
-import { IContentData } from "@/app";
 import no_image from "@/../public/assets/no_image.svg";
 import getRandomNumber from "@/app/_utils/getRandomNumber";
 import FloatingBtn from "./FloatingBtn";
 import BackImage from "./BackImage";
 import { useSearchParams } from "next/navigation";
+import ContentFallBack from "./ContentSliderFallback";
 
 export default function ContentSlider({
   // initialData,
@@ -116,7 +116,7 @@ export default function ContentSlider({
 
   return (
     <div>
-      {shuffledContentsData && (
+      {shuffledContentsData ? (
         <Swiper
           modules={[Mousewheel]}
           mousewheel={{
@@ -242,6 +242,8 @@ export default function ContentSlider({
               );
             })}
         </Swiper>
+      ) : (
+        <ContentFallBack />
       )}
     </div>
   );

@@ -1,9 +1,7 @@
 import styles from "./Home.module.css";
 import ContentSlider from "./ContentSlider";
 import { Suspense } from "react";
-import { contentFallBack } from "./ContentSliderFallback";
-import { getContentsCount, getShuffledContents } from "@/app/_utils/api";
-import getRandomNumber from "@/app/_utils/getRandomNumber";
+import { getContentsCount } from "@/app/_utils/api";
 export default async function Home({
   searchParams,
 }: {
@@ -37,9 +35,7 @@ export default async function Home({
     <div className={styles.container}>
       <div className={styles.contentBox}>
         <div className={styles.sliderBox}>
-          <Suspense fallback={contentFallBack}>
-            <ContentSlider contentsCountData={contentsCountData} />
-          </Suspense>
+          <ContentSlider contentsCountData={contentsCountData} />
         </div>
       </div>
     </div>
