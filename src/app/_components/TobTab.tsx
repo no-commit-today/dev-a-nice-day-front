@@ -21,7 +21,7 @@ export default function TobTab() {
           height={48}
           priority={true}
           alt="carrot"
-          style={{ transform: "rotate(180deg)" }}
+          style={{ transform: "rotate(180deg)", cursor: "pointer" }}
           onClick={() => router.back()}
         />
         <h1 className={styles.groupTitle}>모든 게시물</h1>
