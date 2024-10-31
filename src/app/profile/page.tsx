@@ -1,14 +1,16 @@
 "use client";
 import styles from "./page.module.css";
 import LoginModal from "../_components/LoginModal";
-import { getGroupList } from "../_utils/api";
+import { deleteGroup, getGroupList } from "../_utils/api";
 import { MouseEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import CheckToken from "../(home)/_components/CheckToken";
 import { IGroup } from "..";
 import no_image from "@/../public/assets/no_image.svg";
 import dots from "@/../public/assets/dots.svg";
+import plus_gray from "@/../public/assets/plus_gray.svg";
 import Image from "next/image";
+import NewGroupModal from "../_components/NewGroupModal";
 
 const Profile = () => {
   const router = useRouter();
@@ -17,6 +19,7 @@ const Profile = () => {
   } | null>(null);
   const [isLoginModalOpened, setIsLoginModalOpened] = useState(false);
   const [isDotMenuOpened, setIsDotMenuOpened] = useState<boolean[]>([]);
+  const [isNewGroupModalOpened, setIsNewGroupModalOpened] = useState(false);
 
   useEffect(() => {
     const getGroupListData = async () => {
@@ -52,6 +55,33 @@ const Profile = () => {
     const newIsDotMenuOpened = new Array(isDotMenuOpened.length).fill(false);
     setIsDotMenuOpened(newIsDotMenuOpened);
   };
+  const handleDeleteGroup = async (e: MouseEvent, name: string) => {
+    //name만 뺀 새로운 groupListData를 만들어서 setGroupListData
+    if (groupListData !== null) {
+      const newGroupListData = groupListData.content.filter(
+        (content) => content.name !== name
+      );
+      setGroupListData({ content: newGroupListData });
+    }
+
+    e.stopPropagation();
+    const localTokenData = localStorage.getItem("tokenData");
+    if (localTokenData !== null) {
+      const tokenData = JSON.parse(localTokenData);
+      await deleteGroup(name, tokenData.accessToken);
+      const groupListData = await getGroupList(tokenData.accessToken);
+      setGroupListData(groupListData);
+    }
+  };
+  const closeNewGroupModal = async () => {
+    setIsNewGroupModalOpened(false);
+    const localTokenData = localStorage.getItem("tokenData");
+    if (localTokenData !== null) {
+      const tokenData = JSON.parse(localTokenData);
+      const groupListData = await getGroupList(tokenData.accessToken);
+      setGroupListData(groupListData);
+    }
+  };
   return (
     <>
       {isLoginModalOpened && <LoginModal closeLoginModal={closeLoginModal} />}
@@ -86,7 +116,10 @@ const Profile = () => {
                       />
                     </div>
                     {isDotMenuOpened[index] && (
-                      <div className={styles.dotMenuContent}>
+                      <div
+                        className={styles.dotMenuContent}
+                        onClick={(e) => handleDeleteGroup(e, content.name)}
+                      >
                         <h1>삭제</h1>
                       </div>
                     )}
@@ -94,6 +127,26 @@ const Profile = () => {
                   <h1 className={styles.contentTitle}>{content.name}</h1>
                 </div>
               ))}
+            <div
+              className={styles.groupedContentBox}
+              onClick={() => setIsNewGroupModalOpened(true)}
+            >
+              <div
+                className={styles.groupedContentImage}
+                style={{ backgroundColor: "#63667A" }}
+              >
+                <Image
+                  src={plus_gray.src}
+                  alt="newGroup"
+                  width={100}
+                  height={100}
+                />
+              </div>
+              <h1 className={styles.contentTitle}>새 그룹</h1>
+            </div>
+            {isNewGroupModalOpened && (
+              <NewGroupModal closeNewGroupModal={closeNewGroupModal} />
+            )}
           </div>
         </div>
       </div>

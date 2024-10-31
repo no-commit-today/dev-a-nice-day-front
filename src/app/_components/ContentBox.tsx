@@ -26,7 +26,7 @@ const ContentBox = ({
   index,
   length,
   fetchNextPage,
-  isDeletable,
+  handleDelete,
 }: {
   contentData: IContentData;
   index: number;
@@ -34,7 +34,7 @@ const ContentBox = ({
   fetchNextPage?: ({}) => Promise<
     InfiniteQueryObserverResult<InfiniteData<any, unknown>, Error>
   >;
-  isDeletable?: boolean;
+  handleDelete?: ({ contentId }: { contentId: number }) => void;
 }) => {
   const ref = useIntersect(() => {
     if (fetchNextPage) fetchNextPage({ cancelRefetch: false });
@@ -80,13 +80,19 @@ const ContentBox = ({
           height={60}
           style={{ borderRadius: 10 }}
         ></Image>
-        {isDeletable && (
+        {handleDelete && (
           <>
             <div className={styles.dotMenu} onClick={(e) => handleDotMenu(e)}>
               <Image src={dots.src} alt="dot_menu" width={20} height={20} />
             </div>
             {isDotMenuOpened && (
-              <div className={styles.dotMenuContent}>
+              <div
+                className={styles.dotMenuContent}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete({ contentId: contentData.id });
+                }}
+              >
                 <h1>삭제</h1>
               </div>
             )}

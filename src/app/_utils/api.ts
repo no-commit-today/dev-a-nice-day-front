@@ -252,6 +252,43 @@ const getContentListInGroup = async (
   return await data.json();
 };
 
+const deleteGroup = async (groupName: string, access_token: string) => {
+  const data = await fetch(`${BASE_URL}/api/bookmark/v1/groups/${groupName}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Accept: "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+  return data;
+};
+
+const deleteContentInGroup = async (
+  groupName: string,
+  contentId: string,
+  access_token: string
+) => {
+  const data = await fetch(
+    `${BASE_URL}/api/bookmark/v1/groups/${groupName}/contents/${contentId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        Accept: "application/json",
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+  return data;
+};
+
 export {
   getShuffledContents,
   getContents,
@@ -264,4 +301,6 @@ export {
   createGroup,
   saveContentToGroup,
   getContentListInGroup,
+  deleteGroup,
+  deleteContentInGroup,
 };

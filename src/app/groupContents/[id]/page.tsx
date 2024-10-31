@@ -2,8 +2,8 @@
 
 import ContentBox from "@/app/_components/ContentBox";
 import styles from "./page.module.css";
-import { getContentListInGroup } from "@/app/_utils/api";
-import { useEffect, useState } from "react";
+import { deleteContentInGroup, getContentListInGroup } from "@/app/_utils/api";
+import { MouseEvent, useEffect, useState } from "react";
 interface IContentData {
   id: number;
   providerIconUrl: string;
@@ -28,6 +28,25 @@ const GroupContents = ({ params }: { params: { id: string } }) => {
     };
     getContentList();
   }, []);
+  const handleDelete = async ({ contentId }: { contentId: number }) => {
+    const tempContentsData = contentsData.content.filter(
+      (content) => content.id !== contentId
+    );
+    setContentsData({ content: tempContentsData });
+
+    const localTokenData = localStorage.getItem("tokenData");
+    if (localTokenData === null) throw new Error("Token is not found");
+    const tokenData = JSON.parse(localTokenData);
+    await deleteContentInGroup(
+      params.id,
+      contentId.toString(),
+      tokenData.accessToken
+    );
+
+    const newContentsData: { content: IContentData[] } =
+      await getContentListInGroup(params.id, tokenData.accessToken);
+    setContentsData(newContentsData);
+  };
 
   return (
     <div className={styles.container}>
@@ -43,7 +62,7 @@ const GroupContents = ({ params }: { params: { id: string } }) => {
               contentData={contentData}
               index={index}
               length={contentsData.content.length}
-              isDeletable={true}
+              handleDelete={handleDelete}
             />
           ))}
       </div>
