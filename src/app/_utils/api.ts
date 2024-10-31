@@ -269,7 +269,7 @@ const deleteGroup = async (groupName: string, access_token: string) => {
 
 const deleteContentInGroup = async (
   groupName: string,
-  contentId: string,
+  contentId: string | null,
   access_token: string
 ) => {
   const data = await fetch(
@@ -289,6 +289,24 @@ const deleteContentInGroup = async (
   return data;
 };
 
+const getContainedGroupList = async (
+  contentId: string,
+  access_token: string
+) => {
+  const data = await fetch(
+    `${BASE_URL}/api/bookmark/v1/groups-with-contains?contentId=${contentId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+  return await data.json();
+};
+
 export {
   getShuffledContents,
   getContents,
@@ -303,4 +321,5 @@ export {
   getContentListInGroup,
   deleteGroup,
   deleteContentInGroup,
+  getContainedGroupList,
 };

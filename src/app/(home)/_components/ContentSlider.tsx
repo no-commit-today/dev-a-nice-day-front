@@ -235,7 +235,10 @@ export default function ContentSlider({
                           </div>
                         </div>
                       </div>
-                      <FloatingBtn />
+                      <FloatingBtn
+                        isSaved={content.bookmarked}
+                        contentId={content.id}
+                      />
                     </>
                   )}
                 </SwiperSlide>
