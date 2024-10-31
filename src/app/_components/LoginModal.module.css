@@ -23,6 +23,7 @@
   justify-content: center;
   align-items: flex-end;
   width: 100dvw;
+  max-width: 600px;
 }
 .dismissButton {
   position: absolute;
