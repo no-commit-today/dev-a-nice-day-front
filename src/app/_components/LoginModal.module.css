@@ -1,3 +1,15 @@
+.container {
+  background-color: hsl(0, 0%, 18%);
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: absolute;
+  z-index: 104;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .loginContainer {
   display: flex;
   height: 100dvh;
@@ -8,9 +20,10 @@
   display: flex;
   position: relative;
   flex: 0.5;
-  width: 100%;
   justify-content: center;
   align-items: flex-end;
+  width: 100dvw;
+  max-width: 600px;
 }
 .dismissButton {
   position: absolute;

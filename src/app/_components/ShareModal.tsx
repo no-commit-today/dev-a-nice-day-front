@@ -15,6 +15,7 @@ const ShareModal = ({ closeShareModal }: { closeShareModal: () => void }) => {
     try {
       await navigator.clipboard.writeText(href);
       setIsCopied(true);
+      alert("복사되었습니다.");
     } catch (err) {
       console.log(err);
     }

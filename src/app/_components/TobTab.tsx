@@ -21,16 +21,44 @@ export default function TobTab() {
           height={48}
           priority={true}
           alt="carrot"
-          style={{ transform: "rotate(180deg)" }}
+          style={{ transform: "rotate(180deg)", cursor: "pointer" }}
           onClick={() => router.back()}
         />
         <h1 className={styles.groupTitle}>모든 게시물</h1>
         <div style={{ width: 48, height: 48 }} />
       </div>
     );
+  if (pathname.includes("/setting")) {
+    return (
+      <div className={styles.container}>
+        <Image
+          src={logo}
+          priority={true}
+          alt="logo"
+          className={styles.logo}
+          onClick={() => router.push("/")}
+          style={{ cursor: "pointer" }}
+        />
+        <div className={styles.rightContainer}></div>
+      </div>
+    );
+  }
   return (
     <div className={styles.container}>
-      <Image src={logo} priority={true} alt="logo" className={styles.logo} />
+      <Image
+        src={logo}
+        priority={true}
+        alt="logo"
+        className={styles.logo}
+        onClick={() => {
+          if (pathname.includes("/content") || pathname.includes("profile"))
+            router.push("/");
+          else {
+            window.location.replace("/");
+          }
+        }}
+        style={{ cursor: "pointer" }}
+      />
       <div className={styles.rightContainer}>
         <CategoryButton />
         <Link href={"/setting"} className={styles.settingBtn}>
