@@ -35,7 +35,7 @@ const ContentFallBack = () => (
       />
       <div
         className={styles.loadingItem}
-        style={{ width: "100%", height: 100, marginLeft: 10 }}
+        style={{ width: "100%", height: 50, marginLeft: 10 }}
       />
     </div>
     <div className={styles.row} style={{ marginTop: 10 }}>
@@ -45,7 +45,7 @@ const ContentFallBack = () => (
       />
       <div
         className={styles.loadingItem}
-        style={{ width: "100%", height: 100, marginLeft: 10 }}
+        style={{ width: "100%", height: 50, marginLeft: 10 }}
       />
     </div>
     <div className={styles.row} style={{ marginTop: 10 }}>
@@ -55,7 +55,7 @@ const ContentFallBack = () => (
       />
       <div
         className={styles.loadingItem}
-        style={{ width: "100%", height: 100, marginLeft: 10 }}
+        style={{ width: "100%", height: 50, marginLeft: 10 }}
       />
     </div>
     <div className={styles.floatingBtnContainer}>
