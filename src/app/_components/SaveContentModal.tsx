@@ -133,7 +133,6 @@ const SaveContent = ({
       </div>
     </div>
   );
-  return null;
 };
 
 export default SaveContent;

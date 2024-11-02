@@ -6,7 +6,7 @@ import "./globals.css";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "테크스와이프 | 테크를 스와이프하다.",
+  title: "Dev a Nice Day | 한눈에 보는 IT 트렌드",
 };
 
 export default function RootLayout({

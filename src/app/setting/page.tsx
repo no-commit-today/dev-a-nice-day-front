@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import LogoutButton from "./_components/LogoutButton";
 export const metadata: Metadata = {
-  title: "테크스와이프 | 설정",
+  title: "Dev a Nice Day | 설정",
 };
 export default function Setting() {
   return (
