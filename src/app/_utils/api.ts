@@ -89,8 +89,8 @@ const getGitHubToken = async (code?: string) => {
       Accept: "application/json",
     },
     body: JSON.stringify({
-      client_id: "Iv23lipZn6Q52xQOthNr",
-      client_secret: "7efa5c65398a198caf376cb1ecb09c6942b13dcf",
+      client_id: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID,
+      client_secret: process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET,
       code: code,
     }),
   });
@@ -101,7 +101,6 @@ const getGitHubToken = async (code?: string) => {
 };
 
 const signup = async (gitHubAccessToken: string) => {
-  // console.log("signup Fn: ", gitHubAccessToken);
   const data = await fetch(`${BASE_URL}/api/user/v1/signup`, {
     method: "POST",
     headers: {
@@ -119,7 +118,6 @@ const signup = async (gitHubAccessToken: string) => {
 };
 
 const login = async (gitHubAccessToken: string) => {
-  // console.log("login fn: ", gitHubAccessToken);
   const data = await fetch(`${BASE_URL}/api/user/v1/login`, {
     method: "POST",
     headers: {
@@ -132,12 +130,10 @@ const login = async (gitHubAccessToken: string) => {
   });
   if (!data.ok) {
     if (data.status === 404) {
-      console.log("가입되지 않은 회원");
       await signup(gitHubAccessToken);
       const ret: Response = await login(gitHubAccessToken);
       return ret;
     } else {
-      console.log("login Fn Error: ", data);
       throw new Error("API Error");
     }
   }
@@ -162,7 +158,6 @@ const refresh = async (refreshToken: string) => {
 };
 
 const logout = async (refreshToken: string) => {
-  console.log("logout Fn: ", refreshToken);
   const data = await fetch(`${BASE_URL}/api/user/v1/logout`, {
     method: "POST",
     headers: {
