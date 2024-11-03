@@ -1,0 +1,93 @@
+.contentBox {
+  width: 100%;
+  height: fit-content;
+  background-color: #2e2e2e;
+  margin: 15px 0;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.contentBox:hover {
+  cursor: pointer;
+  background-color: #3e3e3e;
+}
+.leftBox {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0px;
+  padding-left: 10px;
+
+  overflow: hidden;
+}
+.rightBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  position: relative;
+}
+.titleBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.providerTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f1f1f1;
+  margin: 0 5px;
+}
+.dateText {
+  font-size: 10px;
+  font-weight: 600;
+  color: #b5b5b5;
+}
+.contentTitle {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+.categoryBox {
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-spacing: 3px;
+  margin-right: 5px;
+  font-size: 12px;
+  color: #3d6bff;
+  font-weight: 500;
+}
+.category {
+  margin-right: 5px;
+  font-size: 12px;
+  color: #3d6bff;
+  font-weight: 500;
+}
+.dotMenu {
+  position: absolute;
+  top: 10px;
+  right: 3px;
+  cursor: pointer;
+}
+.dotMenu:hover {
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.1); /* x-offset, y-offset, blur-radius, spread-radius, color */
+}
+.dotMenuContent {
+  position: absolute;
+  right: 30px;
+  top: 20px;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #fff;
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.1);
+}
+.dotMenuContent:hover {
+  background-color: #f1f1f1;
+}

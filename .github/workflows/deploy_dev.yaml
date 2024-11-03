@@ -1,8 +1,8 @@
-name: git push into dev repo to deploy to vercel
+name: git push into deploy_dev repo to deploy to vercel
 
 on:
   push:
-    branches: [deploy]
+    branches: [develop]
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
         with:
           source-directory: 'output'
           destination-github-username: 'prkgnt'
-          destination-repository-name: 'dev-a-nice-day-front-deploy'
+          destination-repository-name: 'dev-a-nice-day-front-deploy-DEV'
           user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }}
           commit-message: See ORIGIN_COMMIT from $GITHUB_REF
           target-branch: main

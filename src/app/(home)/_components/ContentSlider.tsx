@@ -11,20 +11,22 @@ import { BASE_URL, getShuffledContents } from "@/app/_utils/api";
 import { useEffect } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
-import { IContentData } from "@/app";
 import no_image from "@/../public/assets/no_image.svg";
 import getRandomNumber from "@/app/_utils/getRandomNumber";
 import FloatingBtn from "./FloatingBtn";
 import BackImage from "./BackImage";
+import { useSearchParams } from "next/navigation";
+import ContentFallBack from "./ContentSliderFallback";
 
 export default function ContentSlider({
-  initialData,
+  // initialData,
   contentsCountData,
 }: {
-  initialData: { pages: { content: IContentData[] }[]; pageParams: number[] };
+  // initialData: { pages: { content: IContentData[] }[]; pageParams: number[] };
   contentsCountData: { count: number };
 }) {
   const searchParams = useParams("categories").getParamsToString();
+  const initialId = useSearchParams().get("id");
 
   const {
     data: shuffledContentsData,
@@ -33,9 +35,9 @@ export default function ContentSlider({
     isStale,
   } = useInfiniteQuery({
     queryKey: ["shuffledContents", searchParams],
-    queryFn: ({ pageParam }) => getShuffledContents(pageParam, searchParams),
+    queryFn: ({ pageParam }) =>
+      getShuffledContents(pageParam, searchParams, initialId),
     initialPageParam: getRandomNumber([], contentsCountData),
-    initialData: initialData,
     getNextPageParam: (_, __, ___, allPageParams) => {
       return getRandomNumber(allPageParams, contentsCountData);
     },
@@ -92,8 +94,9 @@ export default function ContentSlider({
         window.location.pathname +
           "?" +
           `${searchParams}&id=${
-            shuffledContentsData.pages.map((page) => page.content).flat()[index]
-              .id
+            shuffledContentsData?.pages.map((page) => page.content).flat()[
+              index
+            ].id
           }`
       );
     } else {
@@ -103,8 +106,9 @@ export default function ContentSlider({
         window.location.pathname +
           "?" +
           `id=${
-            shuffledContentsData.pages.map((page) => page.content).flat()[index]
-              .id
+            shuffledContentsData?.pages.map((page) => page.content).flat()[
+              index
+            ].id
           }`
       );
     }
@@ -112,7 +116,7 @@ export default function ContentSlider({
 
   return (
     <div>
-      {shuffledContentsData && (
+      {shuffledContentsData ? (
         <Swiper
           modules={[Mousewheel]}
           mousewheel={{
@@ -231,13 +235,18 @@ export default function ContentSlider({
                           </div>
                         </div>
                       </div>
-                      <FloatingBtn />
+                      <FloatingBtn
+                        isSaved={content.bookmarked}
+                        contentId={content.id}
+                      />
                     </>
                   )}
                 </SwiperSlide>
               );
             })}
         </Swiper>
+      ) : (
+        <ContentFallBack />
       )}
     </div>
   );

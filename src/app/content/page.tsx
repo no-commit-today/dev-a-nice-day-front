@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { contentListFallBack } from "./_components/ContentListFallback";
 
 export const metadata: Metadata = {
-  title: "테크스와이프 | 콘텐츠 목록",
+  title: "Dev a Nice Day | 콘텐츠 목록",
 };
 
 export default function Content() {

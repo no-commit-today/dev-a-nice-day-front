@@ -14,9 +14,17 @@
 }
 .floatingWrap {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin: 20px;
   align-items: center;
+}
+.btnWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20px;
+  cursor: pointer;
 }
 .floatingBtn {
   width: 42px;
@@ -27,6 +35,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.btnWrap:hover {
+  .floatingBtn {
+    background-color: rgba(224, 224, 224, 0.5);
+  }
 }
 .text {
   color: #fff;

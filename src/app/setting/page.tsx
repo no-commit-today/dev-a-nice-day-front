@@ -1,10 +1,11 @@
 import { Metadata } from "next";
 import styles from "./page.module.css";
-import carret_right from "@/../public/assets/carret_right.svg";
+import carrot_right from "@/../public/assets/carrot_right.svg";
 import Link from "next/link";
 import Image from "next/image";
+import LogoutButton from "./_components/LogoutButton";
 export const metadata: Metadata = {
-  title: "테크스와이프 | 설정",
+  title: "Dev a Nice Day | 설정",
 };
 export default function Setting() {
   return (
@@ -18,8 +19,8 @@ export default function Setting() {
           <div className={styles.termsBox}>
             <h1 className={styles.termsText}>서비스 이용 약관</h1>
             <Image
-              alt={"carret_right"}
-              src={carret_right.src}
+              alt={"carrot_right"}
+              src={carrot_right.src}
               width={24}
               height={24}
             />
@@ -33,13 +34,14 @@ export default function Setting() {
           <div className={styles.termsBox}>
             <h1 className={styles.termsText}>고객센터</h1>
             <Image
-              alt={"carret_right"}
-              src={carret_right.src}
+              alt={"carrot_right"}
+              src={carrot_right.src}
               width={24}
               height={24}
             />
           </div>
         </Link>
+        <LogoutButton />
       </div>
     </div>
   );

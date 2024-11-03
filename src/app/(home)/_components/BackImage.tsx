@@ -56,8 +56,6 @@ const BackImage = ({
       ></Image>
     </div>
   );
-
-  return null;
 };
 
 export default BackImage;

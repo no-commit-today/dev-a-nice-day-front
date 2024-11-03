@@ -10,3 +10,16 @@ export interface IContentData {
   providerUrl: string;
   providerIconUrl: string;
 }
+export interface ITokenData {
+  userId: string;
+  accessToken: string;
+  refreshToken: string;
+  accessTokenIssuedAt: string;
+  accessTokenExpiresAt: string;
+  refreshTokenIssuedAt: string;
+  refreshTokenExpiresAt: string;
+}
+
+export interface IGroup {
+  name: string;
+}
