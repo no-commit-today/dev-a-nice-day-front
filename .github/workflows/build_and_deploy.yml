@@ -1,0 +1,65 @@
+name: build and deploy
+
+on:
+  push:
+    branches: ["deploy"]
+
+jobs:
+  build:
+    environment: prod
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - uses: actions/checkout@v4
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+    - name: Login to AWS ECR
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Build and push
+      run: |
+        docker build \
+        --build-arg NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }} \
+        --build-arg NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }} \
+        --build-arg NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }} \
+        --build-arg NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }} \
+        --build-arg NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }} \
+        --build-arg NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }} \
+        --build-arg NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }} \
+        --build-arg NEXT_PUBLIC_GITHUB_CLIENT_ID=${{ secrets.NEXT_PUBLIC_GITHUB_CLIENT_ID }} \
+        --build-arg NEXT_PUBLIC_GITHUB_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_GITHUB_CLIENT_SECRET }} \
+        --build-arg NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }} \
+        --build-arg NEXT_PUBLIC_GITHUB_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_GITHUB_REDIRECT_URI }} \
+        -t ${{ secrets.AWS_ECR_REGISTRY }}/dev-a-nice-day-front:${{ github.sha}} --push .
+    - name: Logout docker
+      run: |
+        docker logout
+  deploy:
+    environment: prod
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup SSH agent
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.GITOPS_PRIVATE_KEY }}
+    - name: Checkout gitops repo
+      run: |
+        git clone git@github.com:no-commit-today/dev-a-nice-day-gitops.git
+    - name: Change Deployment spec
+      uses: mikefarah/yq@master
+      with:
+        cmd: yq eval -i '.spec.template.spec.containers[0].image = "${{ secrets.AWS_ECR_REGISTRY }}/dev-a-nice-day-front:${{ github.sha }}"' 'dev-a-nice-day-gitops/frontend/dev-a-nice-day-front.yaml'
+    - name: Git commit and push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        cd dev-a-nice-day-gitops/frontend
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions Bot"
+        git add .
+        git commit -m "Updated by GitHub Actions Bot"
+        git push origin main
