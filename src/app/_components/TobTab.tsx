@@ -43,6 +43,31 @@ export default function TobTab() {
       </div>
     );
   }
+  if (pathname.includes("/profile")) {
+    return (
+      <div className={styles.container}>
+        <Image
+          src={logo}
+          priority={true}
+          alt="logo"
+          className={styles.logo}
+          onClick={() => router.push("/")}
+          style={{ cursor: "pointer" }}
+        />
+        <div className={styles.rightContainer}>
+          <Link href={"/setting"} className={styles.settingBtn}>
+            <Image
+              src={setting.src}
+              width={20}
+              height={20}
+              priority={true}
+              alt="setting"
+            />
+          </Link>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={styles.container}>
       <Image
