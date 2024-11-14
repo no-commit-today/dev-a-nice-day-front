@@ -4,16 +4,24 @@ import styles from "./ShareModal.module.css";
 import Image from "next/image";
 import Check_White from "@/../public/assets/check_white.svg";
 
-const ShareModal = ({ closeShareModal }: { closeShareModal: () => void }) => {
-  const [href, setHref] = useState("");
+const ShareModal = ({
+  closeShareModal,
+  contentId,
+}: {
+  closeShareModal: () => void;
+  contentId: string;
+}) => {
+  // const [href, setHref] = useState("");
   const [isCopied, setIsCopied] = useState(false);
 
-  useEffect(() => {
-    setHref(window.location.href);
-  }, []);
+  // useEffect(() => {
+  //   setHref(window.location.href);
+  // }, []);
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(href);
+      await navigator.clipboard.writeText(
+        `${process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI}/?id=${contentId}`
+      );
       setIsCopied(true);
       alert("복사되었습니다.");
     } catch (err) {
@@ -27,7 +35,12 @@ const ShareModal = ({ closeShareModal }: { closeShareModal: () => void }) => {
           <h1 className={styles.title}>공유</h1>
         </div>
         <div className={styles.shareWrap}>
-          <input type="text" className={styles.input} value={href} readOnly />
+          <input
+            type="text"
+            className={styles.input}
+            value={`${process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI}/?id=${contentId}`}
+            readOnly
+          />
           <button className={styles.copyBtn} onClick={copyToClipboard}>
             {isCopied ? (
               <Image src={Check_White.src} alt="check" width={14} height={14} />
