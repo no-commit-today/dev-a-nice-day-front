@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import OgImage from "@/../public/assets/OpenGraph Image.png";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://devniceday.com"),
   title: "Dev a Nice Day | 한눈에 보는 IT 트렌드",
   description:
     "지금 알고 싶은 정보부터 더 깊은 개발 이야기까지 Dev A Nice Day에서 확인하세요!",
