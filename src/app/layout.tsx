@@ -4,7 +4,6 @@ import TobTab from "./_components/TobTab";
 import ReactQueryProvider from "./_hooks/useReactQuery";
 import "./globals.css";
 import { Suspense } from "react";
-import OgImage from "@/../public/assets/OpenGraph Image.png";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://devniceday.com"),
@@ -17,7 +16,6 @@ export const metadata: Metadata = {
     description:
       "지금 알고 싶은 정보부터 더 깊은 개발 이야기까지 Dev A Nice Day에서 확인하세요!",
     url: "https://devniceday.com",
-    images: [OgImage.src],
   },
 };
 
