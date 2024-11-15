@@ -137,6 +137,7 @@ export default function ContentSlider({
             );
           }}
           onReachEnd={pushMore}
+          observer={true}
         >
           {shuffledContentsData.pages
             .map((page) => page.content)

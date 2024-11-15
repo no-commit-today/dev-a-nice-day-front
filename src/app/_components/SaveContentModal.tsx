@@ -19,7 +19,7 @@ const SaveContent = ({
 }: {
   closeSaveModal: (isSaved: boolean | null) => void;
   openNewGroupModal: () => void;
-  contentId: number;
+  contentId: string;
 }) => {
   const [groupListData, setGroupListData] = useState<{
     content: IGroup[];

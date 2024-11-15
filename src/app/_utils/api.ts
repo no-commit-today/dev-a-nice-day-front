@@ -1,3 +1,5 @@
+import { IContentData } from "..";
+
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 function shuffleArray(array: object[]) {
@@ -42,7 +44,9 @@ const getContents = async (page: number, searchParams: string) => {
   return ret;
 };
 
-const getContentById = async (id: string) => {
+const getContentById = async (
+  id: string | undefined
+): Promise<IContentData> => {
   let tokenData;
   if (typeof window !== "undefined") {
     const localData = localStorage.getItem("tokenData");
@@ -305,6 +309,7 @@ const getContainedGroupList = async (
 export {
   getShuffledContents,
   getContents,
+  getContentById,
   getContentsCount,
   getGitHubToken,
   login,
