@@ -8,8 +8,8 @@ import Image from "next/image";
 import { Categories } from "@/app/_components/Categories";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { BASE_URL, getShuffledContents } from "@/app/_utils/api";
-import { useEffect } from "react";
-import { Mousewheel } from "swiper/modules";
+import { useEffect, useState } from "react";
+import { Manipulation, Mousewheel, Virtual } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
 import no_image from "@/../public/assets/no_image.svg";
 import getRandomNumber from "@/app/_utils/getRandomNumber";
@@ -27,7 +27,6 @@ export default function ContentSlider({
 }) {
   const searchParams = useParams("categories").getParamsToString();
   const initialId = useSearchParams().get("id");
-
   const {
     data: shuffledContentsData,
     fetchNextPage,
@@ -43,12 +42,15 @@ export default function ContentSlider({
     },
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
+    maxPages: 3,
   });
 
   // 데이터 추가 요청
   const pushMore = async () => {
     if (!isFetchingNextPage) {
-      await fetchNextPage();
+      const res = await fetchNextPage();
+      console.log(res);
+      return res.data;
     }
   };
   const goToLink = ({ url }: { url: string }) => {
@@ -118,7 +120,7 @@ export default function ContentSlider({
     <div>
       {shuffledContentsData ? (
         <Swiper
-          modules={[Mousewheel]}
+          modules={[Mousewheel, Manipulation]}
           mousewheel={{
             thresholdDelta: 30,
             forceToAxis: true,
@@ -126,17 +128,27 @@ export default function ContentSlider({
           autoHeight={true}
           direction={"vertical"}
           initialSlide={getScrollPosition()}
+          slidesPerView={1}
           onInit={(prop) => {
             pushIdParam(prop.activeIndex);
           }}
-          onSlideChange={(prop) => {
-            pushIdParam(prop.activeIndex);
+          onSlideChangeTransitionEnd={(swiper) => {
+            pushIdParam(swiper.activeIndex);
             sessionStorage.setItem(
               "scrollPosition",
-              prop.activeIndex.toString()
+              swiper.activeIndex.toString()
             );
+            if (swiper.isEnd) {
+              pushMore().then((res) => {
+                if (swiper.activeIndex >= 29) {
+                  swiper.realIndex =
+                    swiper.realIndex - res?.pages[2].content.length;
+                  swiper.activeIndex =
+                    swiper.activeIndex - res?.pages[2].content.length;
+                }
+              });
+            }
           }}
-          onReachEnd={pushMore}
           observer={true}
         >
           {shuffledContentsData.pages
