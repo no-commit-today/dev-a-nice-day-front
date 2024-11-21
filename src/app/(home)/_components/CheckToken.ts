@@ -34,11 +34,8 @@ const CheckToken = async () => {
       accessTokenExpiresAt < localTime &&
       refreshTokenExpiresAt < localTime
     ) {
-      console.log("c");
-      console.log(localTime, parsedTokenData.accessTokenExpiresAt);
+      return false;
     }
-  } else {
-    console.log("d");
   }
   return false;
 };

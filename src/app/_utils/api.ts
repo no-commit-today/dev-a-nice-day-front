@@ -40,7 +40,6 @@ const getContents = async (page: number, searchParams: string) => {
     throw new Error("API Error");
   }
   const ret = await data.json();
-  console.log(ret);
   return ret;
 };
 
@@ -84,7 +83,6 @@ const getShuffledContents = async (
 };
 
 const getGitHubToken = async (code?: string) => {
-  console.log("getGitHubToken Fn: ", code);
   const data = await fetch("https://github.com/login/oauth/access_token", {
     method: "POST",
     headers: {

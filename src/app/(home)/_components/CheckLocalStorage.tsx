@@ -14,7 +14,6 @@ export default function CheckLocalStorage({
     // 새로운 토큰이 있을 때
     if (tokenData !== null) {
       localStorage.setItem("tokenData", JSON.stringify(tokenData));
-      console.log(tokenData);
       return true;
     } else {
       const localTokenData = localStorage.getItem("tokenData");
@@ -41,7 +40,6 @@ export default function CheckLocalStorage({
         ) {
           const tokenData = await refresh(parsedTokenData.refreshToken);
           if (tokenData) {
-            console.log(tokenData);
             localStorage.setItem("tokenData", JSON.stringify(tokenData));
             return true;
           }
@@ -51,11 +49,8 @@ export default function CheckLocalStorage({
           accessTokenExpiresAt < localTime &&
           refreshTokenExpiresAt < localTime
         ) {
-          console.log("c");
-          console.log(localTime, parsedTokenData.accessTokenExpiresAt);
+          return false;
         }
-      } else {
-        console.log("d");
       }
     }
   }

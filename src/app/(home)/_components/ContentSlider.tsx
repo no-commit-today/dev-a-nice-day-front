@@ -49,7 +49,6 @@ export default function ContentSlider({
   const pushMore = async () => {
     if (!isFetchingNextPage) {
       const res = await fetchNextPage();
-      console.log(res);
       return res.data;
     }
   };

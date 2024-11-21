@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function Error({ error }: { error: Error }) {
   useEffect(() => {
-    console.log(error);
+    console.error(error);
   }, []);
   return (
     <div className={styles.container}>

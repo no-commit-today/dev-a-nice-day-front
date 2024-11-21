@@ -25,7 +25,7 @@ const ShareModal = ({
       setIsCopied(true);
       alert("복사되었습니다.");
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
   return (

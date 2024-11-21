@@ -37,7 +37,6 @@ export default async function Page({
   if (code) {
     const gitTokenData = await getGitHubToken(code);
     tokenData = await login(gitTokenData?.access_token);
-    console.log("tokenData: ", tokenData);
   }
 
   return (
