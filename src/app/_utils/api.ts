@@ -1,6 +1,7 @@
 import { IContentData } from "..";
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const fetchUrl = new URL(BASE_URL || "");
 
 function shuffleArray(array: object[]) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -11,57 +12,68 @@ function shuffleArray(array: object[]) {
 }
 
 const getContentsCount = async (searchParams: string) => {
-  const data = await fetch(
-    `${BASE_URL}/api/content/v1/contents-count?${searchParams}`
-  );
+  fetchUrl.pathname = "/api/content/v1/contents-count";
+  fetchUrl.search = searchParams;
+
+  const data = await fetch(fetchUrl.href);
+
   if (!data.ok) {
     throw new Error("API Error");
   }
+
   return await data.json();
 };
 
 const getContents = async (page: number, searchParams: string) => {
+  fetchUrl.pathname = "/api/content/v1/contents";
+  fetchUrl.search = `page=${page}&size=10&${searchParams}`;
+
   let tokenData;
+
   if (typeof window !== "undefined") {
     const localData = localStorage.getItem("tokenData");
     if (localData !== null) {
       tokenData = JSON.parse(localData);
     }
   }
-  const data = await fetch(
-    `${BASE_URL}/api/content/v1/contents?page=${page}&size=10&${searchParams}`,
-    {
-      headers: tokenData && {
-        Authorization: `Bearer ${tokenData?.accessToken}`,
-      },
-    }
-  );
+
+  const data = await fetch(fetchUrl.href, {
+    headers: tokenData && {
+      Authorization: `Bearer ${tokenData?.accessToken}`,
+    },
+  });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
-  const ret = await data.json();
-  console.log(ret);
-  return ret;
+
+  return await data.json();
 };
 
 const getContentById = async (
   id: string | undefined
 ): Promise<IContentData> => {
+  fetchUrl.pathname = `/api/content/v1/contents/${id}`;
+
   let tokenData;
+
   if (typeof window !== "undefined") {
     const localData = localStorage.getItem("tokenData");
     if (localData !== null) {
       tokenData = JSON.parse(localData);
     }
   }
-  const data = await fetch(`${BASE_URL}/api/content/v1/contents/${id}`, {
+
+  const data = await fetch(fetchUrl.href, {
     headers: tokenData && {
       Authorization: `Bearer ${tokenData?.accessToken}`,
     },
   });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
+
   return await data.json();
 };
 
@@ -78,13 +90,14 @@ const getShuffledContents = async (
 
       return { content: [firstContent, ...data.content] };
     }
+
     shuffleArray(data.content);
+
     return data;
   }
 };
 
 const getGitHubToken = async (code?: string) => {
-  console.log("getGitHubToken Fn: ", code);
   const data = await fetch("https://github.com/login/oauth/access_token", {
     method: "POST",
     headers: {
@@ -98,14 +111,18 @@ const getGitHubToken = async (code?: string) => {
       code: code,
     }),
   });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
+
   return await data.json();
 };
 
 const signup = async (gitHubAccessToken: string) => {
-  const data = await fetch(`${BASE_URL}/api/user/v1/signup`, {
+  fetchUrl.pathname = "/api/user/v1/signup";
+
+  const data = await fetch(fetchUrl.href, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -115,14 +132,18 @@ const signup = async (gitHubAccessToken: string) => {
       accessToken: gitHubAccessToken,
     }),
   });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
+
   return data;
 };
 
 const login = async (gitHubAccessToken: string) => {
-  const data = await fetch(`${BASE_URL}/api/user/v1/login`, {
+  fetchUrl.pathname = "/api/user/v1/login";
+
+  const data = await fetch(fetchUrl.href, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -132,6 +153,7 @@ const login = async (gitHubAccessToken: string) => {
       accessToken: gitHubAccessToken,
     }),
   });
+
   if (!data.ok) {
     if (data.status === 404) {
       await signup(gitHubAccessToken);
@@ -141,11 +163,14 @@ const login = async (gitHubAccessToken: string) => {
       throw new Error("API Error");
     }
   }
+
   return await data.json();
 };
 
 const refresh = async (refreshToken: string) => {
-  const data = await fetch(`${BASE_URL}/api/user/v1/refresh`, {
+  fetchUrl.pathname = "/api/user/v1/refresh";
+
+  const data = await fetch(fetchUrl.href, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -155,14 +180,18 @@ const refresh = async (refreshToken: string) => {
       refreshToken: refreshToken,
     }),
   });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
+
   return await data.json();
 };
 
 const logout = async (refreshToken: string) => {
-  const data = await fetch(`${BASE_URL}/api/user/v1/logout`, {
+  fetchUrl.pathname = "/api/user/v1/logout";
+
+  const data = await fetch(fetchUrl.href, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -172,18 +201,23 @@ const logout = async (refreshToken: string) => {
       refreshToken: refreshToken,
     }),
   });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
+
   return data;
 };
 
 const getGroupList = async (access_token: string) => {
-  const data = await fetch(`${BASE_URL}/api/bookmark/v1/groups`, {
+  fetchUrl.pathname = "/api/bookmark/v1/groups";
+
+  const data = await fetch(fetchUrl.href, {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
   });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
@@ -192,7 +226,9 @@ const getGroupList = async (access_token: string) => {
 };
 
 const createGroup = async (groupName: string, access_token: string) => {
-  const data = await fetch(`${BASE_URL}/api/bookmark/v1/groups`, {
+  fetchUrl.pathname = "/api/bookmark/v1/groups";
+
+  const data = await fetch(fetchUrl.href, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -203,9 +239,11 @@ const createGroup = async (groupName: string, access_token: string) => {
       name: groupName,
     }),
   });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
+
   return data;
 };
 
@@ -214,7 +252,9 @@ const saveContentToGroup = async (
   contentId: string | null,
   access_token: string
 ) => {
-  const data = await fetch(`${BASE_URL}/api/bookmark/v1/bookmarks`, {
+  fetchUrl.pathname = "/api/bookmark/v1/bookmarks";
+
+  const data = await fetch(fetchUrl.href, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -226,6 +266,7 @@ const saveContentToGroup = async (
       contentId: contentId,
     }),
   });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
@@ -237,22 +278,26 @@ const getContentListInGroup = async (
   groupName: string,
   access_token: string
 ) => {
-  const data = await fetch(
-    `${BASE_URL}/api/bookmark/v1/bookmarks?groupName=${groupName}`,
-    {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    }
-  );
+  fetchUrl.pathname = "/api/bookmark/v1/bookmarks";
+  fetchUrl.search = `groupName=${groupName}`;
+
+  const data = await fetch(fetchUrl.href, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
+
   return await data.json();
 };
 
 const deleteGroup = async (groupName: string, access_token: string) => {
-  const data = await fetch(`${BASE_URL}/api/bookmark/v1/groups/${groupName}`, {
+  fetchUrl.pathname = `/api/bookmark/v1/groups/${groupName}`;
+
+  const data = await fetch(fetchUrl.href, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -260,9 +305,11 @@ const deleteGroup = async (groupName: string, access_token: string) => {
       Authorization: `Bearer ${access_token}`,
     },
   });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
+
   return data;
 };
 
@@ -271,20 +318,21 @@ const deleteContentInGroup = async (
   contentId: string | null,
   access_token: string
 ) => {
-  const data = await fetch(
-    `${BASE_URL}/api/bookmark/v1/groups/${groupName}/contents/${contentId}`,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        Accept: "application/json",
-        Authorization: `Bearer ${access_token}`,
-      },
-    }
-  );
+  fetchUrl.pathname = `/api/bookmark/v1/groups/${groupName}/contents/${contentId}`;
+
+  const data = await fetch(fetchUrl.href, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Accept: "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
+
   return data;
 };
 
@@ -292,17 +340,19 @@ const getContainedGroupList = async (
   contentId: string,
   access_token: string
 ) => {
-  const data = await fetch(
-    `${BASE_URL}/api/bookmark/v1/groups-with-contains?contentId=${contentId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    }
-  );
+  fetchUrl.pathname = "/api/bookmark/v1/groups-with-contains";
+  fetchUrl.search = `contentId=${contentId}`;
+
+  const data = await fetch(fetchUrl.href, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+
   if (!data.ok) {
     throw new Error("API Error");
   }
+
   return await data.json();
 };
 
