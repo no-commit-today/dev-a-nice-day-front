@@ -136,6 +136,14 @@ export default function ContentSlider({
               prop.activeIndex.toString()
             );
           }}
+          onSlideChangeTransitionEnd={(prop) => {
+            prop.allowSlideNext = false;
+            prop.allowSlidePrev = false;
+            setTimeout(() => {
+              prop.allowSlideNext = true;
+              prop.allowSlidePrev = true;
+            }, 500);
+          }}
           onReachEnd={pushMore}
           observer={true}
         >
