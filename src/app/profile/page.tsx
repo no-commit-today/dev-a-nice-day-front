@@ -84,7 +84,7 @@ const Profile = () => {
   };
   return (
     <>
-      {isLoginModalOpened && <LoginModal closeLoginModal={closeLoginModal} />}
+      {isLoginModalOpened && <LoginModal />}
       <div className={styles.container} onClick={handleCloseDotMenu}>
         <div className={styles.groupedContentsContainer}>
           <h1 className={styles.groupText}>저장한 게시글</h1>

@@ -8,14 +8,19 @@ import { useRouter } from "next/navigation";
 export default function LoginModal({
   closeLoginModal,
 }: {
-  closeLoginModal: () => void;
+  closeLoginModal?: () => void;
 }) {
   const router = useRouter();
   return (
     <div className={styles.container}>
       <div className={styles.loginContainer}>
         <div className={styles.upperContainer}>
-          <div className={styles.dismissButton} onClick={closeLoginModal}>
+          <div
+            className={styles.dismissButton}
+            onClick={() => {
+              closeLoginModal ? closeLoginModal() : router.replace("/");
+            }}
+          >
             <Image src={dismiss.src} alt="dismiss" width={36} height={36} />
           </div>
           <Image src={logo.src} alt="logo" width={301} height={81} />
@@ -39,7 +44,12 @@ export default function LoginModal({
             </div>
             <h1>GitHub로 로그인하기</h1>
           </div>
-          <div className={styles.dismissText} onClick={closeLoginModal}>
+          <div
+            className={styles.dismissText}
+            onClick={() => {
+              closeLoginModal ? closeLoginModal() : router.back();
+            }}
+          >
             <h1>나중에 할래요.</h1>
           </div>
         </div>
