@@ -1,10 +1,10 @@
 "use client";
 
 import styles from "./CategoryButton.module.css";
-import category from "@/../public/assets/categories2.svg";
+import category from "../../../../public/assets/categories2.svg";
 
 import { useState } from "react";
-import CategoryModal from "./CategoryModal";
+import CategoryModal from "../CategoryModal/CategoryModal";
 import Image from "next/image";
 
 export default function CategoryButton() {

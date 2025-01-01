@@ -2,7 +2,7 @@
 import Link from "next/link";
 import styles from "./BottomTabBar.module.css";
 import { usePathname } from "next/navigation";
-import useParams from "../_hooks/useParams";
+import useParams from "../../_hooks/useParams";
 
 export default function BottomTabBar() {
   const pathname = usePathname();

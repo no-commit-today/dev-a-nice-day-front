@@ -1,7 +1,7 @@
 import Image from "next/image";
-import BlueButton from "./BlueButton";
+import BlueButton from "../BlueButton/BlueButton";
 import styles from "./OnboardingModal.module.css";
-import GPT_Icon from "@/../public/assets/gpt_icon.svg";
+import GPT_Icon from "../../../../public/assets/gpt_icon.svg";
 
 export default function OnboardingModal() {
   return (

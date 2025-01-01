@@ -1,8 +1,8 @@
 import styles from "./NewGroupModal.module.css";
 import Image from "next/image";
-import Check_White from "@/../public/assets/check_white.svg";
+import Check_White from "../../../../public/assets/check_white.svg";
 import { useState } from "react";
-import { createGroup } from "../_utils/api";
+import { createGroup } from "../../_utils/api";
 
 const NewGroup = ({
   closeNewGroupModal,

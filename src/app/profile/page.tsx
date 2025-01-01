@@ -1,16 +1,16 @@
 "use client";
 import styles from "./page.module.css";
-import LoginModal from "../_components/LoginModal";
+import LoginModal from "../_components/LoginModal/LoginModal";
 import { deleteGroup, getGroupList } from "../_utils/api";
 import { MouseEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import CheckToken from "../(home)/_components/CheckToken";
+import CheckToken from "../_utils/CheckToken";
 import { IGroup } from "..";
 import no_image from "@/../public/assets/no_image.svg";
 import dots from "@/../public/assets/dots.svg";
 import plus_gray from "@/../public/assets/plus_gray.svg";
 import Image from "next/image";
-import NewGroupModal from "../_components/NewGroupModal";
+import NewGroupModal from "../_components/NewGroupModal/NewGroupModal";
 
 const Profile = () => {
   const router = useRouter();

@@ -2,9 +2,9 @@
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "./CategoryModal.module.css";
-import dismiss from "@/../public/assets/dismiss.svg";
+import dismiss from "../../../../public/assets/dismiss.svg";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Categories } from "./Categories";
+import { Categories } from "../../_utils/Categories";
 import Image from "next/image";
 
 export default function CategoryModal({

@@ -1,15 +1,15 @@
 "use client";
 import Image from "next/image";
 import styles from "./FloatingBtn.module.css";
-import share from "@/../public/assets/share.svg";
-import save from "@/../public/assets/save.svg";
-import SaveContentModal from "../../_components/SaveContentModal";
+import share from "../../../../../public/assets/share.svg";
+import save from "../../../../../public/assets/save.svg";
+import SaveContentModal from "../../../_components/SaveContentModal/SaveContentModal";
 import { createPortal } from "react-dom";
 import { useState } from "react";
-import NewGroupModal from "@/app/_components/NewGroupModal";
-import ShareModal from "@/app/_components/ShareModal";
-import LoginModal from "@/app/_components/LoginModal";
-import CheckToken from "./CheckToken";
+import NewGroupModal from "@/app/_components/NewGroupModal/NewGroupModal";
+import ShareModal from "@/app/_components/ShareModal/ShareModal";
+import LoginModal from "@/app/_components/LoginModal/LoginModal";
+import CheckToken from "../../../_utils/CheckToken";
 
 const FloatingBtn = ({
   isSaved,

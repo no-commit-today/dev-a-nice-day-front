@@ -1,6 +1,6 @@
 "use client";
 
-import ContentBox from "@/app/_components/ContentBox";
+import ContentBox from "@/app/_components/ContentBox/ContentBox";
 import styles from "./page.module.css";
 import { deleteContentInGroup, getContentListInGroup } from "@/app/_utils/api";
 import { MouseEvent, useEffect, useState } from "react";

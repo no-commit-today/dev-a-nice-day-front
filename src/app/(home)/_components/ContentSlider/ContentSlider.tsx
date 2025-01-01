@@ -3,20 +3,20 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import styles from "./ContentSlider.module.css";
 import "swiper/css";
-import IndexIndicator from "./IndexIndicator";
+import IndexIndicator from "../IndexIndicator/IndexIndicator";
 import Image from "next/image";
-import { Categories } from "@/app/_components/Categories";
+import { Categories } from "@/app/_utils/Categories";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { BASE_URL, getShuffledContents } from "@/app/_utils/api";
 import { useEffect } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
-import no_image from "@/../public/assets/no_image.svg";
+import no_image from "../../../../../public/assets/no_image.svg";
 import getRandomNumber from "@/app/_utils/getRandomNumber";
-import FloatingBtn from "./FloatingBtn";
-import BackImage from "./BackImage";
+import FloatingBtn from "../FloatingBtn/FloatingBtn";
+import BackImage from "../BackImage/BackImage";
 import { useSearchParams } from "next/navigation";
-import ContentFallBack from "./ContentSliderFallback";
+import ContentFallBack from "../ContentSliderFallback/ContentSliderFallback";
 
 export default function ContentSlider({
   // initialData,

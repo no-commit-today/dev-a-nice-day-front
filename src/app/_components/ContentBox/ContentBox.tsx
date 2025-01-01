@@ -1,10 +1,10 @@
 import Image from "next/image";
 import styles from "./ContentBox.module.css";
-import { BASE_URL } from "../_utils/api";
-import { Categories } from "./Categories";
-import no_image from "@/../public/assets/no_image.svg";
-import dots from "@/../public/assets/dots.svg";
-import useIntersect from "../_hooks/useIntersect";
+import { BASE_URL } from "../../_utils/api";
+import { Categories } from "../../_utils/Categories";
+import no_image from "../../../../public/assets/no_image.svg";
+import dots from "../../../../public/assets/dots.svg";
+import useIntersect from "../../_hooks/useIntersect";
 import {
   InfiniteData,
   InfiniteQueryObserverResult,

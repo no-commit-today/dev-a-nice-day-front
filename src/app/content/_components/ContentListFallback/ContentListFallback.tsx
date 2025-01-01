@@ -1,4 +1,4 @@
-import styles from "../loading.module.css";
+import styles from "../../loading.module.css";
 export const contentListFallBack = (
   <div className={styles.container}>
     <div className={styles.contentBox}>

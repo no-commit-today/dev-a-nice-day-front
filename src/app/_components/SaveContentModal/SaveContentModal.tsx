@@ -1,16 +1,16 @@
 import Image from "next/image";
 import styles from "./SaveContentModal.module.css";
-import Plus from "@/../public/assets/plus.svg";
-import Check_White from "@/../public/assets/check_white.svg";
-import CheckBox from "@/app/_components/CheckBox";
+import Plus from "../../../../public/assets/plus.svg";
+import Check_White from "../../../../public/assets/check_white.svg";
+import CheckBox from "@/app/_components/CheckBox/CheckBox";
 import { useEffect, useState } from "react";
 import {
   deleteContentInGroup,
   getContainedGroupList,
   getGroupList,
   saveContentToGroup,
-} from "../_utils/api";
-import { IGroup } from "..";
+} from "../../_utils/api";
+import { IGroup } from "../../index";
 
 const SaveContent = ({
   closeSaveModal,

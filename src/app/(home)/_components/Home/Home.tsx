@@ -1,5 +1,5 @@
 import styles from "./Home.module.css";
-import ContentSlider from "./ContentSlider";
+import ContentSlider from "../ContentSlider/ContentSlider";
 import { Suspense } from "react";
 import { getContentsCount } from "@/app/_utils/api";
 export default async function Home({
