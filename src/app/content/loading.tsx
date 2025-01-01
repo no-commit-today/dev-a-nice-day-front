@@ -1,4 +1,4 @@
-import { categoryFallback } from "../_components/CategoryFallback";
+import { categoryFallback } from "../_components/CategoryFallBack/CategoryFallback";
 import styles from "./loading.module.css";
 export default function Loading() {
   const CategoryBar = () => categoryFallback;

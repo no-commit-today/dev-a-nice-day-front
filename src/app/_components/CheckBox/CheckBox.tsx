@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./CheckBox.module.css";
-import Check from "@/../public/assets/check.svg";
+import Check from "../../../../public/assets/check.svg";
 const CheckBox = ({ checked }: { checked: boolean }) => {
   return (
     <>

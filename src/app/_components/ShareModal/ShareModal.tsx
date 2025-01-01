@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import styles from "./ShareModal.module.css";
 import Image from "next/image";
-import Check_White from "@/../public/assets/check_white.svg";
+import Check_White from "../../../../public/assets/check_white.svg";
 
 const ShareModal = ({
   closeShareModal,

@@ -3,7 +3,7 @@ import styles from "./page.module.css";
 import carrot_right from "@/../public/assets/carrot_right.svg";
 import Link from "next/link";
 import Image from "next/image";
-import LogoutButton from "./_components/LogoutButton";
+import LogoutButton from "./_components/LogoutButton/LogoutButton";
 export const metadata: Metadata = {
   title: "Dev a Nice Day | 설정",
 };

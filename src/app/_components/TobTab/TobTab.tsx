@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import styles from "./TobTab.module.css";
-import logo from "@/../public/assets/DevaNiceDay.svg";
-import CategoryButton from "./CategoryButton";
-import setting from "@/../public/assets/setting.svg";
+import logo from "../../../../public/assets/DevaNiceDay.svg";
+import CategoryButton from "../CategoryButton/CategoryButton";
+import setting from "../../../../public/assets/setting.svg";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import carrot from "@/../public/assets/carrot_right.svg";
+import carrot from "../../../../public/assets/carrot_right.svg";
 
 export default function TobTab() {
   const pathname = usePathname();

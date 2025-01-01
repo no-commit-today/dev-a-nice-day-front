@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import BottomTabBar from "./_components/BottomTabBar";
-import TobTab from "./_components/TobTab";
+import BottomTabBar from "./_components/BottomTabBar/BottomTabBar";
+import TobTab from "./_components/TobTab/TobTab";
 import ReactQueryProvider from "./_hooks/useReactQuery";
 import "./globals.css";
 import { Suspense } from "react";

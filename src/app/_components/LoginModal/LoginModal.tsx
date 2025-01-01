@@ -1,9 +1,9 @@
 "use client";
 import styles from "./LoginModal.module.css";
 import Image from "next/image";
-import logo from "../../../public/assets/login_logo.svg";
-import githubLogo from "../../../public/assets/github_logo.png";
-import dismiss from "../../../public/assets/dismiss.svg";
+import logo from "../../../../public/assets/login_logo.svg";
+import githubLogo from "../../../../public/assets/github_logo.png";
+import dismiss from "../../../../public/assets/dismiss.svg";
 import { useRouter } from "next/navigation";
 export default function LoginModal({
   closeLoginModal,

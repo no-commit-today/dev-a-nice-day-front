@@ -5,7 +5,7 @@ import { getContents, getContentsCount } from "@/app/_utils/api";
 import { useEffect, useMemo } from "react";
 import useParams from "@/app/_hooks/useParams";
 import { IContentData } from "@/app";
-import ContentBox from "@/app/_components/ContentBox";
+import ContentBox from "@/app/_components/ContentBox/ContentBox";
 
 export default function ContentList() {
   const searchParams = useParams("categories").getParamsToString();

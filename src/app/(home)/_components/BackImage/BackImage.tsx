@@ -1,6 +1,6 @@
 import Image from "next/image";
-import no_image from "@/../public/assets/no_image.svg";
-import styles from "./ContentSlider.module.css";
+import no_image from "../../../../../public/assets/no_image.svg";
+import styles from "../ContentSlider/ContentSlider.module.css";
 import { useEffect } from "react";
 
 const BackImage = ({
