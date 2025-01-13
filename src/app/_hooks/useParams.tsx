@@ -6,7 +6,7 @@ const useParams = (queryParam: string) => {
   const searchParamsArray = useSearchParams().getAll(queryParam);
 
   // 배열의 각 요소를 '${categories}=값' 형태로 매핑하고, 결과를 '&'로 연결
-  const arrayToQueryString = (categories: string[] | null) => {
+  const arrayToQueryString = (categories: string[] | null): string => {
     if (categories == null) {
       throw new Error("queryParam is null");
     } else {
@@ -17,7 +17,7 @@ const useParams = (queryParam: string) => {
   };
 
   // 특정 서치 파라미터 문자열을 반환
-  const getParamsToString = () => {
+  const getParamsToString = (): string => {
     return arrayToQueryString(searchParamsArray);
   };
 

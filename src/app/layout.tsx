@@ -26,6 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }>) {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   return (
     <html lang="en">
       <body

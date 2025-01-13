@@ -71,7 +71,6 @@ const SaveContent = ({
         }
       }
     });
-    console.log(isSaved);
     closeSaveModal(isSaved);
   };
 

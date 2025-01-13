@@ -20,7 +20,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = () =>
   isSupported().then((yes) =>
-    yes ? logEvent(getAnalytics(app), "start") : () => console.log("no")
+    yes
+      ? logEvent(getAnalytics(app), "start")
+      : () => console.error("Firebase Error")
   );
 
 // const startAnalytics = () => {

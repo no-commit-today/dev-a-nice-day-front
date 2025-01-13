@@ -6,8 +6,12 @@ import "swiper/css";
 import IndexIndicator from "../IndexIndicator/IndexIndicator";
 import Image from "next/image";
 import { Categories } from "@/app/_utils/Categories";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { BASE_URL, getShuffledContents } from "@/app/_utils/api";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+  BASE_URL,
+  getContentsCount,
+  getShuffledContents,
+} from "@/app/_utils/api";
 import { useEffect } from "react";
 import { Mousewheel } from "swiper/modules";
 import useParams from "@/app/_hooks/useParams";
@@ -18,15 +22,14 @@ import BackImage from "../BackImage/BackImage";
 import { useSearchParams } from "next/navigation";
 import ContentFallBack from "../ContentSliderFallback/ContentSliderFallback";
 
-export default function ContentSlider({
-  // initialData,
-  contentsCountData,
-}: {
-  // initialData: { pages: { content: IContentData[] }[]; pageParams: number[] };
-  contentsCountData: { count: number };
-}) {
+export default function ContentSlider() {
   const searchParams = useParams("categories").getParamsToString();
   const initialId = useSearchParams().get("id");
+
+  const { data: contentsCountData } = useQuery({
+    queryKey: ["contentsCountData", searchParams],
+    queryFn: () => getContentsCount(searchParams),
+  });
 
   const {
     data: shuffledContentsData,
@@ -37,12 +40,13 @@ export default function ContentSlider({
     queryKey: ["shuffledContents", searchParams],
     queryFn: ({ pageParam }) =>
       getShuffledContents(pageParam, searchParams, initialId),
-    initialPageParam: getRandomNumber([], contentsCountData),
+    initialPageParam: getRandomNumber([], contentsCountData || 1),
     getNextPageParam: (_, __, ___, allPageParams) => {
       return getRandomNumber(allPageParams, contentsCountData);
     },
     staleTime: 5 * 1000 * 60,
     gcTime: 30 * 1000 * 60,
+    enabled: !!contentsCountData,
   });
 
   // 데이터 추가 요청

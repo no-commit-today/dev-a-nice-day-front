@@ -30,15 +30,6 @@ const CheckToken = async () => {
       }
     }
     // 모두 유효기간 지났을 때
-    else if (
-      accessTokenExpiresAt < localTime &&
-      refreshTokenExpiresAt < localTime
-    ) {
-      console.log("c");
-      console.log(localTime, parsedTokenData.accessTokenExpiresAt);
-    }
-  } else {
-    console.log("d");
   }
   return false;
 };
