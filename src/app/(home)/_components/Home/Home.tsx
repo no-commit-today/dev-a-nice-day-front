@@ -17,9 +17,9 @@ export default async function Home({
       return categories.map((category) => `categories=${category}`).join("&");
     }
   };
-  const contentsCountData = await getContentsCount(
-    arrayToQueryString(searchParams.categories)
-  );
+  // const contentsCountData = await getContentsCount(
+  //   arrayToQueryString(searchParams.categories)
+  // );
   // const randomIndex = getRandomNumber([], contentsCountData);
   // const initialContents = await getShuffledContents(
   //   randomIndex,
@@ -35,7 +35,9 @@ export default async function Home({
     <div className={styles.container}>
       <div className={styles.contentBox}>
         <div className={styles.sliderBox}>
-          <ContentSlider contentsCountData={contentsCountData} />
+          <Suspense>
+            <ContentSlider />
+          </Suspense>
         </div>
       </div>
     </div>
