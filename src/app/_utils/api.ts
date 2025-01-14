@@ -247,7 +247,7 @@ const createGroup = async (groupName: string, access_token: string) => {
   return data;
 };
 
-const saveContentToGroup = async (
+const saveContentToGroup_Deprecated = async (
   groupName: string | null,
   contentId: string | null,
   access_token: string
@@ -265,6 +265,29 @@ const saveContentToGroup = async (
       groupName: groupName,
       contentId: contentId,
     }),
+  });
+
+  if (!data.ok) {
+    throw new Error("API Error");
+  }
+
+  return data;
+};
+
+const saveContentToGroup = async (
+  groupName: string | null,
+  contentId: string | null,
+  access_token: string
+) => {
+  fetchUrl.pathname = `/api/bookmark/v1/groups/${groupName}/contents/${contentId}`;
+
+  const data = await fetch(fetchUrl.href, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Accept: "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
   });
 
   if (!data.ok) {
