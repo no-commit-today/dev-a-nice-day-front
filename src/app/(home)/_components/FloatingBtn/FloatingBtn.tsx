@@ -10,19 +10,24 @@ import NewGroupModal from "@/app/_components/NewGroupModal/NewGroupModal";
 import ShareModal from "@/app/_components/ShareModal/ShareModal";
 import LoginModal from "@/app/_components/LoginModal/LoginModal";
 import CheckToken from "../../../_utils/CheckToken";
+import queryClient from "@/app/_utils/queryClient";
+import useParams from "@/app/_hooks/useParams";
+import { InfiniteData } from "@tanstack/react-query";
+import { IContentData } from "@/app";
 
 const FloatingBtn = ({
   isSaved,
   contentId,
 }: {
   isSaved: boolean;
-  contentId: string;
+  contentId: number;
 }) => {
   const [isLoginModalOpened, setIsLoginModalOpened] = useState(false);
   const [isSaveModalOpened, setIsSaveModalOpened] = useState(false);
   const [isShareModalOpened, setIsShareModalOpened] = useState(false);
   const [isNewGroupModalOpened, setIsNewGroupModalOpened] = useState(false);
   const [isSavedContent, setIsSavedContent] = useState(isSaved);
+  const searchParams = useParams("categories").getParamsToString();
 
   const handleSaveBtnClick = async () => {
     const isLogin = await CheckToken();
@@ -36,8 +41,38 @@ const FloatingBtn = ({
     setIsSaveModalOpened(false);
     if (isSaved === true) {
       setIsSavedContent(true);
+      queryClient.setQueryData(
+        ["shuffledContents", searchParams],
+        (oldData: InfiniteData<{ content: IContentData[] }, unknown>) => {
+          const updatedPages = oldData.pages.map((page) => {
+            const updatedContent = page.content.map((item) => {
+              if (item.id === contentId) {
+                return { ...item, bookmarked: true }; // 새로운 객체 반환
+              }
+              return item; // 원본 객체 반환
+            });
+            return { ...page, content: updatedContent }; // 새로운 페이지 객체 반환
+          });
+          return { ...oldData, pages: updatedPages }; // 새로운 oldData 객체 반환
+        }
+      );
     } else if (isSaved === false) {
       setIsSavedContent(false);
+      queryClient.setQueryData(
+        ["shuffledContents", searchParams],
+        (oldData: InfiniteData<{ content: IContentData[] }, unknown>) => {
+          const updatedPages = oldData.pages.map((page) => {
+            const updatedContent = page.content.map((item) => {
+              if (item.id === contentId) {
+                return { ...item, bookmarked: false }; // 새로운 객체 반환
+              }
+              return item; // 원본 객체 반환
+            });
+            return { ...page, content: updatedContent }; // 새로운 페이지 객체 반환
+          });
+          return { ...oldData, pages: updatedPages }; // 새로운 oldData 객체 반환
+        }
+      );
     }
   };
 
