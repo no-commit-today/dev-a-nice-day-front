@@ -37,42 +37,31 @@ const FloatingBtn = ({
       setIsLoginModalOpened(true);
     }
   };
+
+  const updateQueryData = (bookmarked: boolean) =>
+    queryClient.setQueryData(
+      ["shuffledContents", searchParams],
+      (oldData: InfiniteData<{ content: IContentData[] }, unknown>) => {
+        const updatedPages = oldData.pages.map((page) => {
+          const updatedContent = page.content.map((item) => {
+            if (item.id === contentId) {
+              return { ...item, bookmarked }; // 새로운 객체 반환
+            }
+            return item; // 원본 객체 반환
+          });
+          return { ...page, content: updatedContent }; // 새로운 페이지 객체 반환
+        });
+        return { ...oldData, pages: updatedPages }; // 새로운 oldData 객체 반환
+      }
+    );
   const closeSaveModal = (isSaved: boolean | null) => {
     setIsSaveModalOpened(false);
     if (isSaved === true) {
       setIsSavedContent(true);
-      queryClient.setQueryData(
-        ["shuffledContents", searchParams],
-        (oldData: InfiniteData<{ content: IContentData[] }, unknown>) => {
-          const updatedPages = oldData.pages.map((page) => {
-            const updatedContent = page.content.map((item) => {
-              if (item.id === contentId) {
-                return { ...item, bookmarked: true }; // 새로운 객체 반환
-              }
-              return item; // 원본 객체 반환
-            });
-            return { ...page, content: updatedContent }; // 새로운 페이지 객체 반환
-          });
-          return { ...oldData, pages: updatedPages }; // 새로운 oldData 객체 반환
-        }
-      );
+      updateQueryData(true);
     } else if (isSaved === false) {
       setIsSavedContent(false);
-      queryClient.setQueryData(
-        ["shuffledContents", searchParams],
-        (oldData: InfiniteData<{ content: IContentData[] }, unknown>) => {
-          const updatedPages = oldData.pages.map((page) => {
-            const updatedContent = page.content.map((item) => {
-              if (item.id === contentId) {
-                return { ...item, bookmarked: false }; // 새로운 객체 반환
-              }
-              return item; // 원본 객체 반환
-            });
-            return { ...page, content: updatedContent }; // 새로운 페이지 객체 반환
-          });
-          return { ...oldData, pages: updatedPages }; // 새로운 oldData 객체 반환
-        }
-      );
+      updateQueryData(false);
     }
   };
 
