@@ -32,10 +32,16 @@ const SaveContent = ({
     enabled: !!tokenData,
   });
 
+  const { data: containedGroupList } = useQuery({
+    queryKey: ["containedGroupList", contentId],
+    queryFn: () =>
+      getContainedGroupList(contentId.toString(), tokenData.accessToken),
+    enabled: !!groupListData,
+  });
+
   const [checkList, setCheckList] = useState<boolean[]>(
     new Array(groupListData?.content.length).fill(false)
   );
-  const [containedGroupList, setContainedGroupList] = useState<boolean[]>([]);
 
   const handleGroupClick = (index: number) => {
     const updatedCheckList = [...checkList];
@@ -79,21 +85,14 @@ const SaveContent = ({
   };
 
   useEffect(() => {
-    const getContainedGroupListData = async () => {
-      const containedGroupList = await getContainedGroupList(
-        contentId.toString(),
-        tokenData.accessToken
-      );
-
+    if (containedGroupList) {
       const updatedCheckList = containedGroupList.content.map(
         (group: { name: string; contains: boolean }) => group.contains
       );
-      setContainedGroupList(updatedCheckList);
-      setCheckList(updatedCheckList);
-    };
 
-    getContainedGroupListData();
-  }, []);
+      setCheckList(updatedCheckList);
+    }
+  }, [containedGroupList]);
 
   return (
     <div className={styles.background} onClick={() => closeSaveModal(null)}>
