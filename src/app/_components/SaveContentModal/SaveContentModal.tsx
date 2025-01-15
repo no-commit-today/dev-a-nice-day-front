@@ -11,7 +11,7 @@ import {
   saveContentToGroup,
 } from "../../_utils/api";
 import { IGroup } from "../../index";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const SaveContent = ({
   closeSaveModal,
@@ -32,11 +32,50 @@ const SaveContent = ({
     enabled: !!tokenData,
   });
 
-  const { data: containedGroupList } = useQuery({
-    queryKey: ["containedGroupList", contentId],
-    queryFn: () =>
-      getContainedGroupList(contentId.toString(), tokenData.accessToken),
-    enabled: !!groupListData,
+  const { data: containedGroupList, refetch: refetchContainedGroupList } =
+    useQuery({
+      queryKey: ["containedGroupList", contentId],
+      queryFn: () =>
+        getContainedGroupList(contentId.toString(), tokenData.accessToken),
+      enabled: !!groupListData,
+    });
+
+  const { mutate: saveContent } = useMutation({
+    mutationFn: ({
+      index,
+      contentId,
+    }: {
+      index: number;
+      contentId: number;
+    }) => {
+      if (groupListData === undefined)
+        throw new Error("GroupListData is not found");
+      return saveContentToGroup(
+        groupListData.content[index].name,
+        contentId,
+        tokenData.accessToken
+      );
+    },
+    onSuccess: () => refetchContainedGroupList(),
+  });
+
+  const { mutate: deleteContent } = useMutation({
+    mutationFn: ({
+      index,
+      contentId,
+    }: {
+      index: number;
+      contentId: number;
+    }) => {
+      if (groupListData === undefined)
+        throw new Error("GroupListData is not found");
+      return deleteContentInGroup(
+        groupListData.content[index].name,
+        contentId,
+        tokenData.accessToken
+      );
+    },
+    onSuccess: () => refetchContainedGroupList(),
   });
 
   const [checkList, setCheckList] = useState<boolean[]>(
@@ -50,34 +89,18 @@ const SaveContent = ({
   };
 
   const handleSaveGroupClick = async () => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const contentId = urlParams.get("id");
-
     let isSaved = false;
     checkList.forEach((v, index) => {
       if (v === true) {
-        if (groupListData === undefined)
-          throw new Error("GroupListData is not found");
         // 그룹 추가
-        if (containedGroupList[index] === false) {
-          saveContentToGroup(
-            groupListData.content[index].name,
-            contentId,
-            tokenData.accessToken
-          );
+        if (containedGroupList.content[index].contains === false) {
+          saveContent({ index, contentId });
         }
         isSaved = true;
       } else {
-        if (containedGroupList[index] === true) {
-          if (groupListData === undefined)
-            throw new Error("GroupListData is not found");
-          // 그룹 삭제
-          deleteContentInGroup(
-            groupListData.content[index].name,
-            contentId,
-            tokenData.accessToken
-          );
+        // 그룹 삭제
+        if (containedGroupList.content[index].contains === true) {
+          deleteContent({ index, contentId });
         }
       }
     });
