@@ -4,48 +4,58 @@ import LoginModal from "../_components/LoginModal/LoginModal";
 import { deleteGroup, getGroupList } from "../_utils/api";
 import { MouseEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import CheckToken from "../_utils/CheckToken";
 import { IGroup } from "..";
 import no_image from "@/../public/assets/no_image.svg";
 import dots from "@/../public/assets/dots.svg";
 import plus_gray from "@/../public/assets/plus_gray.svg";
 import Image from "next/image";
 import NewGroupModal from "../_components/NewGroupModal/NewGroupModal";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createPortal } from "react-dom";
+import queryClient from "../_utils/queryClient";
 
 const Profile = () => {
   const router = useRouter();
-  const [groupListData, setGroupListData] = useState<{
+
+  const localTokenData = localStorage.getItem("tokenData");
+  if (localTokenData === null) throw new Error("Token is not found");
+  const tokenData = JSON.parse(localTokenData);
+
+  const { data: groupListData, isSuccess: isListDataFetched } = useQuery<{
     content: IGroup[];
-  } | null>(null);
+  }>({
+    queryKey: ["groupListData"],
+    queryFn: () => getGroupList(tokenData.accessToken),
+    enabled: !!tokenData,
+  });
+
+  const { mutate: deleteGroupFn } = useMutation({
+    mutationFn: ({ groupName }: { groupName: string }) =>
+      deleteGroup(groupName, tokenData.accessToken),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["groupListData"] }),
+  });
+
   const [isLoginModalOpened, setIsLoginModalOpened] = useState(false);
   const [isDotMenuOpened, setIsDotMenuOpened] = useState<boolean[]>([]);
   const [isNewGroupModalOpened, setIsNewGroupModalOpened] = useState(false);
 
   useEffect(() => {
-    const getGroupListData = async () => {
-      const isLogin = await CheckToken();
-      if (isLogin) {
-        const localTokenData = localStorage.getItem("tokenData");
-        if (localTokenData !== null) {
-          const tokenData = JSON.parse(localTokenData);
-          const groupListData = await getGroupList(tokenData.accessToken);
-          setGroupListData(groupListData);
-        }
-      } else {
-        setIsLoginModalOpened(true);
-      }
-    };
-    getGroupListData();
-  }, []);
+    if (isListDataFetched) {
+      setIsDotMenuOpened(new Array(groupListData.content.length).fill(false));
+    }
+  }, [isListDataFetched]);
 
-  const closeLoginModal = () => {
-    setIsLoginModalOpened(false);
-    router.push("/");
-  };
   const handleDotMenu = (e: MouseEvent, index: number) => {
     e.stopPropagation();
-    const newIsDotMenuOpened = [...isDotMenuOpened];
-    newIsDotMenuOpened[index] = !newIsDotMenuOpened[index];
+    const newIsDotMenuOpened = [...isDotMenuOpened].map((value, idx) => {
+      if (index === idx) {
+        value = !value;
+      } else {
+        value = false;
+      }
+      return value;
+    });
     setIsDotMenuOpened(newIsDotMenuOpened);
   };
   const handleRouteToGroupContents = (name: string) => {
@@ -55,32 +65,13 @@ const Profile = () => {
     const newIsDotMenuOpened = new Array(isDotMenuOpened.length).fill(false);
     setIsDotMenuOpened(newIsDotMenuOpened);
   };
-  const handleDeleteGroup = async (e: MouseEvent, name: string) => {
-    //name만 뺀 새로운 groupListData를 만들어서 setGroupListData
-    if (groupListData !== null) {
-      const newGroupListData = groupListData.content.filter(
-        (content) => content.name !== name
-      );
-      setGroupListData({ content: newGroupListData });
-    }
-
+  const handleDeleteGroup = (e: MouseEvent, name: string) => {
     e.stopPropagation();
-    const localTokenData = localStorage.getItem("tokenData");
-    if (localTokenData !== null) {
-      const tokenData = JSON.parse(localTokenData);
-      await deleteGroup(name, tokenData.accessToken);
-      const groupListData = await getGroupList(tokenData.accessToken);
-      setGroupListData(groupListData);
-    }
+    deleteGroupFn({ groupName: name });
+    handleCloseDotMenu();
   };
-  const closeNewGroupModal = async () => {
+  const closeNewGroupModal = () => {
     setIsNewGroupModalOpened(false);
-    const localTokenData = localStorage.getItem("tokenData");
-    if (localTokenData !== null) {
-      const tokenData = JSON.parse(localTokenData);
-      const groupListData = await getGroupList(tokenData.accessToken);
-      setGroupListData(groupListData);
-    }
   };
   return (
     <>
@@ -144,9 +135,11 @@ const Profile = () => {
               </div>
               <h1 className={styles.contentTitle}>새 그룹</h1>
             </div>
-            {isNewGroupModalOpened && (
-              <NewGroupModal closeNewGroupModal={closeNewGroupModal} />
-            )}
+            {isNewGroupModalOpened &&
+              createPortal(
+                <NewGroupModal closeNewGroupModal={closeNewGroupModal} />,
+                document.body
+              )}
           </div>
         </div>
       </div>
