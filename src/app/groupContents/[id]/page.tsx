@@ -37,11 +37,7 @@ const GroupContents = ({ params }: { params: { id: string } }) => {
     const localTokenData = localStorage.getItem("tokenData");
     if (localTokenData === null) throw new Error("Token is not found");
     const tokenData = JSON.parse(localTokenData);
-    await deleteContentInGroup(
-      params.id,
-      contentId.toString(),
-      tokenData.accessToken
-    );
+    await deleteContentInGroup(params.id, contentId, tokenData.accessToken);
 
     const newContentsData: { content: IContentData[] } =
       await getContentListInGroup(params.id, tokenData.accessToken);
