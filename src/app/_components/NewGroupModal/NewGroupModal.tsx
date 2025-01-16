@@ -3,25 +3,31 @@ import Image from "next/image";
 import Check_White from "../../../../public/assets/check_white.svg";
 import { useState } from "react";
 import { createGroup } from "../../_utils/api";
+import queryClient from "@/app/_utils/queryClient";
+import { useMutation } from "@tanstack/react-query";
 
 const NewGroup = ({
   closeNewGroupModal,
 }: {
   closeNewGroupModal: () => void;
 }) => {
+  const localTokenData = localStorage.getItem("tokenData");
+  if (localTokenData === null) throw new Error("Token is not found");
+  const tokenData = JSON.parse(localTokenData);
+
   const [groupName, setGroupName] = useState("");
 
-  const handleCreateGroup = async () => {
-    const localTokenData = localStorage.getItem("tokenData");
-    if (localTokenData !== null) {
-      if (groupName === "") {
-        alert("그룹 이름을 입력해주세요.");
-        return;
-      }
-      const tokenData = JSON.parse(localTokenData);
-      await createGroup(groupName, tokenData.accessToken);
-      closeNewGroupModal();
+  const { mutate: createNewGroup } = useMutation({
+    mutationFn: () => createGroup(groupName, tokenData.accessToken),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["groupListData"] }),
+  });
+
+  const handleCreateGroup = () => {
+    if (groupName !== "") {
+      createNewGroup();
     }
+    closeNewGroupModal();
   };
   return (
     <div className={styles.background} onClick={closeNewGroupModal}>
