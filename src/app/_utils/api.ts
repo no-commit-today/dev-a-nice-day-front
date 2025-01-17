@@ -276,7 +276,7 @@ const saveContentToGroup_Deprecated = async (
 
 const saveContentToGroup = async (
   groupName: string | null,
-  contentId: string | null,
+  contentId: number | null,
   access_token: string
 ) => {
   fetchUrl.pathname = `/api/bookmark/v1/groups/${groupName}/contents/${contentId}`;
@@ -338,7 +338,7 @@ const deleteGroup = async (groupName: string, access_token: string) => {
 
 const deleteContentInGroup = async (
   groupName: string,
-  contentId: string | null,
+  contentId: number | null,
   access_token: string
 ) => {
   fetchUrl.pathname = `/api/bookmark/v1/groups/${groupName}/contents/${contentId}`;

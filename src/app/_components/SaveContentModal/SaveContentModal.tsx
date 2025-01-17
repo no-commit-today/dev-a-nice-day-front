@@ -11,6 +11,7 @@ import {
   saveContentToGroup,
 } from "../../_utils/api";
 import { IGroup } from "../../index";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const SaveContent = ({
   closeSaveModal,
@@ -21,13 +22,65 @@ const SaveContent = ({
   openNewGroupModal: () => void;
   contentId: number;
 }) => {
-  const [groupListData, setGroupListData] = useState<{
-    content: IGroup[];
-  } | null>(null);
+  const localTokenData = localStorage.getItem("tokenData");
+  if (localTokenData === null) throw new Error("Token is not found");
+  const tokenData = JSON.parse(localTokenData);
+
+  const { data: groupListData } = useQuery<{ content: IGroup[] }>({
+    queryKey: ["groupListData"],
+    queryFn: () => getGroupList(tokenData.accessToken),
+    enabled: !!tokenData,
+  });
+
+  const { data: containedGroupList, refetch: refetchContainedGroupList } =
+    useQuery({
+      queryKey: ["containedGroupList", contentId],
+      queryFn: () =>
+        getContainedGroupList(contentId.toString(), tokenData.accessToken),
+      enabled: !!groupListData,
+    });
+
+  const { mutate: saveContent } = useMutation({
+    mutationFn: ({
+      index,
+      contentId,
+    }: {
+      index: number;
+      contentId: number;
+    }) => {
+      if (groupListData === undefined)
+        throw new Error("GroupListData is not found");
+      return saveContentToGroup(
+        groupListData.content[index].name,
+        contentId,
+        tokenData.accessToken
+      );
+    },
+    onSuccess: () => refetchContainedGroupList(),
+  });
+
+  const { mutate: deleteContent } = useMutation({
+    mutationFn: ({
+      index,
+      contentId,
+    }: {
+      index: number;
+      contentId: number;
+    }) => {
+      if (groupListData === undefined)
+        throw new Error("GroupListData is not found");
+      return deleteContentInGroup(
+        groupListData.content[index].name,
+        contentId,
+        tokenData.accessToken
+      );
+    },
+    onSuccess: () => refetchContainedGroupList(),
+  });
+
   const [checkList, setCheckList] = useState<boolean[]>(
     new Array(groupListData?.content.length).fill(false)
   );
-  const [containedGroupList, setContainedGroupList] = useState<boolean[]>([]);
 
   const handleGroupClick = (index: number) => {
     const updatedCheckList = [...checkList];
@@ -36,38 +89,18 @@ const SaveContent = ({
   };
 
   const handleSaveGroupClick = async () => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const contentId = urlParams.get("id");
-
-    const localTokenData = localStorage.getItem("tokenData");
-    if (localTokenData === null) throw new Error("Token is not found");
-    const tokenData = JSON.parse(localTokenData);
-
     let isSaved = false;
     checkList.forEach((v, index) => {
       if (v === true) {
-        if (groupListData === null)
-          throw new Error("GroupListData is not found");
         // 그룹 추가
-        if (containedGroupList[index] === false) {
-          saveContentToGroup(
-            groupListData.content[index].name,
-            contentId,
-            tokenData.accessToken
-          );
+        if (containedGroupList.content[index].contains === false) {
+          saveContent({ index, contentId });
         }
         isSaved = true;
       } else {
-        if (containedGroupList[index] === true) {
-          if (groupListData === null)
-            throw new Error("GroupListData is not found");
-          // 그룹 삭제
-          deleteContentInGroup(
-            groupListData.content[index].name,
-            contentId,
-            tokenData.accessToken
-          );
+        // 그룹 삭제
+        if (containedGroupList.content[index].contains === true) {
+          deleteContent({ index, contentId });
         }
       }
     });
@@ -75,33 +108,14 @@ const SaveContent = ({
   };
 
   useEffect(() => {
-    const getGroupListData = async () => {
-      const localTokenData = localStorage.getItem("tokenData");
-      if (localTokenData !== null) {
-        const tokenData = JSON.parse(localTokenData);
-        const groupListData = await getGroupList(tokenData.accessToken);
-        setGroupListData(groupListData);
-        setCheckList(new Array(groupListData.content.length).fill(false));
-        getContainedGroupListData();
-      }
-    };
-    const getContainedGroupListData = async () => {
-      const localTokenData = localStorage.getItem("tokenData");
-      if (localTokenData === null) throw new Error("Token is not found");
-      const tokenData = JSON.parse(localTokenData);
-      const containedGroupList = await getContainedGroupList(
-        contentId.toString(),
-        tokenData.accessToken
-      );
-
+    if (containedGroupList) {
       const updatedCheckList = containedGroupList.content.map(
         (group: { name: string; contains: boolean }) => group.contains
       );
-      setContainedGroupList(updatedCheckList);
+
       setCheckList(updatedCheckList);
-    };
-    getGroupListData();
-  }, []);
+    }
+  }, [containedGroupList]);
 
   return (
     <div className={styles.background} onClick={() => closeSaveModal(null)}>
