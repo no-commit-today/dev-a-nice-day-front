@@ -18,7 +18,7 @@ const NewGroup = ({
   const [groupName, setGroupName] = useState("");
 
   const { mutate: createNewGroup } = useMutation({
-    mutationFn: () => createGroup(groupName, tokenData.accessToken),
+    mutationFn: () => createGroup(groupName),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["groupListData"] }),
   });

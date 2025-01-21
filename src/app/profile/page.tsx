@@ -1,6 +1,5 @@
 "use client";
 import styles from "./page.module.css";
-import LoginModal from "../_components/LoginModal/LoginModal";
 import { deleteGroup, getGroupList } from "../_utils/api";
 import { MouseEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -11,32 +10,30 @@ import plus_gray from "@/../public/assets/plus_gray.svg";
 import Image from "next/image";
 import NewGroupModal from "../_components/NewGroupModal/NewGroupModal";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createPortal } from "react-dom";
 import queryClient from "../_utils/queryClient";
 
 const Profile = () => {
   const router = useRouter();
 
-  const localTokenData = localStorage.getItem("tokenData");
-  if (localTokenData === null) throw new Error("Token is not found");
-  const tokenData = JSON.parse(localTokenData);
-
-  const { data: groupListData, isSuccess: isListDataFetched } = useQuery<{
+  const {
+    data: groupListData,
+    isSuccess: isListDataFetched,
+    isLoading,
+  } = useQuery<{
     content: IGroup[];
   }>({
     queryKey: ["groupListData"],
-    queryFn: () => getGroupList(tokenData.accessToken),
-    enabled: !!tokenData,
+    queryFn: () => getGroupList(),
+    retry: 1,
   });
 
   const { mutate: deleteGroupFn } = useMutation({
     mutationFn: ({ groupName }: { groupName: string }) =>
-      deleteGroup(groupName, tokenData.accessToken),
+      deleteGroup(groupName),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["groupListData"] }),
   });
 
-  const [isLoginModalOpened, setIsLoginModalOpened] = useState(false);
   const [isDotMenuOpened, setIsDotMenuOpened] = useState<boolean[]>([]);
   const [isNewGroupModalOpened, setIsNewGroupModalOpened] = useState(false);
 
@@ -75,7 +72,20 @@ const Profile = () => {
   };
   return (
     <>
-      {isLoginModalOpened && <LoginModal />}
+      {isLoading && (
+        <div
+          style={{
+            backgroundColor: "black",
+            opacity: 0.5,
+            top: 0,
+            bottom: 0,
+            right: 0,
+            left: 0,
+            position: "absolute",
+            zIndex: 105,
+          }}
+        ></div>
+      )}
       <div className={styles.container} onClick={handleCloseDotMenu}>
         <div className={styles.groupedContentsContainer}>
           <h1 className={styles.groupText}>저장한 게시글</h1>
@@ -135,11 +145,9 @@ const Profile = () => {
               </div>
               <h1 className={styles.contentTitle}>새 그룹</h1>
             </div>
-            {isNewGroupModalOpened &&
-              createPortal(
-                <NewGroupModal closeNewGroupModal={closeNewGroupModal} />,
-                document.body
-              )}
+            {isNewGroupModalOpened && (
+              <NewGroupModal closeNewGroupModal={closeNewGroupModal} />
+            )}
           </div>
         </div>
       </div>
