@@ -10,7 +10,6 @@ import plus_gray from "@/../public/assets/plus_gray.svg";
 import Image from "next/image";
 import NewGroupModal from "../_components/NewGroupModal/NewGroupModal";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createPortal } from "react-dom";
 import queryClient from "../_utils/queryClient";
 
 const Profile = () => {
@@ -73,22 +72,20 @@ const Profile = () => {
   };
   return (
     <>
-      {isLoading &&
-        createPortal(
-          <div
-            style={{
-              backgroundColor: "black",
-              opacity: 0.5,
-              top: 0,
-              bottom: 0,
-              right: 0,
-              left: 0,
-              position: "absolute",
-              zIndex: 105,
-            }}
-          ></div>,
-          document.body
-        )}
+      {isLoading && (
+        <div
+          style={{
+            backgroundColor: "black",
+            opacity: 0.5,
+            top: 0,
+            bottom: 0,
+            right: 0,
+            left: 0,
+            position: "absolute",
+            zIndex: 105,
+          }}
+        ></div>
+      )}
       <div className={styles.container} onClick={handleCloseDotMenu}>
         <div className={styles.groupedContentsContainer}>
           <h1 className={styles.groupText}>저장한 게시글</h1>
@@ -148,11 +145,9 @@ const Profile = () => {
               </div>
               <h1 className={styles.contentTitle}>새 그룹</h1>
             </div>
-            {isNewGroupModalOpened &&
-              createPortal(
-                <NewGroupModal closeNewGroupModal={closeNewGroupModal} />,
-                document.body
-              )}
+            {isNewGroupModalOpened && (
+              <NewGroupModal closeNewGroupModal={closeNewGroupModal} />
+            )}
           </div>
         </div>
       </div>

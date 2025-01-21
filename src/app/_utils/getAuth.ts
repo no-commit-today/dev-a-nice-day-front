@@ -1,5 +1,5 @@
 import { ITokenData } from "..";
-import { refresh } from "../_utils/api";
+import { refresh } from "./api";
 
 const getAccessToken = async () => {
   if (typeof window === "undefined") return false;
@@ -70,8 +70,8 @@ const isLoggedIn = async () => {
   }
   return false;
 };
-const useAuth = () => {
+const getAuth = () => {
   return { getAccessToken, isLoggedIn };
 };
 
-export default useAuth;
+export default getAuth;

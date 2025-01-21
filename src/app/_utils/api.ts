@@ -1,10 +1,10 @@
 import { IContentData } from "..";
-import useAuth from "../_hooks/useAuth";
+import getAuth from "./getAuth";
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const fetchUrl = new URL(BASE_URL || "");
 
-const { getAccessToken, isLoggedIn } = useAuth();
+const { getAccessToken, isLoggedIn } = getAuth();
 
 function shuffleArray(array: object[]) {
   for (let i = array.length - 1; i > 0; i--) {
