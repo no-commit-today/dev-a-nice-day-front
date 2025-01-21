@@ -17,21 +17,16 @@ import queryClient from "../_utils/queryClient";
 const Profile = () => {
   const router = useRouter();
 
-  const localTokenData = localStorage.getItem("tokenData");
-  if (localTokenData === null) throw new Error("Token is not found");
-  const tokenData = JSON.parse(localTokenData);
-
   const { data: groupListData, isSuccess: isListDataFetched } = useQuery<{
     content: IGroup[];
   }>({
     queryKey: ["groupListData"],
-    queryFn: () => getGroupList(tokenData.accessToken),
-    enabled: !!tokenData,
+    queryFn: () => getGroupList(),
   });
 
   const { mutate: deleteGroupFn } = useMutation({
     mutationFn: ({ groupName }: { groupName: string }) =>
-      deleteGroup(groupName, tokenData.accessToken),
+      deleteGroup(groupName),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["groupListData"] }),
   });

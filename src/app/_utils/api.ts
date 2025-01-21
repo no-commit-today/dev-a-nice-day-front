@@ -1,7 +1,10 @@
 import { IContentData } from "..";
+import useAuth from "../_hooks/useAuth";
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const fetchUrl = new URL(BASE_URL || "");
+
+const { getAccessToken, isLoggedIn } = useAuth();
 
 function shuffleArray(array: object[]) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -28,19 +31,14 @@ const getContents = async (page: number, searchParams: string) => {
   fetchUrl.pathname = "/api/content/v1/contents";
   fetchUrl.search = `page=${page}&size=10&${searchParams}`;
 
-  let tokenData;
-
-  if (typeof window !== "undefined") {
-    const localData = localStorage.getItem("tokenData");
-    if (localData !== null) {
-      tokenData = JSON.parse(localData);
-    }
-  }
+  const access_token = await getAccessToken();
 
   const data = await fetch(fetchUrl.href, {
-    headers: tokenData && {
-      Authorization: `Bearer ${tokenData?.accessToken}`,
-    },
+    headers: access_token
+      ? {
+          Authorization: `Bearer ${access_token}`,
+        }
+      : undefined,
   });
 
   if (!data.ok) {
@@ -55,19 +53,14 @@ const getContentById = async (
 ): Promise<IContentData> => {
   fetchUrl.pathname = `/api/content/v1/contents/${id}`;
 
-  let tokenData;
-
-  if (typeof window !== "undefined") {
-    const localData = localStorage.getItem("tokenData");
-    if (localData !== null) {
-      tokenData = JSON.parse(localData);
-    }
-  }
+  const access_token = await getAccessToken();
 
   const data = await fetch(fetchUrl.href, {
-    headers: tokenData && {
-      Authorization: `Bearer ${tokenData?.accessToken}`,
-    },
+    headers: access_token
+      ? {
+          Authorization: `Bearer ${access_token}`,
+        }
+      : undefined,
   });
 
   if (!data.ok) {
@@ -209,9 +202,10 @@ const logout = async (refreshToken: string) => {
   return data;
 };
 
-const getGroupList = async (access_token: string) => {
+const getGroupList = async () => {
   fetchUrl.pathname = "/api/bookmark/v1/groups";
 
+  const access_token = await getAccessToken();
   const data = await fetch(fetchUrl.href, {
     headers: {
       Authorization: `Bearer ${access_token}`,
@@ -219,15 +213,19 @@ const getGroupList = async (access_token: string) => {
   });
 
   if (!data.ok) {
+    if (data.status === 401) {
+      throw new Error("Auth Error");
+    }
     throw new Error("API Error");
   }
 
   return await data.json();
 };
 
-const createGroup = async (groupName: string, access_token: string) => {
+const createGroup = async (groupName: string) => {
   fetchUrl.pathname = "/api/bookmark/v1/groups";
 
+  const access_token = await getAccessToken();
   const data = await fetch(fetchUrl.href, {
     method: "POST",
     headers: {
@@ -276,11 +274,11 @@ const saveContentToGroup_Deprecated = async (
 
 const saveContentToGroup = async (
   groupName: string | null,
-  contentId: number | null,
-  access_token: string
+  contentId: number | null
 ) => {
   fetchUrl.pathname = `/api/bookmark/v1/groups/${groupName}/contents/${contentId}`;
 
+  const access_token = await getAccessToken();
   const data = await fetch(fetchUrl.href, {
     method: "PUT",
     headers: {
@@ -297,13 +295,10 @@ const saveContentToGroup = async (
   return data;
 };
 
-const getContentListInGroup = async (
-  groupName: string,
-  access_token: string
-) => {
+const getContentListInGroup = async (groupName: string) => {
   fetchUrl.pathname = "/api/bookmark/v1/bookmarks";
   fetchUrl.search = `groupName=${groupName}`;
-
+  const access_token = await getAccessToken();
   const data = await fetch(fetchUrl.href, {
     headers: {
       Authorization: `Bearer ${access_token}`,
@@ -317,9 +312,9 @@ const getContentListInGroup = async (
   return await data.json();
 };
 
-const deleteGroup = async (groupName: string, access_token: string) => {
+const deleteGroup = async (groupName: string) => {
   fetchUrl.pathname = `/api/bookmark/v1/groups/${groupName}`;
-
+  const access_token = await getAccessToken();
   const data = await fetch(fetchUrl.href, {
     method: "DELETE",
     headers: {
@@ -338,11 +333,10 @@ const deleteGroup = async (groupName: string, access_token: string) => {
 
 const deleteContentInGroup = async (
   groupName: string,
-  contentId: number | null,
-  access_token: string
+  contentId: number | null
 ) => {
   fetchUrl.pathname = `/api/bookmark/v1/groups/${groupName}/contents/${contentId}`;
-
+  const access_token = await getAccessToken();
   const data = await fetch(fetchUrl.href, {
     method: "DELETE",
     headers: {
@@ -359,13 +353,10 @@ const deleteContentInGroup = async (
   return data;
 };
 
-const getContainedGroupList = async (
-  contentId: string,
-  access_token: string
-) => {
+const getContainedGroupList = async (contentId: string) => {
   fetchUrl.pathname = "/api/bookmark/v1/groups-with-contains";
   fetchUrl.search = `contentId=${contentId}`;
-
+  const access_token = await getAccessToken();
   const data = await fetch(fetchUrl.href, {
     headers: {
       Authorization: `Bearer ${access_token}`,

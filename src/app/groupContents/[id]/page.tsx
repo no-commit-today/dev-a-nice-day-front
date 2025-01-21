@@ -19,11 +19,11 @@ const GroupContents = ({ params }: { params: { id: string } }) => {
   );
   useEffect(() => {
     const getContentList = async () => {
-      const localTokenData = localStorage.getItem("tokenData");
-      if (localTokenData === null) throw new Error("Token is not found");
-      const tokenData = JSON.parse(localTokenData);
+      // const localTokenData = localStorage.getItem("tokenData");
+      // if (localTokenData === null) throw new Error("Token is not found");
+      // const tokenData = JSON.parse(localTokenData);
       const contentsData: { content: IContentData[] } =
-        await getContentListInGroup(params.id, tokenData.accessToken);
+        await getContentListInGroup(params.id);
       setContentsData(contentsData);
     };
     getContentList();
@@ -34,13 +34,13 @@ const GroupContents = ({ params }: { params: { id: string } }) => {
     );
     setContentsData({ content: tempContentsData });
 
-    const localTokenData = localStorage.getItem("tokenData");
-    if (localTokenData === null) throw new Error("Token is not found");
-    const tokenData = JSON.parse(localTokenData);
-    await deleteContentInGroup(params.id, contentId, tokenData.accessToken);
+    // const localTokenData = localStorage.getItem("tokenData");
+    // if (localTokenData === null) throw new Error("Token is not found");
+    // const tokenData = JSON.parse(localTokenData);
+    await deleteContentInGroup(params.id, contentId);
 
     const newContentsData: { content: IContentData[] } =
-      await getContentListInGroup(params.id, tokenData.accessToken);
+      await getContentListInGroup(params.id);
     setContentsData(newContentsData);
   };
 

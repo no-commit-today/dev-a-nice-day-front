@@ -22,21 +22,20 @@ const SaveContent = ({
   openNewGroupModal: () => void;
   contentId: number;
 }) => {
-  const localTokenData = localStorage.getItem("tokenData");
-  if (localTokenData === null) throw new Error("Token is not found");
-  const tokenData = JSON.parse(localTokenData);
+  // const localTokenData = localStorage.getItem("tokenData");
+  // if (localTokenData === null) throw new Error("Token is not found");
+  // const tokenData = JSON.parse(localTokenData);
 
   const { data: groupListData } = useQuery<{ content: IGroup[] }>({
     queryKey: ["groupListData"],
-    queryFn: () => getGroupList(tokenData.accessToken),
-    enabled: !!tokenData,
+    queryFn: () => getGroupList(),
+    // enabled: !!tokenData,
   });
 
   const { data: containedGroupList, refetch: refetchContainedGroupList } =
     useQuery({
       queryKey: ["containedGroupList", contentId],
-      queryFn: () =>
-        getContainedGroupList(contentId.toString(), tokenData.accessToken),
+      queryFn: () => getContainedGroupList(contentId.toString()),
       enabled: !!groupListData,
     });
 
@@ -50,11 +49,7 @@ const SaveContent = ({
     }) => {
       if (groupListData === undefined)
         throw new Error("GroupListData is not found");
-      return saveContentToGroup(
-        groupListData.content[index].name,
-        contentId,
-        tokenData.accessToken
-      );
+      return saveContentToGroup(groupListData.content[index].name, contentId);
     },
     onSuccess: () => refetchContainedGroupList(),
   });
@@ -69,11 +64,7 @@ const SaveContent = ({
     }) => {
       if (groupListData === undefined)
         throw new Error("GroupListData is not found");
-      return deleteContentInGroup(
-        groupListData.content[index].name,
-        contentId,
-        tokenData.accessToken
-      );
+      return deleteContentInGroup(groupListData.content[index].name, contentId);
     },
     onSuccess: () => refetchContainedGroupList(),
   });
