@@ -4,15 +4,8 @@ import ContentBox from "@/app/_components/ContentBox/ContentBox";
 import styles from "./page.module.css";
 import { deleteContentInGroup, getContentListInGroup } from "@/app/_utils/api";
 import { MouseEvent, useEffect, useState } from "react";
-interface IContentData {
-  id: number;
-  providerIconUrl: string;
-  providerTitle: string;
-  publishedDate: string;
-  title: string;
-  categories: string[];
-  imageUrl: string;
-}
+import { IContentData } from "@/app";
+
 const GroupContents = ({ params }: { params: { id: string } }) => {
   const [contentsData, setContentsData] = useState<{ content: IContentData[] }>(
     { content: [] }
@@ -28,7 +21,7 @@ const GroupContents = ({ params }: { params: { id: string } }) => {
     };
     getContentList();
   }, []);
-  const handleDelete = async ({ contentId }: { contentId: number }) => {
+  const handleDelete = async ({ contentId }: { contentId: string }) => {
     const tempContentsData = contentsData.content.filter(
       (content) => content.id !== contentId
     );

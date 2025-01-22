@@ -1,5 +1,5 @@
 export interface IContentData {
-  id: number;
+  id: string;
   title: string;
   publishedDate: string;
   summary: string;

@@ -35,7 +35,7 @@ const SaveContent = ({
   const { data: containedGroupList, refetch: refetchContainedGroupList } =
     useQuery({
       queryKey: ["containedGroupList", contentId],
-      queryFn: () => getContainedGroupList(contentId.toString()),
+      queryFn: () => getContainedGroupList(contentId),
       enabled: !!groupListData,
     });
 
@@ -45,7 +45,7 @@ const SaveContent = ({
       contentId,
     }: {
       index: number;
-      contentId: number;
+      contentId: string;
     }) => {
       if (groupListData === undefined)
         throw new Error("GroupListData is not found");
@@ -60,7 +60,7 @@ const SaveContent = ({
       contentId,
     }: {
       index: number;
-      contentId: number;
+      contentId: string;
     }) => {
       if (groupListData === undefined)
         throw new Error("GroupListData is not found");

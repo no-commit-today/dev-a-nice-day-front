@@ -10,16 +10,7 @@ import {
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
 import { MouseEvent, useState } from "react";
-
-interface IContentData {
-  id: number;
-  providerIconUrl: string;
-  providerTitle: string;
-  publishedDate: string;
-  title: string;
-  categories: string[];
-  imageUrl: string;
-}
+import { IContentData } from "@/app";
 
 const ContentBox = ({
   contentData,
@@ -34,7 +25,7 @@ const ContentBox = ({
   fetchNextPage?: ({}) => Promise<
     InfiniteQueryObserverResult<InfiniteData<any, unknown>, Error>
   >;
-  handleDelete?: ({ contentId }: { contentId: number }) => void;
+  handleDelete?: ({ contentId }: { contentId: string }) => void;
 }) => {
   const ref = useIntersect(() => {
     if (fetchNextPage) fetchNextPage({ cancelRefetch: false });
