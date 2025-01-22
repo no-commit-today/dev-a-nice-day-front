@@ -9,6 +9,7 @@ export interface IContentData {
   providerTitle: string;
   providerUrl: string;
   providerIconUrl: string;
+  bookmarked: boolean;
 }
 export interface ITokenData {
   userId: string;

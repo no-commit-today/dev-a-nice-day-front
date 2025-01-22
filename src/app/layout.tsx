@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import BottomTabBar from "./_components/BottomTabBar";
-import TobTab from "./_components/TobTab";
+import BottomTabBar from "./_components/BottomTabBar/BottomTabBar";
+import TobTab from "./_components/TobTab/TobTab";
 import ReactQueryProvider from "./_hooks/useReactQuery";
 import "./globals.css";
 import { Suspense } from "react";
@@ -26,6 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }>) {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   return (
     <html lang="en">
       <body

@@ -1,51 +1,58 @@
 "use client";
 import styles from "./page.module.css";
-import LoginModal from "../_components/LoginModal";
 import { deleteGroup, getGroupList } from "../_utils/api";
 import { MouseEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import CheckToken from "../(home)/_components/CheckToken";
 import { IGroup } from "..";
 import no_image from "@/../public/assets/no_image.svg";
 import dots from "@/../public/assets/dots.svg";
 import plus_gray from "@/../public/assets/plus_gray.svg";
 import Image from "next/image";
-import NewGroupModal from "../_components/NewGroupModal";
+import NewGroupModal from "../_components/NewGroupModal/NewGroupModal";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import queryClient from "../_utils/queryClient";
 
 const Profile = () => {
   const router = useRouter();
-  const [groupListData, setGroupListData] = useState<{
+
+  const {
+    data: groupListData,
+    isSuccess: isListDataFetched,
+    isLoading,
+  } = useQuery<{
     content: IGroup[];
-  } | null>(null);
-  const [isLoginModalOpened, setIsLoginModalOpened] = useState(false);
+  }>({
+    queryKey: ["groupListData"],
+    queryFn: () => getGroupList(),
+    retry: 1,
+  });
+
+  const { mutate: deleteGroupFn } = useMutation({
+    mutationFn: ({ groupName }: { groupName: string }) =>
+      deleteGroup(groupName),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["groupListData"] }),
+  });
+
   const [isDotMenuOpened, setIsDotMenuOpened] = useState<boolean[]>([]);
   const [isNewGroupModalOpened, setIsNewGroupModalOpened] = useState(false);
 
   useEffect(() => {
-    const getGroupListData = async () => {
-      const isLogin = await CheckToken();
-      if (isLogin) {
-        const localTokenData = localStorage.getItem("tokenData");
-        if (localTokenData !== null) {
-          const tokenData = JSON.parse(localTokenData);
-          const groupListData = await getGroupList(tokenData.accessToken);
-          setGroupListData(groupListData);
-        }
-      } else {
-        setIsLoginModalOpened(true);
-      }
-    };
-    getGroupListData();
-  }, []);
+    if (isListDataFetched) {
+      setIsDotMenuOpened(new Array(groupListData.content.length).fill(false));
+    }
+  }, [isListDataFetched]);
 
-  const closeLoginModal = () => {
-    setIsLoginModalOpened(false);
-    router.push("/");
-  };
   const handleDotMenu = (e: MouseEvent, index: number) => {
     e.stopPropagation();
-    const newIsDotMenuOpened = [...isDotMenuOpened];
-    newIsDotMenuOpened[index] = !newIsDotMenuOpened[index];
+    const newIsDotMenuOpened = [...isDotMenuOpened].map((value, idx) => {
+      if (index === idx) {
+        value = !value;
+      } else {
+        value = false;
+      }
+      return value;
+    });
     setIsDotMenuOpened(newIsDotMenuOpened);
   };
   const handleRouteToGroupContents = (name: string) => {
@@ -55,36 +62,30 @@ const Profile = () => {
     const newIsDotMenuOpened = new Array(isDotMenuOpened.length).fill(false);
     setIsDotMenuOpened(newIsDotMenuOpened);
   };
-  const handleDeleteGroup = async (e: MouseEvent, name: string) => {
-    //name만 뺀 새로운 groupListData를 만들어서 setGroupListData
-    if (groupListData !== null) {
-      const newGroupListData = groupListData.content.filter(
-        (content) => content.name !== name
-      );
-      setGroupListData({ content: newGroupListData });
-    }
-
+  const handleDeleteGroup = (e: MouseEvent, name: string) => {
     e.stopPropagation();
-    const localTokenData = localStorage.getItem("tokenData");
-    if (localTokenData !== null) {
-      const tokenData = JSON.parse(localTokenData);
-      await deleteGroup(name, tokenData.accessToken);
-      const groupListData = await getGroupList(tokenData.accessToken);
-      setGroupListData(groupListData);
-    }
+    deleteGroupFn({ groupName: name });
+    handleCloseDotMenu();
   };
-  const closeNewGroupModal = async () => {
+  const closeNewGroupModal = () => {
     setIsNewGroupModalOpened(false);
-    const localTokenData = localStorage.getItem("tokenData");
-    if (localTokenData !== null) {
-      const tokenData = JSON.parse(localTokenData);
-      const groupListData = await getGroupList(tokenData.accessToken);
-      setGroupListData(groupListData);
-    }
   };
   return (
     <>
-      {isLoginModalOpened && <LoginModal closeLoginModal={closeLoginModal} />}
+      {isLoading && (
+        <div
+          style={{
+            backgroundColor: "black",
+            opacity: 0.5,
+            top: 0,
+            bottom: 0,
+            right: 0,
+            left: 0,
+            position: "absolute",
+            zIndex: 105,
+          }}
+        ></div>
+      )}
       <div className={styles.container} onClick={handleCloseDotMenu}>
         <div className={styles.groupedContentsContainer}>
           <h1 className={styles.groupText}>저장한 게시글</h1>

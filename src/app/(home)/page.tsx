@@ -1,5 +1,5 @@
-import Home from "./_components/Home";
-import CheckLocalStorage from "./_components/CheckLocalStorage";
+import Home from "./_components/Home/Home";
+import CheckLocalStorage from "../_utils/CheckLocalStorage";
 import { getContentById, getGitHubToken, login } from "../_utils/api";
 import { Metadata, ResolvingMetadata } from "next";
 
@@ -37,7 +37,6 @@ export default async function Page({
   if (code) {
     const gitTokenData = await getGitHubToken(code);
     tokenData = await login(gitTokenData?.access_token);
-    console.log("tokenData: ", tokenData);
   }
 
   return (

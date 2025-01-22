@@ -1,7 +1,7 @@
 name: git push into deploy_dev repo to deploy to vercel
 
 on:
-  push:
+  pull_request:
     branches: [develop]
 
 jobs:
