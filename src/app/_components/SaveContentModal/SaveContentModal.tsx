@@ -20,7 +20,7 @@ const SaveContent = ({
 }: {
   closeSaveModal: (isSaved: boolean | null) => void;
   openNewGroupModal: () => void;
-  contentId: number;
+  contentId: string;
 }) => {
   // const localTokenData = localStorage.getItem("tokenData");
   // if (localTokenData === null) throw new Error("Token is not found");

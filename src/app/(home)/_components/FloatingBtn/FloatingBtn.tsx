@@ -20,7 +20,7 @@ const FloatingBtn = ({
   contentId,
 }: {
   isSaved: boolean;
-  contentId: number;
+  contentId: string;
 }) => {
   const [isLoginModalOpened, setIsLoginModalOpened] = useState(false);
   const [isSaveModalOpened, setIsSaveModalOpened] = useState(false);
