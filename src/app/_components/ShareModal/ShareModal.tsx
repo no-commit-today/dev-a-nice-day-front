@@ -9,7 +9,7 @@ const ShareModal = ({
   contentId,
 }: {
   closeShareModal: () => void;
-  contentId: number;
+  contentId: string;
 }) => {
   // const [href, setHref] = useState("");
   const [isCopied, setIsCopied] = useState(false);
