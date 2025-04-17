@@ -10,6 +10,7 @@ export interface IContentData {
   providerUrl: string;
   providerIconUrl: string;
   bookmarked: boolean;
+  url: string;
 }
 export interface ITokenData {
   userId: string;

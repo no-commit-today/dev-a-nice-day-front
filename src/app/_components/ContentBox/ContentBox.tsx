@@ -40,7 +40,8 @@ const ContentBox = ({
       key={contentData.id}
       ref={index === length - 2 ? ref : null}
       className={styles.contentBox}
-      onClick={() => window.open(`${BASE_URL}/contents/${contentData.id}/link`)}
+      // onClick={() => window.open(`${BASE_URL}/contents/${contentData.id}/link`)}
+      onClick={() => window.open(contentData.url)}
     >
       <div className={styles.leftBox}>
         <div className={styles.titleBox}>

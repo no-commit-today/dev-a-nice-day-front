@@ -200,9 +200,14 @@ export default function ContentSlider() {
                         </div>
                         <h2
                           className={styles.title}
+                          // onClick={() =>
+                          //   goToLink({
+                          //     url: `${BASE_URL}/contents/${content.id}/link`,
+                          //   })
+                          // }
                           onClick={() =>
                             goToLink({
-                              url: `${BASE_URL}/contents/${content.id}/link`,
+                              url: content.url,
                             })
                           }
                         >
@@ -222,9 +227,14 @@ export default function ContentSlider() {
                         <div className={styles.summaryBox}>
                           <div
                             className={styles.summaryBtn}
+                            // onClick={() =>
+                            //   goToLink({
+                            //     url: `${BASE_URL}/contents/${content.id}/link`,
+                            //   })
+                            // }
                             onClick={() =>
                               goToLink({
-                                url: `${BASE_URL}/contents/${content.id}/link`,
+                                url: content.url,
                               })
                             }
                           >
