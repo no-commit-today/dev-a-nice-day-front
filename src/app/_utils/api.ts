@@ -222,9 +222,19 @@ const getContentsCount = async (searchParams: string) => {
 const getContents = async (page: number, searchParams: string) => {
   // fetchUrl.pathname = "/api/content/v1/contents";
   // fetchUrl.search = `page=${page}&size=10&${searchParams}`;
+  // fetchUrl.pathname = "/api/content/v1/contents";
+  // fetchUrl.search = `page=${page}&size=10&${searchParams}`;
 
   // const access_token = await getAccessToken();
+  // const access_token = await getAccessToken();
 
+  // const data = await fetch(fetchUrl.href, {
+  //   headers: access_token
+  //     ? {
+  //         Authorization: `Bearer ${access_token}`,
+  //       }
+  //     : undefined,
+  // });
   // const data = await fetch(fetchUrl.href, {
   //   headers: access_token
   //     ? {
@@ -236,7 +246,12 @@ const getContents = async (page: number, searchParams: string) => {
   // if (!data.ok) {
   //   throw new Error("API Error");
   // }
+  // if (!data.ok) {
+  //   throw new Error("API Error");
+  // }
 
+  // return await data.json();
+  return (await mockData) as any;
   // return await data.json();
   return (await mockData) as any;
 };
